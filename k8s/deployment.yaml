@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: ghcr.io/mindulle/sonagi-eagle-gallery:latest
+        image: ghcr.io/mindulle/sonagi-eagle-gallery:1.7.0
         imagePullPolicy: Always
         ports:
         - containerPort: 34920
