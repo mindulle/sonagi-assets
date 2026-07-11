@@ -20,6 +20,8 @@ spec:
               mountPath: /app/eagle_gallery.db
             - name: library-volume
               mountPath: /mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library
+            - name: ai-assets-volume
+              mountPath: /mnt/monitoring/ai-assets
           restartPolicy: OnFailure
           volumes:
           - name: db-volume
@@ -30,3 +32,7 @@ spec:
             hostPath:
               path: /mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library
               type: Directory
+          - name: ai-assets-volume
+            hostPath:
+              path: /mnt/monitoring/ai-assets
+              type: DirectoryOrCreate

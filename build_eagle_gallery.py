@@ -9,6 +9,7 @@ from tqdm import tqdm
 LOCK_FILE = "eagle_gallery.lock"
 DB_PATH = "eagle_gallery.db"
 LIBRARY_PATH = "/mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library/images"
+AI_ASSETS_PATH = "/mnt/monitoring/ai-assets/images"
 
 
 def acquire_lock():
@@ -41,18 +42,16 @@ def init_db():
     return conn
 
 
-def build_index():
-    conn = init_db()
-    c = conn.cursor()
+def scan_library(library_path: str, c, batch_data: list, count: int) -> tuple[list, int]:
+    if not os.path.exists(library_path):
+        print(f"Skipping (not found): {library_path}")
+        return batch_data, count
 
-    print(f"Scanning {LIBRARY_PATH}...")
-    info_dirs = [d for d in os.listdir(LIBRARY_PATH) if d.endswith(".info")]
-
-    count = 0
-    batch_data = []
+    print(f"Scanning {library_path}...")
+    info_dirs = [d for d in os.listdir(library_path) if d.endswith(".info")]
 
     for info_dir in tqdm(info_dirs):
-        dir_path = os.path.join(LIBRARY_PATH, info_dir)
+        dir_path = os.path.join(library_path, info_dir)
         meta_path = os.path.join(dir_path, "metadata.json")
 
         if not os.path.exists(meta_path):
@@ -88,11 +87,26 @@ def build_index():
             count += 1
             if count % 1000 == 0:
                 c.executemany("INSERT OR REPLACE INTO items VALUES (?,?,?,?,?,?,?,?)", batch_data)
-                conn.commit()
                 batch_data = []
 
         except Exception:
             pass
+
+    return batch_data, count
+
+
+def build_index():
+    conn = init_db()
+    c = conn.cursor()
+
+    count = 0
+    batch_data = []
+
+    # Eagle.cool 원본 라이브러리 스캔
+    batch_data, count = scan_library(LIBRARY_PATH, c, batch_data, count)
+
+    # AI 생성 에셋 스캔
+    batch_data, count = scan_library(AI_ASSETS_PATH, c, batch_data, count)
 
     if batch_data:
         c.executemany("INSERT OR REPLACE INTO items VALUES (?,?,?,?,?,?,?,?)", batch_data)
