@@ -9,12 +9,11 @@ ai-assets 디렉토리에 저장하는 스크립트.
     python import_ai_asset.py <image_path> [--tags tag1,tag2] [--name "이름"] [--annotation "메모"]
 
 예시:
-    python import_ai_asset.py /path/to/output.png --tags "ai-generated,comfyui" --name "로고 시안 v1"
+    python import_ai_asset.py /path/to/output.png --tags "ai-generated,comfyui" --name "로고 v1"
 """
 
 import argparse
 import json
-import os
 import shutil
 import sys
 import time
@@ -23,6 +22,7 @@ from pathlib import Path
 
 try:
     from PIL import Image
+
     HAS_PIL = True
 except ImportError:
     HAS_PIL = False
