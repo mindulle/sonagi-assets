@@ -14,6 +14,7 @@ ai-assets 디렉토리에 저장하는 스크립트.
 
 import argparse
 import json
+import os
 import shutil
 import sys
 import time
@@ -27,7 +28,7 @@ try:
 except ImportError:
     HAS_PIL = False
 
-AI_ASSETS_PATH = "/mnt/monitoring/ai-assets/images"
+AI_ASSETS_PATH = os.environ.get("AI_ASSETS_PATH", "/app/data/ai-assets/images")
 THUMBNAIL_SIZE = (256, 256)
 
 
