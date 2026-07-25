@@ -21,6 +21,9 @@ spec:
       - name: web
         image: ghcr.io/mindulle/sonagi-eagle-gallery:latest
         imagePullPolicy: Always
+        env:
+        - name: GALLERY_LIBRARY_PATH
+          value: "/app/data/Design.library/images"
         ports:
         - containerPort: 34920
           hostPort: 34920
@@ -28,16 +31,15 @@ spec:
         - name: db-volume
           mountPath: /app/eagle_gallery.db
         - name: library-volume
-          mountPath: /mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library
+          mountPath: /app/data
       volumes:
       - name: db-volume
         hostPath:
           path: /home/mindulle/design-tools-setup/eagle_gallery.db
           type: FileOrCreate
       - name: library-volume
-        hostPath:
-          path: /mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library
-          type: Directory
+        persistentVolumeClaim:
+          claimName: sonagi-gallery-library-pvc
 ---
 apiVersion: v1
 kind: Service
