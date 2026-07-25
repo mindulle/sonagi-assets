@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: eagle-gallery-harvest
+  namespace: default
+spec:
+  schedule: "0 0 * * *" # Every day at midnight
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: harvest
+            image: ghcr.io/mindulle/sonagi-eagle-gallery:latest
+            imagePullPolicy: Always
+            command: ["python", "dribbble_scraper_bot.py"]
+            env:
+            - name: AI_ASSETS_PATH
+              value: "/app/data/ai-assets/images"
+            volumeMounts:
+            - name: ai-assets-volume
+              mountPath: /app/data/ai-assets
+          restartPolicy: OnFailure
+          volumes:
+          - name: ai-assets-volume
+            hostPath:
+              path: /mnt/monitoring/ai-assets
+              type: DirectoryOrCreate

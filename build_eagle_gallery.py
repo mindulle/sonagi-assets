@@ -86,11 +86,7 @@ def scan_library(library_path: str, c, batch_data: list, count: int) -> tuple[li
             files = os.listdir(dir_path)
             thumbnail = next((f for f in files if "_thumbnail." in f), None)
             original = next(
-                (
-                    f
-                    for f in files
-                    if f != "metadata.json" and not f.endswith(".info") and "_thumbnail" not in f
-                ),
+                (f for f in files if f != "metadata.json" and not f.endswith(".info") and "_thumbnail" not in f),
                 None,
             )
 

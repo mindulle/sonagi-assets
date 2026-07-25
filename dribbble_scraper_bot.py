@@ -6,15 +6,27 @@ import subprocess
 
 def run_harvest(brief, query):
     cmd = [
-        "npx", "-y", "opendevbrowser", "inspiredesign", "harvest",
-        "--brief", brief,
-        "--query", query,
-        "--provider", "web/default",
-        "--max-references", "3",
-        "--visual-evidence", "required",
-        "--browser-mode", "managed",
-        "--mode", "json",
-        "--output-format", "json"
+        "npx",
+        "-y",
+        "opendevbrowser",
+        "inspiredesign",
+        "harvest",
+        "--brief",
+        brief,
+        "--query",
+        query,
+        "--provider",
+        "web/default",
+        "--max-references",
+        "3",
+        "--visual-evidence",
+        "required",
+        "--browser-mode",
+        "managed",
+        "--mode",
+        "json",
+        "--output-format",
+        "json",
     ]
 
     print(f"Running OpenDevBrowser harvest for: {brief}...")
@@ -35,11 +47,15 @@ def run_harvest(brief, query):
                             print(f"Ingesting {img_path} from {url}")
                             # Call the eagle import script
                             import_cmd = [
-                                "python3", "import_ai_asset.py",
+                                "python3",
+                                "import_ai_asset.py",
                                 img_path,
-                                "--name", f"Harvested: {brief[:20]}",
-                                "--tags", "opendevbrowser,harvest,auto-collected",
-                                "--annotation", f"Source: {url}"
+                                "--name",
+                                f"Harvested: {brief[:20]}",
+                                "--tags",
+                                "opendevbrowser,harvest,auto-collected",
+                                "--annotation",
+                                f"Source: {url}",
                             ]
                             subprocess.run(import_cmd)
             else:
@@ -49,14 +65,16 @@ def run_harvest(brief, query):
     except Exception as e:
         print("Error during harvest execution:", e)
 
+
 def main():
     targets = [
         {"brief": "Modern dark mode dashboard", "query": "site:dribbble.com dark mode dashboard UI"},
-        {"brief": "Hand drawn UX flow wireframe", "query": "site:dribbble.com hand drawn wireframe ux flow"}
+        {"brief": "Hand drawn UX flow wireframe", "query": "site:dribbble.com hand drawn wireframe ux flow"},
     ]
 
     for t in targets:
         run_harvest(t["brief"], t["query"])
+
 
 if __name__ == "__main__":
     main()
