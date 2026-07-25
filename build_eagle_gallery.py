@@ -8,8 +8,8 @@ from tqdm import tqdm
 
 LOCK_FILE = "eagle_gallery.lock"
 DB_PATH = "eagle_gallery.db"
-LIBRARY_PATH = "/mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library/images"
-AI_ASSETS_PATH = "/mnt/monitoring/ai-assets/images"
+LIBRARY_PATH = os.environ.get("GALLERY_LIBRARY_PATH", "/mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library/images")
+AI_ASSETS_PATH = os.environ.get("AI_ASSETS_PATH", "/app/data/ai-assets/images")
 
 
 def acquire_lock():
@@ -38,8 +38,23 @@ def init_db():
     c.execute("""CREATE TABLE IF NOT EXISTS items
                  (id TEXT PRIMARY KEY, name TEXT, ext TEXT, tags TEXT,
                   annotation TEXT, url TEXT, thumbnail_path TEXT, original_path TEXT)""")
+    c.execute("""CREATE TABLE IF NOT EXISTS tags
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE)""")
+    c.execute("""CREATE TABLE IF NOT EXISTS item_tags
+                 (item_id TEXT NOT NULL, tag_id INTEGER NOT NULL,
+                  PRIMARY KEY (item_id, tag_id),
+                  FOREIGN KEY (item_id) REFERENCES items(id),
+                  FOREIGN KEY (tag_id) REFERENCES tags(id))""")
     conn.commit()
     return conn
+
+
+def process_tags(c, item_id, tags_list):
+    for tag in tags_list:
+        c.execute("INSERT OR IGNORE INTO tags (name) VALUES (?)", (tag,))
+        c.execute("SELECT id FROM tags WHERE name = ?", (tag,))
+        tag_id = c.fetchone()[0]
+        c.execute("INSERT OR IGNORE INTO item_tags (item_id, tag_id) VALUES (?, ?)", (item_id, tag_id))
 
 
 def scan_library(library_path: str, c, batch_data: list, count: int) -> tuple[list, int]:
@@ -64,25 +79,22 @@ def scan_library(library_path: str, c, batch_data: list, count: int) -> tuple[li
             item_id = meta.get("id", info_dir.replace(".info", ""))
             name = meta.get("name", "")
             ext = meta.get("ext", "")
-            tags = json.dumps(meta.get("tags", []))
+            tags_list = meta.get("tags", [])
             annotation = meta.get("annotation", "")
             url = meta.get("url", "")
 
             files = os.listdir(dir_path)
             thumbnail = next((f for f in files if "_thumbnail." in f), None)
             original = next(
-                (
-                    f
-                    for f in files
-                    if f != "metadata.json" and not f.endswith(".info") and "_thumbnail" not in f
-                ),
+                (f for f in files if f != "metadata.json" and not f.endswith(".info") and "_thumbnail" not in f),
                 None,
             )
 
             thumb_path = os.path.join(dir_path, thumbnail) if thumbnail else ""
             orig_path = os.path.join(dir_path, original) if original else ""
 
-            batch_data.append((item_id, name, ext, tags, annotation, url, thumb_path, orig_path))
+            batch_data.append((item_id, name, ext, json.dumps(tags_list), annotation, url, thumb_path, orig_path))
+            process_tags(c, item_id, tags_list)
 
             count += 1
             if count % 1000 == 0:

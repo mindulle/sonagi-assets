@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonagi-gallery-library-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sonagi-gallery-migration-job
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - name: migrator
+        image: busybox
+        command: ["/bin/sh", "-c", "cp -r /source/* /destination/"]
+        volumeMounts:
+        - name: source-volume
+          mountPath: /source
+        - name: destination-volume
+          mountPath: /destination
+      restartPolicy: OnFailure
+      volumes:
+      - name: source-volume
+        hostPath:
+          path: /mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library
+      - name: destination-volume
+        persistentVolumeClaim:
+          claimName: sonagi-gallery-library-pvc

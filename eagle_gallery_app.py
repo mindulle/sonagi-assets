@@ -111,9 +111,10 @@ def get_tags(limit: int = Query(20, le=100)):
         c = conn.cursor()
         c.execute(
             """
-            SELECT value as tag, count(*) as count
-            FROM items, json_each(items.tags)
-            GROUP BY value
+            SELECT t.name as tag, count(it.item_id) as count
+            FROM tags t
+            JOIN item_tags it ON t.id = it.tag_id
+            GROUP BY t.id
             ORDER BY count DESC
             LIMIT ?
         """,
