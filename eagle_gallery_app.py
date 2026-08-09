@@ -4,6 +4,48 @@ import sqlite3
 
 import sentry_sdk
 from fastapi import FastAPI, HTTPException, Query
+
+import urllib.request
+import urllib.parse
+import shutil
+import uuid
+import time
+from pathlib import Path
+from pydantic import BaseModel
+from typing import List, Optional
+
+try:
+    from PIL import Image
+    HAS_PIL = True
+except ImportError:
+    HAS_PIL = False
+
+AI_ASSETS_PATH = os.environ.get("AI_ASSETS_PATH", "/app/data/ai-assets/images")
+THUMBNAIL_SIZE = (256, 256)
+
+class ImportUrlRequest(BaseModel):
+    imageUrl: str
+    author: Optional[str] = ""
+    content: Optional[str] = ""
+    messageUrl: Optional[str] = ""
+    tags: List[str] = []
+
+def generate_id():
+    return str(uuid.uuid4()).upper()
+
+def make_thumbnail(src_path: Path, dest_path: Path):
+    if not HAS_PIL:
+        shutil.copy2(src_path, dest_path)
+        return
+    try:
+        with Image.open(src_path) as img:
+            img.thumbnail(THUMBNAIL_SIZE)
+            if dest_path.suffix.lower() in [".jpg", ".jpeg"]:
+                img = img.convert("RGB")
+            img.save(dest_path)
+    except Exception as e:
+        shutil.copy2(src_path, dest_path)
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -168,6 +210,79 @@ def get_image(item_id: str, type: str):
     finally:
         conn.close()
 
+
+
+@app.post("/api/import-url")
+def import_url(req: ImportUrlRequest):
+    asset_id = generate_id()
+    path = urllib.parse.urlparse(req.imageUrl).path
+    ext = path.split('.')[-1].lower()
+    if ext not in ['jpg', 'jpeg', 'png', 'gif', 'webp']:
+        ext = 'png'
+        
+    info_dir = Path(AI_ASSETS_PATH) / f"{asset_id}.info"
+    info_dir.mkdir(parents=True, exist_ok=True)
+    
+    asset_name = f"discord_{asset_id[:8]}"
+    dest_original = info_dir / f"{asset_name}.{ext}"
+    
+    try:
+        req_obj = urllib.request.Request(req.imageUrl, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req_obj) as response, open(dest_original, 'wb') as out_file:
+            shutil.copyfileobj(response, out_file)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to download image: {str(e)}")
+
+    thumb_ext = "jpg" if ext not in ("png", "gif", "webp") else ext
+    dest_thumbnail = info_dir / f"{asset_id}_thumbnail.{thumb_ext}"
+    make_thumbnail(dest_original, dest_thumbnail)
+    
+    annotation_parts = []
+    if req.content:
+        annotation_parts.append(req.content)
+    if req.author:
+        annotation_parts.append(f"Author: {req.author}")
+    if req.messageUrl:
+        annotation_parts.append(f"Message: {req.messageUrl}")
+    annotation = "\n".join(annotation_parts)
+    
+    metadata = {
+        "id": asset_id,
+        "name": asset_name,
+        "ext": ext,
+        "tags": req.tags,
+        "folders": [],
+        "isDeleted": False,
+        "url": req.messageUrl,
+        "annotation": annotation,
+        "modificationTime": int(time.time() * 1000),
+    }
+
+    meta_path = info_dir / "metadata.json"
+    with open(meta_path, "w", encoding="utf-8") as f:
+        json.dump(metadata, f, ensure_ascii=False, indent=2)
+
+    conn = get_db()
+    try:
+        c = conn.cursor()
+        c.execute("INSERT OR REPLACE INTO items VALUES (?,?,?,?,?,?,?,?)", (
+            asset_id, asset_name, ext, json.dumps(req.tags), annotation, req.messageUrl,
+            str(dest_thumbnail), str(dest_original)
+        ))
+        
+        for tag in req.tags:
+            c.execute("INSERT OR IGNORE INTO tags (name) VALUES (?)", (tag,))
+            c.execute("SELECT id FROM tags WHERE name = ?", (tag,))
+            tag_id_row = c.fetchone()
+            if tag_id_row:
+                tag_id = tag_id_row[0]
+                c.execute("INSERT OR IGNORE INTO item_tags (item_id, tag_id) VALUES (?, ?)", (asset_id, tag_id))
+        
+        conn.commit()
+    finally:
+        conn.close()
+
+    return {"success": True, "id": asset_id}
 
 @app.get("/")
 def index():
