@@ -39,7 +39,7 @@ GitHub에 PR을 생성할 때는 다음 사항을 반드시 지켜주세요:
 
 1. **PR 제목 규칙:** PR 제목에 반드시 **Paperclip 이슈 ID (예: `CEO-881`)**를 포함해야 합니다.
    * `feat: 디자인 큐레이션 API 연동 추가 (CEO-881)`
-2. **이유:** GitHub Actions(`.github/workflows/paperclip-sync.yml`)가 PR 제목에서 정규식(`CEO-[0-9]+`)을 통해 이슈 ID를 추출합니다. 
+2. **이유:** GitHub Actions(`.github/workflows/paperclip-sync.yml`)가 PR 제목에서 정규식(`CEO-[0-9]+`)을 통해 이슈 ID를 추출합니다.
 3. **상태 자동 동기화:** PR이 `main` 브랜치에 **Merge** 되면, 위 Actions 워크플로우가 자동으로 Paperclip API를 호출하여 해당 이슈에 성공 코멘트를 남기고 상태를 `done`으로 변경합니다.
 4. 따라서 **작업이 끝났다고 Paperclip 이슈를 수동으로 `done` 처리하지 마시고, PR을 올린 뒤 Merge 되기를 기다리세요.**
 
