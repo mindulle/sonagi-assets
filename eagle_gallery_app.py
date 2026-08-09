@@ -1,13 +1,21 @@
 import json
 import os
 import sqlite3
+import tempfile
+import urllib.request
+import uuid
+from pathlib import Path
 
 import sentry_sdk
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 from prometheus_fastapi_instrumentator import Instrumentator
+
+import import_ai_asset
+import build_eagle_gallery
 
 sentry_dsn = os.environ.get("SENTRY_DSN")
 if sentry_dsn:
@@ -169,6 +177,51 @@ def get_image(item_id: str, type: str):
     finally:
         conn.close()
 
+
+class ImportUrlRequest(BaseModel):
+    url: str
+    name: str | None = None
+    tags: list[str] | None = None
+    annotation: str | None = ""
+
+def trigger_build_index():
+    lock = build_eagle_gallery.acquire_lock()
+    if lock is None:
+        return
+    try:
+        build_eagle_gallery.build_index()
+    finally:
+        build_eagle_gallery.release_lock(lock)
+
+@app.post("/api/import-url")
+def import_url(req: ImportUrlRequest, background_tasks: BackgroundTasks):
+    try:
+        temp_dir = Path(tempfile.gettempdir())
+        ext = req.url.split('?')[0].split('.')[-1]
+        if len(ext) > 5 or not ext.isalnum():
+            ext = "jpg"
+        temp_path = temp_dir / f"download_{uuid.uuid4().hex}.{ext}"
+        
+        req_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        request = urllib.request.Request(req.url, headers=req_headers)
+        with urllib.request.urlopen(request) as response, open(temp_path, "wb") as out_file:
+            out_file.write(response.read())
+
+        asset_id = import_ai_asset.import_asset(
+            image_path=str(temp_path),
+            name=req.name,
+            tags=req.tags,
+            annotation=req.annotation
+        )
+        
+        if temp_path.exists():
+            os.remove(temp_path)
+            
+        background_tasks.add_task(trigger_build_index)
+        
+        return {"status": "success", "asset_id": asset_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/")
 def index():
