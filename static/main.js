@@ -79,7 +79,7 @@ async function loadItems(reset = false) {
         hasMore = true;
         document.getElementById('gallery').innerHTML = '';
     }
-    
+
     if (isLoading || !hasMore) return;
     isLoading = true;
     document.getElementById('loading').style.display = 'flex';
@@ -110,7 +110,8 @@ async function loadItems(reset = false) {
             }
 
             if (totalItems === 0) {
-                gallery.innerHTML = '<div class="no-results">No items found matching your search.</div>';
+                gallery.innerHTML =
+                    '<div class="no-results">No items found matching your search.</div>';
             }
         }
 
@@ -236,9 +237,11 @@ async function openModal(itemId) {
         document.getElementById('modal-title').textContent = item.name || 'Untitled';
         document.getElementById('edit-name').value = item.name || '';
         document.getElementById('modal-ext').textContent = (item.ext || 'Unknown').toUpperCase();
-        
+
         if (item.created_at) {
-            document.getElementById('modal-date').textContent = new Date(item.created_at).toLocaleString();
+            document.getElementById('modal-date').textContent = new Date(
+                item.created_at
+            ).toLocaleString();
         }
 
         const urlEl = document.getElementById('modal-url');
@@ -262,7 +265,8 @@ async function openModal(itemId) {
             tagsContainer.appendChild(span);
         }
 
-        document.getElementById('modal-annotation').textContent = item.annotation || 'No notes available.';
+        document.getElementById('modal-annotation').textContent =
+            item.annotation || 'No notes available.';
 
         const originalLink = document.getElementById('modal-original-link');
         originalLink.href = `/api/image/${itemId}/original`;
@@ -287,7 +291,7 @@ document.addEventListener('keydown', (e) => {
 // CRUD Functions
 function toggleEditMode(show) {
     document.getElementById('edit-mode').style.display = show ? 'block' : 'none';
-    if(show) {
+    if (show) {
         document.getElementById('modal-title').style.display = 'none';
         document.getElementById('modal-tags').style.display = 'none';
     } else {
@@ -296,40 +300,44 @@ function toggleEditMode(show) {
     }
 }
 
-async function saveEdits() {
+async function _saveEdits() {
     if (!currentItemId) return;
     const newName = document.getElementById('edit-name').value;
-    const newTags = document.getElementById('edit-tags').value.split(',').map(t => t.trim()).filter(t => t);
-    
+    const newTags = document
+        .getElementById('edit-tags')
+        .value.split(',')
+        .map((t) => t.trim())
+        .filter((t) => t);
+
     try {
         await fetch(`/api/items/${currentItemId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: newName, tags: newTags })
+            body: JSON.stringify({ name: newName, tags: newTags }),
         });
         openModal(currentItemId); // reload modal data
         loadSidebarFilters(); // reload tags in sidebar
         loadItems(true); // reload grid
-    } catch (e) {
+    } catch (_e) {
         alert('Failed to update asset');
     }
 }
 
-async function deleteAsset() {
+async function _deleteAsset() {
     if (!currentItemId) return;
     if (!confirm('Are you sure you want to delete this asset? This cannot be undone.')) return;
-    
+
     try {
         await fetch(`/api/items/${currentItemId}`, { method: 'DELETE' });
         closeModal();
         loadSidebarFilters();
         loadItems(true);
-    } catch (e) {
+    } catch (_e) {
         alert('Failed to delete asset');
     }
 }
 
-async function uploadAsset() {
+async function _uploadAsset() {
     const fileInput = document.getElementById('file-upload');
     const tagsInput = document.getElementById('upload-tags');
     if (!fileInput.files.length) return alert('Please select a file');
@@ -342,13 +350,13 @@ async function uploadAsset() {
         document.getElementById('loading').style.display = 'flex';
         await fetch('/api/upload', {
             method: 'POST',
-            body: formData
+            body: formData,
         });
         fileInput.value = '';
         tagsInput.value = '';
         loadSidebarFilters();
         loadItems(true);
-    } catch (e) {
+    } catch (_e) {
         alert('Failed to upload asset');
     } finally {
         document.getElementById('loading').style.display = 'none';

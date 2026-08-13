@@ -39,7 +39,7 @@
         <main class="main-content">
             <div class="header">
                 <input type="text" id="search" placeholder="Search tags, names, or extensions (e.g. png)..." onkeyup="if(event.key==='Enter') searchItems()">
-                <button onclick="searchItems()">Search</button>
+                <button type="button" onclick="searchItems()">Search</button>
             </div>
             
             <!-- Simple Upload Area -->
@@ -47,7 +47,7 @@
                 <h4>Quick Upload</h4>
                 <input type="file" id="file-upload">
                 <input type="text" id="upload-tags" placeholder="Tags (comma separated)">
-                <button onclick="uploadAsset()">Upload</button>
+                <button type="button" onclick="uploadAsset()">Upload</button>
             </div>
 
             <div id="stats" class="stats"></div>
@@ -65,7 +65,7 @@
     <div id="lightbox" class="lightbox">
         <div class="lightbox-overlay" onclick="closeModal()"></div>
         <div class="lightbox-content">
-            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <button type="button" class="close-btn" onclick="closeModal()">&times;</button>
             <div class="lightbox-image-container">
                 <div id="modal-img-wrapper"><img id="modal-img" src="" alt="Preview"></div>
             </div>
@@ -79,15 +79,15 @@
                 <div id="edit-mode" style="display: none; margin-bottom: 15px;">
                     <input type="text" id="edit-name" class="tag-input" placeholder="Name">
                     <input type="text" id="edit-tags" class="tag-input" placeholder="Tags (comma separated)">
-                    <button class="edit-btn" style="margin-top: 5px;" onclick="saveEdits()">Save</button>
-                    <button class="close-btn" style="position: static; font-size: 14px; padding: 5px;" onclick="toggleEditMode(false)">Cancel</button>
+                    <button type="button" class="edit-btn" style="margin-top: 5px;" onclick="saveEdits()">Save</button>
+                    <button type="button" class="close-btn" style="position: static; font-size: 14px; padding: 5px;" onclick="toggleEditMode(false)">Cancel</button>
                 </div>
 
                 <div class="modal-tags" id="modal-tags"></div>
                 <div class="action-btns">
                     <a id="modal-original-link" href="#" target="_blank" class="download-btn">View Original</a>
-                    <button class="edit-btn" onclick="toggleEditMode(true)">Edit</button>
-                    <button class="danger-btn" onclick="deleteAsset()">Delete</button>
+                    <button type="button" class="edit-btn" onclick="toggleEditMode(true)">Edit</button>
+                    <button type="button" class="danger-btn" onclick="deleteAsset()">Delete</button>
                 </div>
             </div>
         </div>
