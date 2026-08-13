@@ -14,7 +14,7 @@ from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from mcp.server import Server
+from mcp.server.fastmcp import FastMCP
 from mcp.server.sse import SseServerTransport
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel
@@ -413,7 +413,6 @@ def index():
 # MCP (Model Context Protocol) Integration
 # ==========================================
 
-from mcp.server.fastmcp import FastMCP
 fast_mcp = FastMCP("sonagi-assets-mcp")
 mcp = fast_mcp._mcp_server
 
