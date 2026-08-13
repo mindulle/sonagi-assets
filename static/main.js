@@ -148,11 +148,14 @@ async function loadItems(reset = false) {
                     style.textContent = `@font-face { font-family: "${fontId}"; src: url("/api/image/${item.id}/original"); }`;
                     document.head.appendChild(style);
                 }
-                document.fonts.load(`14px "${fontId}"`).then(() => {
-                    placeholder.innerHTML = `<span class="font-card-sample" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_EN}</span>`;
-                }).catch(() => {
-                    placeholder.innerHTML = `<span class="font-card-sample">Font</span>`;
-                });
+                document.fonts
+                    .load(`14px "${fontId}"`)
+                    .then(() => {
+                        placeholder.innerHTML = `<span class="font-card-sample" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_EN}</span>`;
+                    })
+                    .catch(() => {
+                        placeholder.innerHTML = `<span class="font-card-sample">Font</span>`;
+                    });
             } else {
                 const img = document.createElement("img");
                 img.loading = "lazy";
