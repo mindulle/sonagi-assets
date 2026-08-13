@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sonagi Sonagi Asset Hub</title>
+    <title>Sonagi Asset Hub</title>
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .action-btns { margin-top: 15px; display: flex; gap: 10px; }
+        .danger-btn { background: #ff4757; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        .edit-btn { background: #2ed573; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
+        .tag-input { padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100%; margin-top: 5px; }
+    </style>
 </head>
 <body>
     <div class="layout">
@@ -35,6 +41,15 @@
                 <input type="text" id="search" placeholder="Search tags, names, or extensions (e.g. png)..." onkeyup="if(event.key==='Enter') searchItems()">
                 <button onclick="searchItems()">Search</button>
             </div>
+            
+            <!-- Simple Upload Area -->
+            <div class="header" style="margin-top: 10px; background: #f1f2f6; padding: 15px; border-radius: 8px;">
+                <h4>Quick Upload</h4>
+                <input type="file" id="file-upload">
+                <input type="text" id="upload-tags" placeholder="Tags (comma separated)">
+                <button onclick="uploadAsset()">Upload</button>
+            </div>
+
             <div id="stats" class="stats"></div>
 
             <div class="gallery" id="gallery"></div>
@@ -58,14 +73,22 @@
                 <h2 id="modal-title"></h2>
                 <div class="modal-meta">
                     <p><strong>Extension:</strong> <span id="modal-ext"></span></p>
-                    <p><strong>URL:</strong> <a id="modal-url" href="#" target="_blank"></a></p>
+                    <p><strong>Date:</strong> <span id="modal-date"></span></p>
                 </div>
+                
+                <div id="edit-mode" style="display: none; margin-bottom: 15px;">
+                    <input type="text" id="edit-name" class="tag-input" placeholder="Name">
+                    <input type="text" id="edit-tags" class="tag-input" placeholder="Tags (comma separated)">
+                    <button class="edit-btn" style="margin-top: 5px;" onclick="saveEdits()">Save</button>
+                    <button class="close-btn" style="position: static; font-size: 14px; padding: 5px;" onclick="toggleEditMode(false)">Cancel</button>
+                </div>
+
                 <div class="modal-tags" id="modal-tags"></div>
-                <div class="modal-note">
-                    <strong>Note:</strong>
-                    <p id="modal-annotation"></p>
+                <div class="action-btns">
+                    <a id="modal-original-link" href="#" target="_blank" class="download-btn">View Original</a>
+                    <button class="edit-btn" onclick="toggleEditMode(true)">Edit</button>
+                    <button class="danger-btn" onclick="deleteAsset()">Delete</button>
                 </div>
-                <a id="modal-original-link" href="#" target="_blank" class="download-btn">View Original</a>
             </div>
         </div>
     </div>
