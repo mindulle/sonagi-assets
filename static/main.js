@@ -1,5 +1,5 @@
 let offset = 0;
-let currentSearch = '';
+let currentSearch = "";
 let isLoading = false;
 let hasMore = true;
 let totalItems = 0;
@@ -13,14 +13,14 @@ const SONAGI_SYMBOL_SVG = `<svg width="80" height="80" viewBox="0 0 100 100" fil
 
 const FOLDER_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></svg>`;
 
-const HEAVY_EXTS = ['psd', 'ai', 'fig', 'blend', 'c4d', 'mp4', 'mov', 'pdf', 'zip'];
+const HEAVY_EXTS = ["psd", "ai", "fig", "blend", "c4d", "mp4", "mov", "pdf", "zip"];
 
 window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const querySearch = urlParams.get('search');
+    const querySearch = urlParams.get("search");
     if (querySearch) {
         currentSearch = querySearch;
-        document.getElementById('search').value = currentSearch;
+        document.getElementById("search").value = currentSearch;
     }
 
     loadSidebarFilters();
@@ -29,19 +29,19 @@ window.onload = () => {
 
 async function loadSidebarFilters() {
     try {
-        const [tagsRes, extsRes] = await Promise.all([fetch('/api/tags'), fetch('/api/exts')]);
+        const [tagsRes, extsRes] = await Promise.all([fetch("/api/tags"), fetch("/api/exts")]);
 
         const tags = await tagsRes.json();
         const exts = await extsRes.json();
 
-        const tagList = document.getElementById('tag-list');
-        tagList.innerHTML = '';
+        const tagList = document.getElementById("tag-list");
+        tagList.innerHTML = "";
         for (const t of tags) {
-            const li = document.createElement('li');
-            const label = document.createElement('span');
+            const li = document.createElement("li");
+            const label = document.createElement("span");
             label.textContent = `# ${t.tag}`;
-            const count = document.createElement('span');
-            count.className = 'count';
+            const count = document.createElement("span");
+            count.className = "count";
             count.textContent = t.count;
             li.appendChild(label);
             li.appendChild(count);
@@ -49,14 +49,14 @@ async function loadSidebarFilters() {
             tagList.appendChild(li);
         }
 
-        const extList = document.getElementById('ext-list');
-        extList.innerHTML = '';
+        const extList = document.getElementById("ext-list");
+        extList.innerHTML = "";
         for (const e of exts) {
-            const li = document.createElement('li');
-            const label = document.createElement('span');
+            const li = document.createElement("li");
+            const label = document.createElement("span");
             label.textContent = `. ${e.ext.toUpperCase()}`;
-            const count = document.createElement('span');
-            count.className = 'count';
+            const count = document.createElement("span");
+            count.className = "count";
             count.textContent = e.count;
             li.appendChild(label);
             li.appendChild(count);
@@ -64,12 +64,12 @@ async function loadSidebarFilters() {
             extList.appendChild(li);
         }
     } catch (e) {
-        console.error('Failed to load sidebar filters:', e);
+        console.error("Failed to load sidebar filters:", e);
     }
 }
 
 function setFilter(term) {
-    document.getElementById('search').value = term;
+    document.getElementById("search").value = term;
     searchItems();
 }
 
@@ -77,34 +77,34 @@ async function loadItems(reset = false) {
     if (reset) {
         offset = 0;
         hasMore = true;
-        document.getElementById('gallery').innerHTML = '';
+        document.getElementById("gallery").innerHTML = "";
     }
 
     if (isLoading || !hasMore) return;
     isLoading = true;
-    document.getElementById('loading').style.display = 'flex';
+    document.getElementById("loading").style.display = "flex";
 
     try {
         const res = await fetch(
-            `/api/items?limit=50&offset=${offset}&search=${encodeURIComponent(currentSearch)}`
+            `/api/items?limit=50&offset=${offset}&search=${encodeURIComponent(currentSearch)}`,
         );
         const data = await res.json();
 
         totalItems = data.total;
         const items = data.items;
 
-        const gallery = document.getElementById('gallery');
-        const stats = document.getElementById('stats');
+        const gallery = document.getElementById("gallery");
+        const stats = document.getElementById("stats");
 
         if (offset === 0) {
-            stats.innerHTML = '';
+            stats.innerHTML = "";
 
-            const foundSpan = document.createElement('span');
+            const foundSpan = document.createElement("span");
             foundSpan.innerHTML = `Found <strong>${totalItems}</strong> items`;
             stats.appendChild(foundSpan);
 
             if (currentSearch) {
-                const searchSpan = document.createElement('span');
+                const searchSpan = document.createElement("span");
                 searchSpan.textContent = ` for "${currentSearch}"`;
                 stats.appendChild(searchSpan);
             }
@@ -120,24 +120,24 @@ async function loadItems(reset = false) {
         }
 
         for (const item of items) {
-            const card = document.createElement('div');
-            card.className = 'card';
+            const card = document.createElement("div");
+            card.className = "card";
             card.onclick = () => openModal(item.id);
 
             const imgSrc = item.has_thumbnail
                 ? `/api/image/${item.id}/thumbnail`
                 : `/api/image/${item.id}/original`;
 
-            const imgContainer = document.createElement('div');
-            imgContainer.className = 'img-container';
+            const imgContainer = document.createElement("div");
+            imgContainer.className = "img-container";
 
-            const img = document.createElement('img');
-            img.loading = 'lazy';
+            const img = document.createElement("img");
+            img.loading = "lazy";
 
             img.onerror = function () {
-                this.style.display = 'none';
-                const placeholder = document.createElement('div');
-                placeholder.className = 'placeholder-icon';
+                this.style.display = "none";
+                const placeholder = document.createElement("div");
+                placeholder.className = "placeholder-icon";
                 if (item.ext && HEAVY_EXTS.includes(item.ext.toLowerCase())) {
                     placeholder.innerHTML = SONAGI_SYMBOL_SVG;
                 } else {
@@ -148,24 +148,24 @@ async function loadItems(reset = false) {
             img.src = imgSrc;
             imgContainer.appendChild(img);
 
-            const info = document.createElement('div');
-            info.className = 'card-info';
+            const info = document.createElement("div");
+            info.className = "card-info";
 
-            const title = document.createElement('h3');
-            title.className = 'card-title';
-            title.textContent = item.name || 'Untitled';
+            const title = document.createElement("h3");
+            title.className = "card-title";
+            title.textContent = item.name || "Untitled";
 
-            const tagsContainer = document.createElement('div');
+            const tagsContainer = document.createElement("div");
             if (item.ext) {
-                const extSpan = document.createElement('span');
-                extSpan.className = 'tag tag-ext';
+                const extSpan = document.createElement("span");
+                extSpan.className = "tag tag-ext";
                 extSpan.textContent = item.ext.toUpperCase();
                 tagsContainer.appendChild(extSpan);
             }
 
             for (const t of item.tags.slice(0, 3)) {
-                const tagSpan = document.createElement('span');
-                tagSpan.className = 'tag';
+                const tagSpan = document.createElement("span");
+                tagSpan.className = "tag";
                 tagSpan.textContent = t;
                 tagsContainer.appendChild(tagSpan);
             }
@@ -180,23 +180,23 @@ async function loadItems(reset = false) {
         offset += 50;
     } catch (e) {
         console.error(e);
-        const stats = document.getElementById('stats');
+        const stats = document.getElementById("stats");
         stats.innerHTML = '<span style="color:red;">Error loading items. Please try again.</span>';
     } finally {
         isLoading = false;
-        document.getElementById('loading').style.display = 'none';
+        document.getElementById("loading").style.display = "none";
     }
 }
 
 function searchItems() {
-    currentSearch = document.getElementById('search').value;
+    currentSearch = document.getElementById("search").value;
     const newUrl = new URL(window.location.href);
     if (currentSearch) {
-        newUrl.searchParams.set('search', currentSearch);
+        newUrl.searchParams.set("search", currentSearch);
     } else {
-        newUrl.searchParams.delete('search');
+        newUrl.searchParams.delete("search");
     }
-    window.history.pushState({}, '', newUrl.toString());
+    window.history.pushState({}, "", newUrl.toString());
     loadItems(true);
 }
 
@@ -208,24 +208,24 @@ window.onscroll = () => {
 
 async function openModal(itemId) {
     currentItemId = itemId;
-    const lightbox = document.getElementById('lightbox');
-    const imgContainer = document.getElementById('modal-img-wrapper');
+    const lightbox = document.getElementById("lightbox");
+    const imgContainer = document.getElementById("modal-img-wrapper");
 
-    lightbox.classList.add('active');
+    lightbox.classList.add("active");
     imgContainer.innerHTML = '<img id="modal-img" src="">';
-    const img = document.getElementById('modal-img');
+    const img = document.getElementById("modal-img");
 
-    document.getElementById('modal-title').textContent = 'Loading...';
-    document.getElementById('modal-ext').textContent = '...';
-    document.getElementById('modal-date').textContent = '';
-    document.getElementById('modal-url').textContent = '';
-    document.getElementById('modal-url').removeAttribute('href');
-    document.getElementById('modal-tags').innerHTML = '';
-    document.getElementById('modal-annotation').textContent = '';
+    document.getElementById("modal-title").textContent = "Loading...";
+    document.getElementById("modal-ext").textContent = "...";
+    document.getElementById("modal-date").textContent = "";
+    document.getElementById("modal-url").textContent = "";
+    document.getElementById("modal-url").removeAttribute("href");
+    document.getElementById("modal-tags").innerHTML = "";
+    document.getElementById("modal-annotation").textContent = "";
     toggleEditMode(false);
 
     img.onerror = function () {
-        this.style.display = 'none';
+        this.style.display = "none";
         imgContainer.innerHTML = `<div class="modal-placeholder">${SONAGI_SYMBOL_SVG}</div>`;
     };
     img.src = `/api/image/${itemId}/original`;
@@ -234,131 +234,131 @@ async function openModal(itemId) {
         const res = await fetch(`/api/items/${itemId}`);
         const item = await res.json();
 
-        document.getElementById('modal-title').textContent = item.name || 'Untitled';
-        document.getElementById('edit-name').value = item.name || '';
-        document.getElementById('modal-ext').textContent = (item.ext || 'Unknown').toUpperCase();
+        document.getElementById("modal-title").textContent = item.name || "Untitled";
+        document.getElementById("edit-name").value = item.name || "";
+        document.getElementById("modal-ext").textContent = (item.ext || "Unknown").toUpperCase();
 
         if (item.created_at) {
-            document.getElementById('modal-date').textContent = new Date(
-                item.created_at
+            document.getElementById("modal-date").textContent = new Date(
+                item.created_at,
             ).toLocaleString();
         }
 
-        const urlEl = document.getElementById('modal-url');
-        if (item.url && (item.url.startsWith('http://') || item.url.startsWith('https://'))) {
+        const urlEl = document.getElementById("modal-url");
+        if (item.url && (item.url.startsWith("http://") || item.url.startsWith("https://"))) {
             urlEl.textContent = item.url;
             urlEl.href = item.url;
-            urlEl.target = '_blank';
-            urlEl.rel = 'noopener noreferrer';
+            urlEl.target = "_blank";
+            urlEl.rel = "noopener noreferrer";
         } else {
-            urlEl.textContent = 'N/A';
-            urlEl.removeAttribute('href');
+            urlEl.textContent = "N/A";
+            urlEl.removeAttribute("href");
         }
 
-        const tagsContainer = document.getElementById('modal-tags');
-        tagsContainer.innerHTML = '';
-        document.getElementById('edit-tags').value = item.tags.join(', ');
+        const tagsContainer = document.getElementById("modal-tags");
+        tagsContainer.innerHTML = "";
+        document.getElementById("edit-tags").value = item.tags.join(", ");
         for (const t of item.tags) {
-            const span = document.createElement('span');
-            span.className = 'tag';
+            const span = document.createElement("span");
+            span.className = "tag";
             span.textContent = t;
             tagsContainer.appendChild(span);
         }
 
-        document.getElementById('modal-annotation').textContent =
-            item.annotation || 'No notes available.';
+        document.getElementById("modal-annotation").textContent =
+            item.annotation || "No notes available.";
 
-        const originalLink = document.getElementById('modal-original-link');
+        const originalLink = document.getElementById("modal-original-link");
         originalLink.href = `/api/image/${itemId}/original`;
-        originalLink.target = '_blank';
-        originalLink.rel = 'noopener noreferrer';
+        originalLink.target = "_blank";
+        originalLink.rel = "noopener noreferrer";
     } catch (e) {
-        console.error('Failed to fetch item details', e);
-        document.getElementById('modal-title').textContent = 'Error loading details';
+        console.error("Failed to fetch item details", e);
+        document.getElementById("modal-title").textContent = "Error loading details";
     }
 }
 
 function closeModal() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.getElementById('modal-img-wrapper').innerHTML = '';
+    document.getElementById("lightbox").classList.remove("active");
+    document.getElementById("modal-img-wrapper").innerHTML = "";
     currentItemId = null;
 }
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
 });
 
 // CRUD Functions
 function toggleEditMode(show) {
-    document.getElementById('edit-mode').style.display = show ? 'block' : 'none';
+    document.getElementById("edit-mode").style.display = show ? "block" : "none";
     if (show) {
-        document.getElementById('modal-title').style.display = 'none';
-        document.getElementById('modal-tags').style.display = 'none';
+        document.getElementById("modal-title").style.display = "none";
+        document.getElementById("modal-tags").style.display = "none";
     } else {
-        document.getElementById('modal-title').style.display = 'block';
-        document.getElementById('modal-tags').style.display = 'flex';
+        document.getElementById("modal-title").style.display = "block";
+        document.getElementById("modal-tags").style.display = "flex";
     }
 }
 
 async function _saveEdits() {
     if (!currentItemId) return;
-    const newName = document.getElementById('edit-name').value;
+    const newName = document.getElementById("edit-name").value;
     const newTags = document
-        .getElementById('edit-tags')
-        .value.split(',')
+        .getElementById("edit-tags")
+        .value.split(",")
         .map((t) => t.trim())
         .filter((t) => t);
 
     try {
         await fetch(`/api/items/${currentItemId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name: newName, tags: newTags }),
         });
         openModal(currentItemId); // reload modal data
         loadSidebarFilters(); // reload tags in sidebar
         loadItems(true); // reload grid
     } catch (_e) {
-        alert('Failed to update asset');
+        alert("Failed to update asset");
     }
 }
 
 async function _deleteAsset() {
     if (!currentItemId) return;
-    if (!confirm('Are you sure you want to delete this asset? This cannot be undone.')) return;
+    if (!confirm("Are you sure you want to delete this asset? This cannot be undone.")) return;
 
     try {
-        await fetch(`/api/items/${currentItemId}`, { method: 'DELETE' });
+        await fetch(`/api/items/${currentItemId}`, { method: "DELETE" });
         closeModal();
         loadSidebarFilters();
         loadItems(true);
     } catch (_e) {
-        alert('Failed to delete asset');
+        alert("Failed to delete asset");
     }
 }
 
 async function _uploadAsset() {
-    const fileInput = document.getElementById('file-upload');
-    const tagsInput = document.getElementById('upload-tags');
-    if (!fileInput.files.length) return alert('Please select a file');
+    const fileInput = document.getElementById("file-upload");
+    const tagsInput = document.getElementById("upload-tags");
+    if (!fileInput.files.length) return alert("Please select a file");
 
     const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
-    formData.append('tags', tagsInput.value);
+    formData.append("file", fileInput.files[0]);
+    formData.append("tags", tagsInput.value);
 
     try {
-        document.getElementById('loading').style.display = 'flex';
-        await fetch('/api/upload', {
-            method: 'POST',
+        document.getElementById("loading").style.display = "flex";
+        await fetch("/api/upload", {
+            method: "POST",
             body: formData,
         });
-        fileInput.value = '';
-        tagsInput.value = '';
+        fileInput.value = "";
+        tagsInput.value = "";
         loadSidebarFilters();
         loadItems(true);
     } catch (_e) {
-        alert('Failed to upload asset');
+        alert("Failed to upload asset");
     } finally {
-        document.getElementById('loading').style.display = 'none';
+        document.getElementById("loading").style.display = "none";
     }
 }
