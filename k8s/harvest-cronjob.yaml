@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: eagle-gallery-harvest
+  name: sonagi-assets-harvest
   namespace: default
 spec:
   schedule: "0 0 * * *" # Every day at midnight
@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
           - name: harvest
-            image: ghcr.io/mindulle/sonagi-eagle-gallery:latest
+            image: ghcr.io/mindulle/sonagi-assets:latest
             imagePullPolicy: Always
             command: ["python", "dribbble_scraper_bot.py"]
             env:

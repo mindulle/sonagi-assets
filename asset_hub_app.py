@@ -74,7 +74,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DB_PATH = "eagle_gallery.db"
+DB_PATH = "asset_hub.db"
 
 
 def get_db():

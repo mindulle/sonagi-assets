@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: eagle-gallery-web
+  name: sonagi-assets-web
   namespace: default
   labels:
-    app: eagle-gallery-web
+    app: sonagi-assets-web
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: eagle-gallery-web
+      app: sonagi-assets-web
   template:
     metadata:
       labels:
-        app: eagle-gallery-web
+        app: sonagi-assets-web
     spec:
       containers:
       - name: web
-        image: ghcr.io/mindulle/sonagi-eagle-gallery:latest
+        image: ghcr.io/mindulle/sonagi-assets:latest
         imagePullPolicy: Always
         env:
         - name: GALLERY_LIBRARY_PATH
@@ -29,13 +29,13 @@ spec:
           hostPort: 34920
         volumeMounts:
         - name: db-volume
-          mountPath: /app/eagle_gallery.db
+          mountPath: /app/asset_hub.db
         - name: library-volume
           mountPath: /app/data
       volumes:
       - name: db-volume
         hostPath:
-          path: /home/mindulle/design-tools-setup/eagle_gallery.db
+          path: /home/mindulle/design-tools-setup/asset_hub.db
           type: FileOrCreate
       - name: library-volume
         persistentVolumeClaim:
@@ -44,11 +44,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: eagle-gallery-svc
+  name: sonagi-assets-svc
   namespace: default
 spec:
   selector:
-    app: eagle-gallery-web
+    app: sonagi-assets-web
   type: ClusterIP
   ports:
     - protocol: TCP
