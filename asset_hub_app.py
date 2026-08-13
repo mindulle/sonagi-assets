@@ -413,10 +413,11 @@ def index():
 # MCP (Model Context Protocol) Integration
 # ==========================================
 
-mcp = Server("sonagi-assets-mcp")
+from mcp.server.fastmcp import FastMCP
+fast_mcp = FastMCP("sonagi-assets-mcp")
+mcp = fast_mcp._mcp_server
 
-
-@mcp.tool()
+@fast_mcp.tool()
 async def assets_search(search: str = "") -> str:
     """Search assets by keyword (name, tags, or extension). Returns JSON array of assets."""
     conn = get_db()
@@ -441,7 +442,7 @@ async def assets_search(search: str = "") -> str:
         conn.close()
 
 
-@mcp.tool()
+@fast_mcp.tool()
 async def assets_update_tags(item_id: str, tags: list[str]) -> str:
     """Update (overwrite) the tags of a specific asset."""
     conn = get_db()
@@ -468,7 +469,7 @@ async def assets_update_tags(item_id: str, tags: list[str]) -> str:
         conn.close()
 
 
-@mcp.tool()
+@fast_mcp.tool()
 async def assets_delete(item_id: str) -> str:
     """Delete an asset permanently."""
     conn = get_db()
