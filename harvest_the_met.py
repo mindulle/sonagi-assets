@@ -115,7 +115,8 @@ def harvest_the_met(query: str, limit: int = 10):
 
             tags_json = json.dumps(tags)
             cursor.execute(
-                "INSERT INTO items (id, name, ext, tags, annotation, url, created_at, thumbnail_path, original_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO items (id, name, ext, tags, annotation, url, created_at, thumbnail_path, original_path) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (asset_id, title, ext, tags_json, medium, image_url, int(time.time()), str(thumb_path), str(orig_path)),
             )
 
