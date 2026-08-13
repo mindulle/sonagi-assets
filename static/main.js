@@ -133,7 +133,7 @@ async function loadItems(reset = false) {
             // 폰트 파일은 has_thumbnail과 무관하게 @font-face 미리보기 렌더링
             if (item.ext && FONT_EXTS.includes(item.ext.toLowerCase())) {
                 const placeholder = document.createElement("div");
-                placeholder.className = "placeholder-icon font-card-placeholder";
+                placeholder.className = "font-card-placeholder";
                 placeholder.innerHTML = `<span class="font-card-sample">Loading...</span>`;
                 imgContainer.appendChild(placeholder);
 
