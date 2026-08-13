@@ -10,18 +10,15 @@ from pathlib import Path
 from typing import List, Optional
 
 import sentry_sdk
-from fastapi import FastAPI, HTTPException, Query, UploadFile, File, Form
+from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from prometheus_fastapi_instrumentator import Instrumentator
-from pydantic import BaseModel
-
 from mcp.server import Server
 from mcp.server.sse import SseServerTransport
+from prometheus_fastapi_instrumentator import Instrumentator
+from pydantic import BaseModel
 from starlette.requests import Request
-import anyio
-
 
 try:
     from PIL import Image
@@ -48,6 +45,7 @@ class ImportUrlRequest(BaseModel):
     content: Optional[str] = ""
     messageUrl: Optional[str] = ""
     tags: List[str] = []
+
 
 class UpdateItemRequest(BaseModel):
     name: Optional[str] = None
@@ -78,7 +76,7 @@ def init_db():
     c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS items
                  (id TEXT PRIMARY KEY, name TEXT, ext TEXT, tags TEXT,
-                  annotation TEXT, url TEXT, created_at INTEGER, 
+                  annotation TEXT, url TEXT, created_at INTEGER,
                   thumbnail_path TEXT, original_path TEXT)""")
     c.execute("""CREATE TABLE IF NOT EXISTS tags
                  (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE)""")
@@ -90,12 +88,14 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 def get_db():
     conn = sqlite3.connect(DB_PATH, timeout=20)
     conn.execute("PRAGMA journal_mode=WAL;")
     conn.execute("PRAGMA foreign_keys = ON;")
     conn.row_factory = sqlite3.Row
     return conn
+
 
 init_db()
 
@@ -211,10 +211,7 @@ def update_item(item_id: str, req: UpdateItemRequest):
                 if tag_id_row:
                     c.execute("INSERT OR IGNORE INTO item_tags (item_id, tag_id) VALUES (?, ?)", (item_id, tag_id_row[0]))
 
-        c.execute(
-            "UPDATE items SET name = ?, tags = ?, annotation = ? WHERE id = ?",
-            (name, tags_str, annotation, item_id)
-        )
+        c.execute("UPDATE items SET name = ?, tags = ?, annotation = ? WHERE id = ?", (name, tags_str, annotation, item_id))
         conn.commit()
         return {"success": True}
     finally:
@@ -395,13 +392,13 @@ async def upload_file(file: UploadFile = File(...), tags: str = Form(""), annota
     asset_id = generate_id()
     ext = file.filename.split(".")[-1].lower() if "." in file.filename else "png"
     asset_name = file.filename.rsplit(".", 1)[0] if "." in file.filename else file.filename
-    
+
     tmp_path = Path("/tmp") / f"{asset_id}.{ext}"
     with open(tmp_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
     tag_list = [t.strip() for t in tags.split(",")] if tags else []
-    
+
     res = process_import(asset_id, asset_name, ext, tmp_path, tag_list, annotation, "")
     os.remove(tmp_path)
     return res
@@ -412,12 +409,12 @@ def index():
     return FileResponse("static/index.html")
 
 
-
 # ==========================================
 # MCP (Model Context Protocol) Integration
 # ==========================================
 
 mcp = Server("sonagi-assets-mcp")
+
 
 @mcp.tool()
 async def assets_search(search: str = "") -> str:
@@ -443,6 +440,7 @@ async def assets_search(search: str = "") -> str:
     finally:
         conn.close()
 
+
 @mcp.tool()
 async def assets_update_tags(item_id: str, tags: list[str]) -> str:
     """Update (overwrite) the tags of a specific asset."""
@@ -453,7 +451,7 @@ async def assets_update_tags(item_id: str, tags: list[str]) -> str:
         row = c.fetchone()
         if not row:
             return f"Error: Item {item_id} not found."
-        
+
         tags_str = json.dumps(tags)
         c.execute("DELETE FROM item_tags WHERE item_id = ?", (item_id,))
         for tag in tags:
@@ -462,12 +460,13 @@ async def assets_update_tags(item_id: str, tags: list[str]) -> str:
             tag_id_row = c.fetchone()
             if tag_id_row:
                 c.execute("INSERT OR IGNORE INTO item_tags (item_id, tag_id) VALUES (?, ?)", (item_id, tag_id_row[0]))
-        
+
         c.execute("UPDATE items SET tags = ? WHERE id = ?", (tags_str, item_id))
         conn.commit()
         return f"Successfully updated tags for {item_id} to {tags}"
     finally:
         conn.close()
+
 
 @mcp.tool()
 async def assets_delete(item_id: str) -> str:
@@ -479,28 +478,32 @@ async def assets_delete(item_id: str) -> str:
         row = c.fetchone()
         if not row:
             return f"Error: Item {item_id} not found."
-            
+
         c.execute("DELETE FROM items WHERE id = ?", (item_id,))
         conn.commit()
-        
+
         if row["original_path"] and os.path.exists(row["original_path"]):
             os.remove(row["original_path"])
         if row["thumbnail_path"] and os.path.exists(row["thumbnail_path"]):
             os.remove(row["thumbnail_path"])
-            
+
         return f"Successfully deleted item {item_id}"
     finally:
         conn.close()
 
+
 sse = SseServerTransport("/mcp/messages")
+
 
 @app.get("/mcp/sse")
 async def handle_sse(request: Request):
     async with sse.connect_sse(request.scope, request.receive, request._send) as streams:
         await mcp.run(streams[0], streams[1], mcp.create_initialization_options())
 
+
 @app.post("/mcp/messages")
 async def handle_messages(request: Request):
     await sse.handle_post_message(request.scope, request.receive, request._send)
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
