@@ -416,6 +416,7 @@ def index():
 fast_mcp = FastMCP("sonagi-assets-mcp")
 mcp = fast_mcp._mcp_server
 
+
 @fast_mcp.tool()
 async def assets_search(search: str = "") -> str:
     """Search assets by keyword (name, tags, or extension). Returns JSON array of assets."""
