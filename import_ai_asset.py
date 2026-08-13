@@ -97,7 +97,7 @@ def import_asset(image_path: str, name: str = None, tags: list = None, annotatio
 
 
 def main():
-    parser = argparse.ArgumentParser(description="AI 생성 이미지를 Eagle Gallery 포맷으로 임포트")
+    parser = argparse.ArgumentParser(description="AI 생성 이미지를 Sonagi Asset Hub 포맷으로 임포트")
     parser.add_argument("image_path", help="임포트할 이미지 파일 경로")
     parser.add_argument("--name", help="에셋 이름 (기본값: 파일명)")
     parser.add_argument("--tags", help="태그 (쉼표 구분, 예: ai-generated,comfyui,logo)")

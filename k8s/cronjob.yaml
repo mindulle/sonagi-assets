@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: eagle-gallery-sync
+  name: sonagi-assets-sync
   namespace: default
 spec:
   schedule: "0 * * * *" # Every hour
@@ -12,12 +12,12 @@ spec:
         spec:
           containers:
           - name: sync
-            image: ghcr.io/mindulle/sonagi-eagle-gallery:latest
+            image: ghcr.io/mindulle/sonagi-assets:latest
             imagePullPolicy: Always
-            command: ["python", "build_eagle_gallery.py"]
+            command: ["python", "build_asset_hub.py"]
             volumeMounts:
             - name: db-volume
-              mountPath: /app/eagle_gallery.db
+              mountPath: /app/asset_hub.db
             - name: library-volume
               mountPath: /mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library
             - name: ai-assets-volume
@@ -26,7 +26,7 @@ spec:
           volumes:
           - name: db-volume
             hostPath:
-              path: /home/mindulle/design-tools-setup/eagle_gallery.db
+              path: /home/mindulle/design-tools-setup/asset_hub.db
               type: FileOrCreate
           - name: library-volume
             hostPath:

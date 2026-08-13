@@ -71,8 +71,8 @@ jobs:
         env:
           NEW_VERSION: ${{ needs.release.outputs.new_release_version }}
         run: |
-          sed -i "s|image: ghcr.io/mindulle/sonagi-eagle-gallery:.*|image: ghcr.io/mindulle/sonagi-eagle-gallery:${NEW_VERSION}|g" k8s/deployment.yaml
-          sed -i "s|image: ghcr.io/mindulle/sonagi-eagle-gallery:.*|image: ghcr.io/mindulle/sonagi-eagle-gallery:${NEW_VERSION}|g" k8s/cronjob.yaml
+          sed -i "s|image: ghcr.io/mindulle/sonagi-assets:.*|image: ghcr.io/mindulle/sonagi-assets:${NEW_VERSION}|g" k8s/deployment.yaml
+          sed -i "s|image: ghcr.io/mindulle/sonagi-assets:.*|image: ghcr.io/mindulle/sonagi-assets:${NEW_VERSION}|g" k8s/cronjob.yaml
 
       - name: Create Pull Request for K8s deployment
         uses: peter-evans/create-pull-request@v6

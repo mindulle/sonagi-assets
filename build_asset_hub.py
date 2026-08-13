@@ -6,8 +6,8 @@ import sys
 
 from tqdm import tqdm
 
-LOCK_FILE = "eagle_gallery.lock"
-DB_PATH = "eagle_gallery.db"
+LOCK_FILE = "asset_hub.lock"
+DB_PATH = "asset_hub.db"
 LIBRARY_PATH = os.environ.get("GALLERY_LIBRARY_PATH", "/mnt/monitoring/@GP66_D드라이브 백업/my-eagle/Design.library/images")
 AI_ASSETS_PATH = os.environ.get("AI_ASSETS_PATH", "/app/data/ai-assets/images")
 

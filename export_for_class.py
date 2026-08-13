@@ -11,7 +11,7 @@ def export_project():
 
     os.makedirs(IMAGES_DIR, exist_ok=True)
 
-    conn = sqlite3.connect("eagle_gallery.db")
+    conn = sqlite3.connect("asset_hub.db")
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
     c.execute("SELECT * FROM items ORDER BY id DESC LIMIT 60")
@@ -91,14 +91,14 @@ def export_project():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eagle Gallery - Home</title>
+    <title>Sonagi Asset Hub - Home</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-4.0.0-beta.min.js"></script>
     <script src="main.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>Sonagi Eagle Gallery</h1>
+        <h1>Sonagi Sonagi Asset Hub</h1>
         <nav>
             <ul>
                 <li><a href="index.html" class="active">Home</a></li>
@@ -151,12 +151,12 @@ def export_project():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eagle Gallery - Content</title>
+    <title>Sonagi Asset Hub - Content</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Sonagi Eagle Gallery</h1>
+        <h1>Sonagi Sonagi Asset Hub</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
@@ -183,12 +183,12 @@ def export_project():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eagle Gallery - About</title>
+    <title>Sonagi Asset Hub - About</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Sonagi Eagle Gallery</h1>
+        <h1>Sonagi Sonagi Asset Hub</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>

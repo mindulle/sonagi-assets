@@ -14,4 +14,4 @@ RUN npm install -g opendevbrowser
 COPY . .
 
 # Default command for the web app
-CMD ["uvicorn", "eagle_gallery_app:app", "--host", "0.0.0.0", "--port", "34920"]
+CMD ["uvicorn", "asset_hub_app:app", "--host", "0.0.0.0", "--port", "34920"]
