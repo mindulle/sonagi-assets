@@ -20,20 +20,22 @@ s3 = boto3.client(
 )
 
 
-def upload_to_cdn(file_path: str, bucket: str = "references"):
+def upload_to_cdn(file_path: str, bucket: str = "references", object_name: str = None):
     file_name = os.path.basename(file_path)
+    if object_name is None:
+        object_name = file_name
 
     # Auto-detect Content-Type (HTML, MP4, JSON, etc.)
     content_type, _ = mimetypes.guess_type(file_path)
     if not content_type:
         content_type = "application/octet-stream"
 
-    print(f"Uploading {file_name} with Content-Type: {content_type}")
+    print(f"Uploading {object_name} with Content-Type: {content_type}")
 
     # Upload with explicitly forced Content-Type
-    s3.upload_file(file_path, bucket, file_name, ExtraArgs={"ContentType": content_type})
+    s3.upload_file(file_path, bucket, object_name, ExtraArgs={"ContentType": content_type})
 
-    return f"{MINIO_URL}/{bucket}/{file_name}"
+    return f"{MINIO_URL}/{bucket}/{object_name}"
 
 
 if __name__ == "__main__":
