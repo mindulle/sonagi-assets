@@ -14,6 +14,9 @@ const SONAGI_SYMBOL_SVG = `<svg width="80" height="80" viewBox="0 0 100 100" fil
 const FOLDER_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" /></svg>`;
 
 const HEAVY_EXTS = ["psd", "ai", "fig", "blend", "c4d", "mp4", "mov", "pdf", "zip"];
+const FONT_EXTS = ["ttf", "otf", "woff", "woff2"];
+const FONT_SAMPLE_EN = "AaBbCcDd 0123 The quick brown fox";
+const FONT_SAMPLE_KO = "가나다라 마바사아 한글 미리보기";
 
 window.onload = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -138,7 +141,18 @@ async function loadItems(reset = false) {
                 this.style.display = "none";
                 const placeholder = document.createElement("div");
                 placeholder.className = "placeholder-icon";
-                if (item.ext && HEAVY_EXTS.includes(item.ext.toLowerCase())) {
+                if (item.ext && FONT_EXTS.includes(item.ext.toLowerCase())) {
+                    placeholder.innerHTML = FOLDER_ICON_SVG;
+                    placeholder.classList.add("font-card-placeholder");
+                    // @font-face 동적 로딩 후 샘플 텍스트 렌더링
+                    const fontId = `font-card-${item.id}`;
+                    const style = document.createElement("style");
+                    style.textContent = `@font-face { font-family: "${fontId}"; src: url("/api/image/${item.id}/original"); }`;
+                    document.head.appendChild(style);
+                    document.fonts.load(`14px "${fontId}"`).then(() => {
+                        placeholder.innerHTML = `<span class="font-card-sample" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_EN}</span>`;
+                    });
+                } else if (item.ext && HEAVY_EXTS.includes(item.ext.toLowerCase())) {
                     placeholder.innerHTML = SONAGI_SYMBOL_SVG;
                 } else {
                     placeholder.innerHTML = FOLDER_ICON_SVG;
@@ -228,7 +242,6 @@ async function openModal(itemId) {
         this.style.display = "none";
         imgContainer.innerHTML = `<div class="modal-placeholder">${SONAGI_SYMBOL_SVG}</div>`;
     };
-    img.src = `/api/image/${itemId}/original`;
 
     try {
         const res = await fetch(`/api/items/${itemId}`);
@@ -272,9 +285,45 @@ async function openModal(itemId) {
         originalLink.href = `/api/image/${itemId}/original`;
         originalLink.target = "_blank";
         originalLink.rel = "noopener noreferrer";
+
+        // 폰트 파일이면 @font-face 동적 로딩으로 미리보기 렌더링
+        if (item.ext && FONT_EXTS.includes(item.ext.toLowerCase())) {
+            img.style.display = "none";
+            const fontId = `font-modal-${itemId}`;
+            const existingStyle = document.getElementById(`style-${fontId}`);
+            if (!existingStyle) {
+                const style = document.createElement("style");
+                style.id = `style-${fontId}`;
+                style.textContent = `@font-face { font-family: "${fontId}"; src: url("/api/image/${itemId}/original"); }`;
+                document.head.appendChild(style);
+            }
+            imgContainer.innerHTML = `<div class="font-modal-preview" id="font-preview-${fontId}">
+                <p class="font-preview-loading">Loading font...</p>
+            </div>`;
+            document.fonts.load(`32px "${fontId}"`).then(() => {
+                const preview = document.getElementById(`font-preview-${fontId}`);
+                if (preview) {
+                    preview.innerHTML = `
+                        <p class="font-preview-en" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_EN}</p>
+                        <p class="font-preview-ko" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_KO}</p>
+                        <p class="font-preview-lg" style="font-family:'${fontId}',sans-serif">Aa Bb Cc</p>
+                    `;
+                }
+            }).catch(() => {
+                const preview = document.getElementById(`font-preview-${fontId}`);
+                if (preview) preview.innerHTML = `<p class="font-preview-error">Failed to load font preview.</p>`;
+            });
+        } else {
+            img.src = `/api/image/${itemId}/original`;
+        }
     } catch (e) {
         console.error("Failed to fetch item details", e);
         document.getElementById("modal-title").textContent = "Error loading details";
+        document.getElementById("modal-ext").textContent = "Error";
+        document.getElementById("modal-date").textContent = "Error";
+        const urlEl = document.getElementById("modal-url");
+        urlEl.textContent = "N/A";
+        urlEl.removeAttribute("href");
     }
 }
 
