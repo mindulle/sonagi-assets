@@ -311,7 +311,9 @@ async function openModal(itemId) {
                 }
             }).catch(() => {
                 const preview = document.getElementById(`font-preview-${fontId}`);
-                if (preview) preview.innerHTML = `<p class="font-preview-error">Failed to load font preview.</p>`;
+                if (preview) {
+                    preview.innerHTML = `<p class="font-preview-error">Failed to load font preview.</p>`;
+                }
             });
         } else {
             img.src = `/api/image/${itemId}/original`;
