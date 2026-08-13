@@ -133,20 +133,15 @@ async function loadItems(reset = false) {
             // 폰트 파일은 has_thumbnail과 무관하게 @font-face 미리보기 렌더링
             if (item.ext && FONT_EXTS.includes(item.ext.toLowerCase())) {
                 const placeholder = document.createElement("div");
-                placeholder.className = "placeholder-icon font-card-placeholder";
+                placeholder.className = "font-card-placeholder";
                 placeholder.innerHTML = `<span class="font-card-sample">Loading...</span>`;
                 imgContainer.appendChild(placeholder);
 
                 const fontId = `font-card-${item.id}`;
-                if (!document.getElementById(`style-${fontId}`)) {
-                    const style = document.createElement("style");
-                    style.id = `style-${fontId}`;
-                    style.textContent = `@font-face { font-family: "${fontId}"; src: url("/api/image/${item.id}/original"); }`;
-                    document.head.appendChild(style);
-                }
-                document.fonts
-                    .load(`14px "${fontId}"`)
-                    .then(() => {
+                const face = new FontFace(fontId, `url("/api/image/${item.id}/original")`);
+                face.load()
+                    .then((loaded) => {
+                        document.fonts.add(loaded);
                         placeholder.innerHTML = `<span class="font-card-sample" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_EN}</span>`;
                     })
                     .catch(() => {
@@ -302,19 +297,13 @@ async function openModal(itemId) {
         if (item.ext && FONT_EXTS.includes(item.ext.toLowerCase())) {
             img.style.display = "none";
             const fontId = `font-modal-${itemId}`;
-            const existingStyle = document.getElementById(`style-${fontId}`);
-            if (!existingStyle) {
-                const style = document.createElement("style");
-                style.id = `style-${fontId}`;
-                style.textContent = `@font-face { font-family: "${fontId}"; src: url("/api/image/${itemId}/original"); }`;
-                document.head.appendChild(style);
-            }
             imgContainer.innerHTML = `<div class="font-modal-preview" id="font-preview-${fontId}">
                 <p class="font-preview-loading">Loading font...</p>
             </div>`;
-            document.fonts
-                .load(`32px "${fontId}"`)
-                .then(() => {
+            const face = new FontFace(fontId, `url("/api/image/${itemId}/original")`);
+            face.load()
+                .then((loaded) => {
+                    document.fonts.add(loaded);
                     const preview = document.getElementById(`font-preview-${fontId}`);
                     if (preview) {
                         preview.innerHTML = `
