@@ -300,21 +300,24 @@ async function openModal(itemId) {
             imgContainer.innerHTML = `<div class="font-modal-preview" id="font-preview-${fontId}">
                 <p class="font-preview-loading">Loading font...</p>
             </div>`;
-            document.fonts.load(`32px "${fontId}"`).then(() => {
-                const preview = document.getElementById(`font-preview-${fontId}`);
-                if (preview) {
-                    preview.innerHTML = `
+            document.fonts
+                .load(`32px "${fontId}"`)
+                .then(() => {
+                    const preview = document.getElementById(`font-preview-${fontId}`);
+                    if (preview) {
+                        preview.innerHTML = `
                         <p class="font-preview-en" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_EN}</p>
                         <p class="font-preview-ko" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_KO}</p>
                         <p class="font-preview-lg" style="font-family:'${fontId}',sans-serif">Aa Bb Cc</p>
                     `;
-                }
-            }).catch(() => {
-                const preview = document.getElementById(`font-preview-${fontId}`);
-                if (preview) {
-                    preview.innerHTML = `<p class="font-preview-error">Failed to load font preview.</p>`;
-                }
-            });
+                    }
+                })
+                .catch(() => {
+                    const preview = document.getElementById(`font-preview-${fontId}`);
+                    if (preview) {
+                        preview.innerHTML = `<p class="font-preview-error">Failed to load font preview.</p>`;
+                    }
+                });
         } else {
             img.src = `/api/image/${itemId}/original`;
         }
