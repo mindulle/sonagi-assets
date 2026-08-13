@@ -288,6 +288,14 @@ def get_exts(limit: int = Query(20, le=100)):
         conn.close()
 
 
+FONT_MIME_TYPES = {
+    "ttf": "font/ttf",
+    "otf": "font/otf",
+    "woff": "font/woff",
+    "woff2": "font/woff2",
+}
+
+
 @app.get("/api/image/{item_id}/{type}")
 def get_image(item_id: str, type: str):
     if type not in ["thumbnail", "original"]:
@@ -296,7 +304,7 @@ def get_image(item_id: str, type: str):
     conn = get_db()
     try:
         c = conn.cursor()
-        c.execute("SELECT thumbnail_path, original_path FROM items WHERE id = ?", (item_id,))
+        c.execute("SELECT thumbnail_path, original_path, name, ext FROM items WHERE id = ?", (item_id,))
         row = c.fetchone()
 
         if not row:
@@ -304,6 +312,21 @@ def get_image(item_id: str, type: str):
 
         path = row["thumbnail_path"] if type == "thumbnail" else row["original_path"]
         if path and os.path.exists(path):
+            if type == "original":
+                filename = f"{row['name']}.{row['ext']}" if row["ext"] else row["name"]
+                ext_lower = (row["ext"] or "").lower()
+                media_type = FONT_MIME_TYPES.get(ext_lower)
+                # 폰트 파일은 브라우저가 직접 렌더링할 수 있도록 inline, 나머지는 attachment
+                if media_type:
+                    return FileResponse(
+                        path,
+                        media_type=media_type,
+                        headers={"Content-Disposition": f'inline; filename="{filename}"'},
+                    )
+                return FileResponse(
+                    path,
+                    headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+                )
             return FileResponse(path)
         return HTMLResponse(status_code=404, content="File not found")
     finally:

@@ -414,3 +414,60 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+/* Font preview - gallery card */
+.font-card-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: #f8f7ff;
+    padding: 12px;
+}
+
+.font-card-sample {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Font preview - modal */
+.font-modal-preview {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding: 32px;
+    background: #f8f7ff;
+    border-radius: 8px;
+}
+
+.font-preview-loading,
+.font-preview-error {
+    color: #999;
+    font-size: 14px;
+    text-align: center;
+}
+
+.font-preview-en {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.font-preview-ko {
+    font-size: 18px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.font-preview-lg {
+    font-size: 48px;
+    color: #1991B9;
+    line-height: 1.2;
+}
