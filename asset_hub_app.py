@@ -17,6 +17,12 @@ from fastapi.staticfiles import StaticFiles
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel
 
+from mcp.server import Server
+from mcp.server.sse import SseServerTransport
+from starlette.requests import Request
+import anyio
+
+
 try:
     from PIL import Image
 
@@ -410,10 +416,6 @@ def index():
 # ==========================================
 # MCP (Model Context Protocol) Integration
 # ==========================================
-from mcp.server import Server
-from mcp.server.sse import SseServerTransport
-from starlette.requests import Request
-import anyio
 
 mcp = Server("sonagi-assets-mcp")
 
@@ -427,7 +429,16 @@ async def assets_search(search: str = "") -> str:
         st = f"%{search}%"
         c.execute(query, (st, st, st))
         rows = c.fetchall()
-        res = [{"id": r["id"], "name": r["name"], "ext": r["ext"], "tags": json.loads(r["tags"]) if r["tags"] else [], "annotation": r["annotation"]} for r in rows]
+        res = [
+            {
+                "id": r["id"],
+                "name": r["name"],
+                "ext": r["ext"],
+                "tags": json.loads(r["tags"]) if r["tags"] else [],
+                "annotation": r["annotation"],
+            }
+            for r in rows
+        ]
         return json.dumps(res, ensure_ascii=False)
     finally:
         conn.close()

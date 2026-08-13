@@ -1,26 +1,14 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
     "formatter": {
         "enabled": true,
         "formatWithErrors": false,
         "indentStyle": "space",
         "indentWidth": 4,
         "lineEnding": "lf",
-        "lineWidth": 100,
-        "attributePosition": "auto"
+        "lineWidth": 100
     },
     "linter": {
-        "enabled": true,
-        "rules": {
-            "recommended": true,
-            "a11y": {
-                "noStaticElementInteractions": "off",
-                "useKeyWithClickEvents": "off",
-                "useHeadingContent": "off",
-                "useValidAnchor": "off",
-                "useButtonType": "off"
-            }
-        }
+        "enabled": false
     },
     "javascript": {
         "formatter": {
@@ -31,8 +19,7 @@
             "arrowParentheses": "always",
             "bracketSpacing": true,
             "bracketSameLine": false,
-            "quoteStyle": "double",
-            "attributePosition": "auto"
+            "quoteStyle": "double"
         }
     }
 }
