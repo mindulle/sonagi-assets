@@ -127,14 +127,10 @@ async function loadItems(reset = false) {
             card.className = "card";
             card.onclick = () => openModal(item.id);
 
-            const imgSrc = item.has_thumbnail
-                ? `/api/image/${item.id}/thumbnail`
-                : `/api/image/${item.id}/original`;
-
             const imgContainer = document.createElement("div");
             imgContainer.className = "img-container";
 
-            // 폰트 파일은 img 로딩 없이 바로 @font-face 미리보기 렌더링
+            // 폰트 파일은 has_thumbnail과 무관하게 @font-face 미리보기 렌더링
             if (item.ext && FONT_EXTS.includes(item.ext.toLowerCase())) {
                 const placeholder = document.createElement("div");
                 placeholder.className = "placeholder-icon font-card-placeholder";
@@ -157,6 +153,9 @@ async function loadItems(reset = false) {
                         placeholder.innerHTML = `<span class="font-card-sample">Font</span>`;
                     });
             } else {
+                const imgSrc = item.has_thumbnail
+                    ? `/api/image/${item.id}/thumbnail`
+                    : `/api/image/${item.id}/original`;
                 const img = document.createElement("img");
                 img.loading = "lazy";
 
