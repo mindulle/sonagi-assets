@@ -406,4 +406,90 @@ def index():
     return FileResponse("static/index.html")
 
 
+
+# ==========================================
+# MCP (Model Context Protocol) Integration
+# ==========================================
+from mcp.server import Server
+from mcp.server.sse import SseServerTransport
+from starlette.requests import Request
+import anyio
+
+mcp = Server("sonagi-assets-mcp")
+
+@mcp.tool()
+async def assets_search(search: str = "") -> str:
+    """Search assets by keyword (name, tags, or extension). Returns JSON array of assets."""
+    conn = get_db()
+    try:
+        c = conn.cursor()
+        query = "SELECT id, name, ext, tags, annotation FROM items WHERE name LIKE ? OR tags LIKE ? OR ext LIKE ? LIMIT 50"
+        st = f"%{search}%"
+        c.execute(query, (st, st, st))
+        rows = c.fetchall()
+        res = [{"id": r["id"], "name": r["name"], "ext": r["ext"], "tags": json.loads(r["tags"]) if r["tags"] else [], "annotation": r["annotation"]} for r in rows]
+        return json.dumps(res, ensure_ascii=False)
+    finally:
+        conn.close()
+
+@mcp.tool()
+async def assets_update_tags(item_id: str, tags: list[str]) -> str:
+    """Update (overwrite) the tags of a specific asset."""
+    conn = get_db()
+    try:
+        c = conn.cursor()
+        c.execute("SELECT * FROM items WHERE id = ?", (item_id,))
+        row = c.fetchone()
+        if not row:
+            return f"Error: Item {item_id} not found."
+        
+        tags_str = json.dumps(tags)
+        c.execute("DELETE FROM item_tags WHERE item_id = ?", (item_id,))
+        for tag in tags:
+            c.execute("INSERT OR IGNORE INTO tags (name) VALUES (?)", (tag,))
+            c.execute("SELECT id FROM tags WHERE name = ?", (tag,))
+            tag_id_row = c.fetchone()
+            if tag_id_row:
+                c.execute("INSERT OR IGNORE INTO item_tags (item_id, tag_id) VALUES (?, ?)", (item_id, tag_id_row[0]))
+        
+        c.execute("UPDATE items SET tags = ? WHERE id = ?", (tags_str, item_id))
+        conn.commit()
+        return f"Successfully updated tags for {item_id} to {tags}"
+    finally:
+        conn.close()
+
+@mcp.tool()
+async def assets_delete(item_id: str) -> str:
+    """Delete an asset permanently."""
+    conn = get_db()
+    try:
+        c = conn.cursor()
+        c.execute("SELECT original_path, thumbnail_path FROM items WHERE id = ?", (item_id,))
+        row = c.fetchone()
+        if not row:
+            return f"Error: Item {item_id} not found."
+            
+        c.execute("DELETE FROM items WHERE id = ?", (item_id,))
+        conn.commit()
+        
+        if row["original_path"] and os.path.exists(row["original_path"]):
+            os.remove(row["original_path"])
+        if row["thumbnail_path"] and os.path.exists(row["thumbnail_path"]):
+            os.remove(row["thumbnail_path"])
+            
+        return f"Successfully deleted item {item_id}"
+    finally:
+        conn.close()
+
+sse = SseServerTransport("/mcp/messages")
+
+@app.get("/mcp/sse")
+async def handle_sse(request: Request):
+    async with sse.connect_sse(request.scope, request.receive, request._send) as streams:
+        await mcp.run(streams[0], streams[1], mcp.create_initialization_options())
+
+@app.post("/mcp/messages")
+async def handle_messages(request: Request):
+    await sse.handle_post_message(request.scope, request.receive, request._send)
+
 app.mount("/static", StaticFiles(directory="static"), name="static")

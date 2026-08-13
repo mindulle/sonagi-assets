@@ -3,3 +3,4 @@ uvicorn
 tqdm
 sentry-sdk[fastapi]
 prometheus-fastapi-instrumentator
+mcp
