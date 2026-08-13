@@ -134,33 +134,46 @@ async function loadItems(reset = false) {
             const imgContainer = document.createElement("div");
             imgContainer.className = "img-container";
 
-            const img = document.createElement("img");
-            img.loading = "lazy";
-
-            img.onerror = function () {
-                this.style.display = "none";
+            // 폰트 파일은 img 로딩 없이 바로 @font-face 미리보기 렌더링
+            if (item.ext && FONT_EXTS.includes(item.ext.toLowerCase())) {
                 const placeholder = document.createElement("div");
-                placeholder.className = "placeholder-icon";
-                if (item.ext && FONT_EXTS.includes(item.ext.toLowerCase())) {
-                    placeholder.innerHTML = FOLDER_ICON_SVG;
-                    placeholder.classList.add("font-card-placeholder");
-                    // @font-face 동적 로딩 후 샘플 텍스트 렌더링
-                    const fontId = `font-card-${item.id}`;
+                placeholder.className = "placeholder-icon font-card-placeholder";
+                placeholder.innerHTML = `<span class="font-card-sample">Loading...</span>`;
+                imgContainer.appendChild(placeholder);
+
+                const fontId = `font-card-${item.id}`;
+                if (!document.getElementById(`style-${fontId}`)) {
                     const style = document.createElement("style");
+                    style.id = `style-${fontId}`;
                     style.textContent = `@font-face { font-family: "${fontId}"; src: url("/api/image/${item.id}/original"); }`;
                     document.head.appendChild(style);
-                    document.fonts.load(`14px "${fontId}"`).then(() => {
-                        placeholder.innerHTML = `<span class="font-card-sample" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_EN}</span>`;
-                    });
-                } else if (item.ext && HEAVY_EXTS.includes(item.ext.toLowerCase())) {
-                    placeholder.innerHTML = SONAGI_SYMBOL_SVG;
-                } else {
-                    placeholder.innerHTML = FOLDER_ICON_SVG;
                 }
-                this.parentElement.appendChild(placeholder);
-            };
-            img.src = imgSrc;
-            imgContainer.appendChild(img);
+                document.fonts
+                    .load(`14px "${fontId}"`)
+                    .then(() => {
+                        placeholder.innerHTML = `<span class="font-card-sample" style="font-family:'${fontId}',sans-serif">${FONT_SAMPLE_EN}</span>`;
+                    })
+                    .catch(() => {
+                        placeholder.innerHTML = `<span class="font-card-sample">Font</span>`;
+                    });
+            } else {
+                const img = document.createElement("img");
+                img.loading = "lazy";
+
+                img.onerror = function () {
+                    this.style.display = "none";
+                    const placeholder = document.createElement("div");
+                    placeholder.className = "placeholder-icon";
+                    if (item.ext && HEAVY_EXTS.includes(item.ext.toLowerCase())) {
+                        placeholder.innerHTML = SONAGI_SYMBOL_SVG;
+                    } else {
+                        placeholder.innerHTML = FOLDER_ICON_SVG;
+                    }
+                    this.parentElement.appendChild(placeholder);
+                };
+                img.src = imgSrc;
+                imgContainer.appendChild(img);
+            }
 
             const info = document.createElement("div");
             info.className = "card-info";
