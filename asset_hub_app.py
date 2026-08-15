@@ -14,12 +14,12 @@ import sentry_sdk
 from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
-from sse_starlette.sse import EventSourceResponse
 from fastapi.staticfiles import StaticFiles
 from mcp.server.fastmcp import FastMCP
 from mcp.server.sse import SseServerTransport
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel
+from sse_starlette.sse import EventSourceResponse
 from starlette.requests import Request
 
 try:
@@ -518,7 +518,6 @@ async def assets_delete(item_id: str) -> str:
         conn.close()
 
 
-
 # --- Agent Canvas Stream ---
 class CanvasBroadcaster:
     def __init__(self):
@@ -528,13 +527,15 @@ class CanvasBroadcaster:
         for q in list(self.queues):
             await q.put(payload)
 
+
 canvas_broadcaster = CanvasBroadcaster()
+
 
 @app.get("/canvas-stream")
 async def canvas_stream(request: Request):
     q = asyncio.Queue()
     canvas_broadcaster.queues.add(q)
-    
+
     async def event_generator():
         try:
             while True:
@@ -548,8 +549,9 @@ async def canvas_stream(request: Request):
                     yield {"data": '{"ping": true}'}
         finally:
             canvas_broadcaster.queues.discard(q)
-            
+
     return EventSourceResponse(event_generator())
+
 
 @fast_mcp.tool()
 async def push_to_canvas(shapes_json: str) -> str:
