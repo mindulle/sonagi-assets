@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
           - name: sync
-            image: ghcr.io/mindulle/sonagi-assets:1.12.4
+            image: ghcr.io/mindulle/sonagi-assets:1.15.1
             imagePullPolicy: Always
             command: ["python", "build_asset_hub.py"]
             volumeMounts:
