@@ -1,3 +1,4 @@
+import asyncio
 import json
 import os
 import shutil
@@ -18,6 +19,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.server.sse import SseServerTransport
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel
+from sse_starlette.sse import EventSourceResponse
 from starlette.requests import Request
 
 try:
@@ -514,6 +516,48 @@ async def assets_delete(item_id: str) -> str:
         return f"Successfully deleted item {item_id}"
     finally:
         conn.close()
+
+
+# --- Agent Canvas Stream ---
+class CanvasBroadcaster:
+    def __init__(self):
+        self.queues = set()
+
+    async def broadcast(self, payload: str):
+        for q in list(self.queues):
+            await q.put(payload)
+
+
+canvas_broadcaster = CanvasBroadcaster()
+
+
+@app.get("/canvas-stream")
+async def canvas_stream(request: Request):
+    q = asyncio.Queue()
+    canvas_broadcaster.queues.add(q)
+
+    async def event_generator():
+        try:
+            while True:
+                if await request.is_disconnected():
+                    break
+                try:
+                    # Wait for next payload from agent
+                    payload = await asyncio.wait_for(q.get(), timeout=5.0)
+                    yield {"data": payload}
+                except asyncio.TimeoutError:
+                    yield {"data": '{"ping": true}'}
+        finally:
+            canvas_broadcaster.queues.discard(q)
+
+    return EventSourceResponse(event_generator())
+
+
+@fast_mcp.tool()
+async def push_to_canvas(shapes_json: str) -> str:
+    """Push an array of shapes (JSON) to the active canvas instantly."""
+    await canvas_broadcaster.broadcast(shapes_json)
+    return "Successfully pushed shapes to canvas."
 
 
 sse = SseServerTransport("/mcp/messages")
