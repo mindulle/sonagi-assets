@@ -521,20 +521,37 @@ async def assets_delete(item_id: str) -> str:
 # --- Agent Canvas Stream ---
 class CanvasBroadcaster:
     def __init__(self):
-        self.queues = set()
+        self.queues_by_room = {}
 
-    async def broadcast(self, payload: str):
-        for q in list(self.queues):
-            await q.put(payload)
+    def add_queue(self, room_id: str, q: asyncio.Queue):
+        if room_id not in self.queues_by_room:
+            self.queues_by_room[room_id] = set()
+        self.queues_by_room[room_id].add(q)
+
+    def remove_queue(self, room_id: str, q: asyncio.Queue):
+        if room_id in self.queues_by_room and q in self.queues_by_room[room_id]:
+            self.queues_by_room[room_id].discard(q)
+            if not self.queues_by_room[room_id]:
+                del self.queues_by_room[room_id]
+
+    async def broadcast(self, payload: str, target_room_id: str = None):
+        if target_room_id:
+            queues = self.queues_by_room.get(target_room_id, set())
+            for q in list(queues):
+                await q.put(payload)
+        else:
+            for queues in self.queues_by_room.values():
+                for q in list(queues):
+                    await q.put(payload)
 
 
 canvas_broadcaster = CanvasBroadcaster()
 
 
 @app.get("/canvas-stream")
-async def canvas_stream(request: Request):
+async def canvas_stream(request: Request, room_id: str = "default"):
     q = asyncio.Queue()
-    canvas_broadcaster.queues.add(q)
+    canvas_broadcaster.add_queue(room_id, q)
 
     async def event_generator():
         try:
@@ -548,16 +565,18 @@ async def canvas_stream(request: Request):
                 except asyncio.TimeoutError:
                     yield {"data": '{"ping": true}'}
         finally:
-            canvas_broadcaster.queues.discard(q)
+            canvas_broadcaster.remove_queue(room_id, q)
 
     return EventSourceResponse(event_generator())
 
 
 @fast_mcp.tool()
-async def push_to_canvas(shapes_json: str) -> str:
-    """Push an array of shapes (JSON) to the active canvas instantly."""
-    await canvas_broadcaster.broadcast(shapes_json)
-    return "Successfully pushed shapes to canvas."
+async def push_to_canvas(shapes_json: str, target_room_id: str = None) -> str:
+    """Push an array of shapes (JSON) to the active canvas instantly. Optionally specify target_room_id to push to a specific room."""
+    await canvas_broadcaster.broadcast(shapes_json, target_room_id)
+    if target_room_id:
+        return f"Successfully pushed shapes to room {target_room_id}."
+    return "Successfully pushed shapes to all active canvases."
 
 
 sse = SseServerTransport("/mcp/messages")
