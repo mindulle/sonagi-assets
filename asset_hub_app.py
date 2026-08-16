@@ -320,6 +320,7 @@ def get_image(item_id: str, type: str):
                 media_type = FONT_MIME_TYPES.get(ext_lower)
                 if not media_type:
                     import mimetypes
+
                     media_type, _ = mimetypes.guess_type(path)
                 # 폰트 파일은 브라우저가 직접 렌더링할 수 있도록 inline, 나머지는 attachment
                 if media_type:
