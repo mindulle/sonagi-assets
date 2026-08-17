@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: ghcr.io/mindulle/sonagi-assets:1.16.2
+        image: ghcr.io/mindulle/sonagi-assets:1.16.3
         imagePullPolicy: Always
         env:
         - name: GALLERY_LIBRARY_PATH
