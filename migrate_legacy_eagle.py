@@ -122,7 +122,7 @@ def migrate_legacy(limit=None):
         with open(meta_file, "r", encoding="utf-8") as f:
             try:
                 meta = json.load(f)
-            except:
+            except Exception:
                 continue
 
         asset_id = meta.get("id")

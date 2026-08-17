@@ -94,7 +94,7 @@ async def extract_deep_data(url: str, token: str):
                     video_element = await page.query_selector("video source")
                     if video_element:
                         media_urls["video"] = await video_element.get_attribute("src")
-                except:
+                except Exception:
                     pass
 
             await browser.close()
