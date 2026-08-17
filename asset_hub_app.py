@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 import uuid
 from pathlib import Path
-from typing import Union, Dict, List, Optional
+from typing import List, Optional, Union
 
 import sentry_sdk
 from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
