@@ -577,8 +577,47 @@ async def canvas_stream(request: Request, room_id: str = "default"):
 @fast_mcp.tool()
 async def push_to_canvas(shapes_json: Union[str, list, dict], target_room_id: str = None) -> str:
     """Push an array of shapes (JSON) to the active canvas instantly. Optionally specify target_room_id to push to a specific room."""
-    if not isinstance(shapes_json, str):
+    if isinstance(shapes_json, str):
+        try:
+            parsed = json.loads(shapes_json)
+        except json.JSONDecodeError:
+            parsed = shapes_json
+    else:
+        parsed = shapes_json
+
+    if isinstance(parsed, (list, dict)):
+        migrated_types = {"geo", "text", "arrow", "note"}
+
+        def patch_shape(shape):
+            if not isinstance(shape, dict):
+                return
+            stype = shape.get("type")
+            props = shape.get("props", {})
+            if stype in migrated_types and isinstance(props, dict) and "text" in props:
+                text_content = props.pop("text")
+                if isinstance(text_content, str):
+                    paragraphs = []
+                    for line in text_content.split("\n"):
+                        if line:
+                            paragraphs.append({"type": "paragraph", "content": [{"type": "text", "text": line}]})
+                        else:
+                            paragraphs.append({"type": "paragraph"})
+                    props["richText"] = {"type": "doc", "content": paragraphs}
+
+        if isinstance(parsed, list):
+            for s in parsed:
+                patch_shape(s)
+        elif isinstance(parsed, dict):
+            if "type" in parsed:
+                patch_shape(parsed)
+            elif "shapes" in parsed and isinstance(parsed["shapes"], list):
+                for s in parsed["shapes"]:
+                    patch_shape(s)
+        
+        shapes_json = json.dumps(parsed)
+    elif not isinstance(shapes_json, str):
         shapes_json = json.dumps(shapes_json)
+
     await canvas_broadcaster.broadcast(shapes_json, target_room_id)
     if target_room_id:
         return f"Successfully pushed shapes to room {target_room_id}."
