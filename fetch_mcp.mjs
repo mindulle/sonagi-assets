@@ -1,6 +1,6 @@
+import fs from "fs";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
-import fs from "fs";
 
 async function main() {
     const query = process.argv[2];
