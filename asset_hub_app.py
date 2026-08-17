@@ -576,7 +576,13 @@ async def canvas_stream(request: Request, room_id: str = "default"):
 
 @fast_mcp.tool()
 async def push_to_canvas(shapes_json: Union[str, list, dict], target_room_id: str = None) -> str:
-    """Push an array of shapes (JSON) to the active canvas instantly. Optionally specify target_room_id to push to a specific room."""
+    """Push an array of shapes (JSON) to the active canvas instantly. Optionally specify target_room_id to push to a specific room.
+    
+    IMPORTANT RULES FOR SHAPES:
+    - Never use Tldraw standard shapes ('geo', 'text') to prevent schema validation crashes.
+    - ALWAYS use custom components (e.g. 'wired-button', 'wired-card', 'wired-progress', 'wired-asset-card').
+    - Payload MUST be wrapped in an object like: {"shapes": [{"id": "shape:...", "type": "wired-...", "x": 0, "y": 0, "props": {...}}]}
+    """
     if isinstance(shapes_json, str):
         try:
             parsed = json.loads(shapes_json)
