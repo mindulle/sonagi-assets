@@ -8,7 +8,7 @@ import urllib.parse
 import urllib.request
 import uuid
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import sentry_sdk
 from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
@@ -575,8 +575,10 @@ async def canvas_stream(request: Request, room_id: str = "default"):
 
 
 @fast_mcp.tool()
-async def push_to_canvas(shapes_json: str, target_room_id: str = None) -> str:
+async def push_to_canvas(shapes_json: Union[str, list, dict], target_room_id: str = None) -> str:
     """Push an array of shapes (JSON) to the active canvas instantly. Optionally specify target_room_id to push to a specific room."""
+    if not isinstance(shapes_json, str):
+        shapes_json = json.dumps(shapes_json)
     await canvas_broadcaster.broadcast(shapes_json, target_room_id)
     if target_room_id:
         return f"Successfully pushed shapes to room {target_room_id}."
