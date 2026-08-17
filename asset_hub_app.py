@@ -613,7 +613,7 @@ async def push_to_canvas(shapes_json: Union[str, list, dict], target_room_id: st
             elif "shapes" in parsed and isinstance(parsed["shapes"], list):
                 for s in parsed["shapes"]:
                     patch_shape(s)
-        
+
         shapes_json = json.dumps(parsed)
     elif not isinstance(shapes_json, str):
         shapes_json = json.dumps(shapes_json)
