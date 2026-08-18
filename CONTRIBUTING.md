@@ -46,3 +46,36 @@ GitHub에 PR을 생성할 때는 다음 사항을 반드시 지켜주세요:
 ## 6. 리뷰 및 병합 (Merge)
 * 리뷰어의 승인(Approve)을 받은 후에만 `main` 브랜치로 병합(Merge)이 가능합니다.
 * 테스트가 실패하거나 린트 에러가 있는 경우 병합이 제한될 수 있습니다.
+
+## 7. 알려진 이슈 (Known Issues)
+
+### 7.1 배포(파드 재시작) 직후 MCP 세션 끊김 (CEO-938)
+`asset_hub_app.py`의 `/mcp/sse` + `/mcp/messages` 엔드포인트는 Python MCP SDK의
+`SseServerTransport`를 사용합니다. 이 트랜스포트는 세션 상태(발급된 `session_id` ↔
+스트림 매핑)를 서버 프로세스의 **인메모리**로만 관리합니다.
+
+**증상:** ArgoCD를 통해 새 이미지가 배포되어 파드가 재시작되면, 그 이전에 발급된 모든
+MCP 세션이 즉시 무효화됩니다. 이미 연결되어 있던 에이전트(MCP 클라이언트)가 재시작 이전에
+발급받은 `session_id`로 `POST /mcp/messages`를 계속 호출하면, 다음 에러가 발생합니다:
+
+```
+Error POSTing to endpoint (HTTP 404): Could not find session
+```
+
+**원인:** MCP SDK의 `SseServerTransport.handle_post_message`가 `session_id`를 자신의
+인메모리 딕셔너리(`_read_stream_writers`)에서 조회하는데, 파드가 재시작되면 이 딕셔너리가
+비워지기 때문입니다. 표준 MCP 프로토콜/SDK 차원에서 세션을 영속화하거나 클라이언트가
+자동으로 재연결하도록 강제하는 메커니즘은 현재 버전(SDK 1.27.x)에 내장되어 있지 않습니다.
+
+**현재 대응 (운영 가이드):**
+- 배포(`chore: update K8s manifests to deploy vX.Y.Z` PR merge) 직후에는, 이미 이 서버에
+  연결되어 있던 에이전트/MCP 클라이언트 세션에서 `push_to_canvas`, `assets_search` 등
+  모든 MCP 툴 호출이 실패할 수 있습니다. `Could not find session` 에러가 보이면 **재시도하지
+  말고**, MCP 클라이언트(에이전트 세션)를 재시작하여 `GET /mcp/sse`로 새 세션을 다시 발급받으세요.
+- 이는 알려진 제약이며, 파드가 재시작될 때마다(신규 배포, OOM, 노드 재스케줄 등) 재현됩니다.
+
+**향후 검토 과제 (미착수):**
+- MCP SDK의 최신 Streamable HTTP 트랜스포트(`mcp.server.streamable_http`)로 마이그레이션하고,
+  세션/이벤트 스토어를 Redis 등 외부 저장소로 백엔드화하면 파드 재시작을 넘어 세션을 유지할 수
+  있음. 다만 이는 트랜스포트 계층 전체를 교체하는 큰 변경이라 별도 이슈(CEO-933 아키텍처 개편과
+  함께)로 계획하고 스테이징 검증 후 진행할 것.
