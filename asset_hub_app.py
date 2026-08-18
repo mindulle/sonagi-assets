@@ -119,6 +119,16 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    # Chrome classifies assets.sonagi.space as a private/local address space
+    # (it resolves via Tailscale split-DNS to an internal host), while pages
+    # like draw.sonagi.space are a public origin. The Private Network Access
+    # (PNA) preflight spec requires this explicit opt-in on top of standard
+    # CORS, or the browser silently blocks every request - which is exactly
+    # what was breaking AgentReceiver's EventSource connection to
+    # /canvas-stream. Starlette's CORSMiddleware has supported this natively
+    # since it was simply never turned on here.
+    # https://developer.chrome.com/blog/private-network-access-preflight
+    allow_private_network=True,
 )
 
 
@@ -576,7 +586,14 @@ async def canvas_stream(request: Request, room_id: str = "default"):
 
 @fast_mcp.tool()
 async def push_to_canvas(shapes_json: Union[str, list, dict], target_room_id: str = None) -> str:
-    """Push an array of shapes (JSON) to the active canvas instantly. Optionally specify target_room_id to push to a specific room."""
+    """Push an array of shapes (JSON) to the active canvas instantly. Optionally specify target_room_id to push to a specific room.
+
+    IMPORTANT RULES FOR SHAPES:
+    - Never use Tldraw standard shapes ('geo', 'text') to prevent schema validation crashes.
+    - ALWAYS use custom components (e.g. 'wired-button', 'wired-card', 'wired-progress', 'wired-asset-card').
+    - A bare shape array (e.g. [{"type": "wired-...", ...}]) or a single bare shape object is also
+      accepted and will be normalized to {"shapes": [...]} automatically before broadcasting.
+    """
     if isinstance(shapes_json, str):
         try:
             parsed = json.loads(shapes_json)
@@ -607,9 +624,14 @@ async def push_to_canvas(shapes_json: Union[str, list, dict], target_room_id: st
         if isinstance(parsed, list):
             for s in parsed:
                 patch_shape(s)
+            # AgentReceiver (apps/web/src/App.tsx) only reads `data.shapes`,
+            # never a bare array - normalize so callers can pass either form.
+            parsed = {"shapes": parsed}
         elif isinstance(parsed, dict):
             if "type" in parsed:
                 patch_shape(parsed)
+                # Same normalization for a single bare shape object.
+                parsed = {"shapes": [parsed]}
             elif "shapes" in parsed and isinstance(parsed["shapes"], list):
                 for s in parsed["shapes"]:
                     patch_shape(s)
