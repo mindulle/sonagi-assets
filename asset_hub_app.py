@@ -581,7 +581,17 @@ async def canvas_stream(request: Request, room_id: str = "default"):
         finally:
             canvas_broadcaster.remove_queue(room_id, q)
 
-    return EventSourceResponse(event_generator())
+    return EventSourceResponse(
+        event_generator(),
+        # CORSMiddleware's allow_private_network only annotates the OPTIONS
+        # preflight response. In practice Chrome's Private Network Access
+        # check for this EventSource connection (verified via CDP network
+        # inspection - no OPTIONS preflight is even visible to Playwright,
+        # the actual GET request itself is aborted with net::ERR_FAILED)
+        # also requires this header on the real response, so it's set
+        # explicitly here too.
+        headers={"Access-Control-Allow-Private-Network": "true"},
+    )
 
 
 @fast_mcp.tool()
