@@ -4,10 +4,34 @@ import os
 import boto3
 from botocore.client import Config
 
+MINIO_ENV_PATH = os.path.expanduser("~/.config/sonagi/minio.env")
+
+
+def load_minio_config() -> dict:
+    """MinIO 자격증명은 코드가 아니라 MINIO_ENV_PATH(600) 에서 읽는다. 환경변수가 우선."""
+    cfg = {"MINIO_ENDPOINT": "https://cdn.sonagi.space"}
+    try:
+        with open(MINIO_ENV_PATH, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                key, value = line.split("=", 1)
+                cfg[key.strip()] = value.strip().strip("'\"")
+    except OSError:
+        pass
+    for key in ("MINIO_ENDPOINT", "MINIO_ACCESS_KEY", "MINIO_SECRET_KEY", "MINIO_BUCKET"):
+        if os.environ.get(key):
+            cfg[key] = os.environ[key]
+    return cfg
+
+
+MINIO = load_minio_config()
+
 # Configuration
-MINIO_URL = "https://cdn.sonagi.space"
-ACCESS_KEY = "admin"  # Replace with actual credentials if different
-SECRET_KEY = "anki123456"
+MINIO_URL = MINIO["MINIO_ENDPOINT"]
+ACCESS_KEY = MINIO.get("MINIO_ACCESS_KEY", "")
+SECRET_KEY = MINIO.get("MINIO_SECRET_KEY", "")
 
 # Initialize S3 client for MinIO
 s3 = boto3.client(
