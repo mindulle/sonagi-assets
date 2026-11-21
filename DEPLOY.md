@@ -48,3 +48,19 @@ Private Network Access 프리플라이트를 통과해야 한다. 포트 매핑�
 
 Uptime Kuma `sonagi-assets UI (Internal)` → `http://100.82.121.40:34920/`,
 timeout 10s, maxretries 3.
+
+## 보안 패치 빌드 (2026-11-21)
+
+베이스 이미지 OS 패키지를 올린 이미지를 따로 빌드해 배포한다.
+
+```bash
+# 소스 동기화 후 (data/, *.db 제외)
+docker build -t ghcr.io/mindulle/sonagi-assets:1.16.6-security .
+# devops /opt/sonagi-assets/.env
+ASSET_IMAGE_TAG=1.16.6-security
+docker compose up -d
+curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:34920/
+```
+
+- 결과: Trivy critical 34 → 8 (no-fix 잔여), high 712 → 349
+- 이미지는 로컬 태그로만 존재한다. 레지스트리에 올리려면 별도 push 필요.
