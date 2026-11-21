@@ -1,0 +1,26 @@
+# sonagi-assets web (devops / 100.82.121.40)
+# k3s(2026-10-31 비활성화) 잔재를 제거하고 docker 단일 배포로 옮긴 구성.
+# host network 를 쓰는 이유: 앱이 34920 포트를 직접 열고, draw.sonagi.space 의
+# Private Network Access 프리플라이트가 같은 호스트 포트를 그대로 기대한다.
+services:
+  web:
+    image: ghcr.io/mindulle/sonagi-assets:${ASSET_IMAGE_TAG:-1.16.5}
+    container_name: sonagi-assets-web
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      GALLERY_LIBRARY_PATH: /app/data/Design.library/images
+    volumes:
+      - ${ASSETS_LIBRARY_DIR:-/srv/sonagi-assets/library}:/app/data
+      - ${ASSETS_DB_FILE:-/srv/sonagi-assets/asset_hub.db}:/app/asset_hub.db
+
+  # 기존 k8s CronJob(schedule 0 0 * * *) 대체. 필요할 때만:
+  #   docker compose --profile jobs run --rm harvest
+  harvest:
+    profiles: ["jobs"]
+    image: ghcr.io/mindulle/sonagi-assets:${ASSET_IMAGE_TAG:-1.16.5}
+    network_mode: host
+    environment:
+      AI_ASSETS_PATH: /app/data/ai-assets/images
+    volumes:
+      - ${ASSETS_LIBRARY_DIR:-/srv/sonagi-assets/library}:/app/data
