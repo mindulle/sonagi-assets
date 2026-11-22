@@ -202,6 +202,30 @@ render_recipe.py ... --breakpoint mobile                               # 390
 
 여백은 breakpoint별로 56/32/20, 본문 스케일은 1.0/0.88/0.72를 쓴다.
 
+## 납품 export (PDF·PNG·WebP)
+
+렌더된 SVG를 화면(브레이크포인트)별로 내보낸다.
+
+```bash
+python3 scripts/export_recipe.py --src out/ --pattern '*.svg' --out dist/ \
+  --formats pdf,png,webp --scale 2 --fonts-css fonts/fonts.css
+```
+
+| 형식 | 내용 |
+| --- | --- |
+| PDF | 화면당 1페이지, 폰트 임베드(Chromium 인쇄) |
+| PNG | `@2x` (예: 1440×2293 → 2880×4586) |
+| WebP | PNG에서 변환 |
+
+- 같은 폴더의 `*.manifest.json`을 읽어 **출처 게이트**를 통과해야 한다
+  (`origin:commercial` 자산이 있으면 중단)
+- 페이지 크기가 다른 캔버스를 한 PDF에 넣으면 Chromium이 한 크기로 합치므로
+  **화면별 PDF를 따로 만든다**
+- `export.json`에 파일 목록·해시·게이트 결과를 남긴다
+
+전제: Chromium, Pillow. snap Chromium은 `/tmp`과 숨김 폴더를 읽지 못하므로
+임시 HTML은 출력 폴더 아래에 만든다.
+
 ## 빌드업 타임랩스
 
 레이어 조립 과정을 프레임으로 남긴다. 사람의 붓질 기록(스피드 페인팅)과는 다르다.
