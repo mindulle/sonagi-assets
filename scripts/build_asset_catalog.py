@@ -167,11 +167,7 @@ def main():
         source = (buckets.get("src") or [None])[0]
         name = row["name"] or ""
         is_junk = name.startswith("._")  # macOS AppleDouble
-        is_glyph = (
-            ext == "svg"
-            and not is_junk
-            and (bool(re.match(r"^uni[0-9a-f]{4,6}", name.lower())) or len(name.strip()) <= 2)
-        )
+        is_glyph = ext == "svg" and not is_junk and (bool(re.match(r"^uni[0-9a-f]{4,6}", name.lower())) or len(name.strip()) <= 2)
 
         if is_junk:
             license_value, license_basis = "n/a", "appledouble-metadata"
