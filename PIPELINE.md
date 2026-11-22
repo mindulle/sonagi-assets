@@ -178,6 +178,15 @@ render_recipe.py ... --embed-max-width 900
 - 색은 스타일 `accent`를 쓰므로 다크 변환도 자동이다.
 - 모바일 프레임 여백은 8px로 줄여 본문(20px)과 겹치지 않게 한다.
 
+미리보기(좌표를 고칠 때):
+
+```bash
+python3 scripts/preview_ornament.py --sheet --png          # 전체 시트
+python3 scripts/preview_ornament.py --motif floral --frame plain --png
+```
+
+결과는 `previews/`에 남고 git에는 넣지 않는다.
+
 리팩터 검증: 장식을 축으로 바꾸고, 이어서 데이터(ornaments.json)로 옮긴 뒤에도 기존 11종 SVG 해시가 모두 동일했다.
 
 ## 콘텐츠 임포터

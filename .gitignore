@@ -5,3 +5,6 @@ venv/
 *.db-shm
 *.log
 __pycache__/
+
+# 장식 미리보기 산출물
+previews/
