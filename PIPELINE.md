@@ -52,6 +52,12 @@ python3 scripts/render_recipe.py \
 | `paper-editorial` | 뉴스프린트·먹 | 1px, r0 | Cormorant·Noto Serif KR | split | list |
 | `bead-editorial` | 테라코타·크림 | 2px, r8 | Gowun Batang | asymmetric | list |
 | `hatch-editorial` | 뉴스프린트·먹 | 1px, r0 | Archivo | split | list |
+| `burgundy-victorian` | 버건디·크림 | 2px, r2 | Cormorant·Gowun Batang | split | cards |
+| `ocean-swiss` | 오션·스틸 | 2px, r0 | Archivo·대문자 | split | columns |
+| `sand-editorial` | 샌드·토프 | 2px, r8 | Gowun Batang | asymmetric | list |
+| `charcoal-brutal` | 차콜·오프화이트 | 4px, r0 | Archivo·대문자 | center | cards |
+| `lilac-editorial` | 라일락·플럼 | 1px, r10 | Cormorant·Noto Serif KR | split | cards |
+| `forest-paper` | 포레스트·크림 | 1px, r4 | Gowun Batang | split | list |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -238,7 +244,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial arch-classic paper-editorial bead-editorial hatch-editorial; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial arch-classic paper-editorial bead-editorial hatch-editorial burgundy-victorian ocean-swiss sand-editorial charcoal-brutal lilac-editorial forest-paper; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```

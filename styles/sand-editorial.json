@@ -1,0 +1,10 @@
+{
+    "name": "sand-editorial",
+    "theme": "editorial",
+    "palette": "sand",
+    "type": "gowun-magazine",
+    "geometry": "r8b2",
+    "layout": "asymmetric-list",
+    "ornament": "arch",
+    "density": 1.0
+}

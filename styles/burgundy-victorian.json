@@ -1,0 +1,10 @@
+{
+    "name": "burgundy-victorian",
+    "theme": "editorial",
+    "palette": "burgundy",
+    "type": "cormorant-victorian",
+    "geometry": "r2b2",
+    "layout": "split-cards",
+    "ornament": "victorian",
+    "density": 1.05
+}
