@@ -51,6 +51,7 @@ python3 scripts/render_recipe.py \
 | `arch-classic` | 테라코타·크림 | 2px, r8 | Cormorant·Gowun Batang | split | cards |
 | `paper-editorial` | 뉴스프린트·먹 | 1px, r0 | Cormorant·Noto Serif KR | split | list |
 | `bead-editorial` | 테라코타·크림 | 2px, r8 | Gowun Batang | asymmetric | list |
+| `hatch-editorial` | 뉴스프린트·먹 | 1px, r0 | Archivo | split | list |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -180,6 +181,9 @@ render_recipe.py ... --embed-max-width 900
 - `repeat` 대신 `grid`를 주면 2차원으로 반복한다: `{cols, rows, x, y}`에 표현식을 쓰고
   `col`·`row` 변수를 받는다.
 - 장식 축에 `background`를 넣으면 본문 뒤에 패턴을 깐다(`dots`, `hatch`).
+- 반복이 많으면 `pattern` 요소로 타일 한 장을 정의한다. `{el: "pattern", id, attrs, elements, rect}`.
+  실측(1440×2400): `hatch` 0.3KB vs `hatch-lines` 447KB, `dots` 0.2KB vs `dots-lines` 141KB.
+- Figma 재임포트에서 `pattern` 채우기가 다르게 보일 수 있어 선 기반 대체 축(`paper-lines`, `hatch-lines`)을 둔다.
 - 모티프는 **데이터**다. `styles/ornaments.json`에 SVG 요소 목록을 추가하고 `axes.json`에 이름만 등록하면 끝난다.
   렌더러 코드는 건드리지 않는다.
 - 요소는 `{el, attrs, repeat?, elements?}` 형태다. `repeat`는 변수 묶음 반복(모서리 4곳, 좌우 대칭),
@@ -234,7 +238,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial arch-classic paper-editorial bead-editorial; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial arch-classic paper-editorial bead-editorial hatch-editorial; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```
