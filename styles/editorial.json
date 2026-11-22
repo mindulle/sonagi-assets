@@ -2,7 +2,14 @@
     "name": "editorial",
     "theme": "editorial",
     "geometry": { "radius": 8, "borderWidth": 2, "shadow": "none" },
-    "type": { "display": "NanumSquare", "sans": "NanumSquare", "mono": "JetBrains Mono", "scale": 1.0, "uppercase": false, "tracking": 0 },
+    "type": {
+        "display": "NanumSquare",
+        "sans": "NanumSquare",
+        "mono": "JetBrains Mono",
+        "scale": 1.0,
+        "uppercase": false,
+        "tracking": 0
+    },
     "illustration": "color",
     "density": 1.0,
     "hero": "split",

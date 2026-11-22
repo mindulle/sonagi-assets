@@ -12,7 +12,14 @@
         "accent-ink": "#ffffff"
     },
     "geometry": { "radius": 0, "borderWidth": 4, "shadow": "none" },
-    "type": { "display": "Archivo", "sans": "Archivo", "mono": "JetBrains Mono", "scale": 1.12, "uppercase": true, "tracking": -1 },
+    "type": {
+        "display": "Archivo",
+        "sans": "Archivo",
+        "mono": "JetBrains Mono",
+        "scale": 1.12,
+        "uppercase": true,
+        "tracking": -1
+    },
     "illustration": "hidden",
     "density": 1.15,
     "hero": "center",
