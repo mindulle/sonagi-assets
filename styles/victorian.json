@@ -1,0 +1,39 @@
+{
+    "name": "victorian",
+    "theme": "editorial",
+    "colors": {
+        "background": "#f5efe2",
+        "surface": "#faf5ea",
+        "surface-sunken": "#ece4d3",
+        "text": "#23201c",
+        "text-secondary": "#4a423a",
+        "text-muted": "#7a6f61",
+        "text-faint": "#a29786",
+        "border": "#c9b48c",
+        "border-strong": "#5c2a2e",
+        "accent": "#5c2a2e",
+        "accent-strong": "#a9853f",
+        "accent-ink": "#f7f2e6"
+    },
+    "geometry": {
+        "radius": 2,
+        "borderWidth": 2,
+        "shadow": "none"
+    },
+    "type": {
+        "display": "Cormorant Garamond",
+        "sans": "Pretendard",
+        "mono": "JetBrains Mono",
+        "korean": "Gowun Batang",
+        "scale": 1.0,
+        "uppercase": false,
+        "tracking": 0.8
+    },
+    "illustration": "mono",
+    "illustration_set": "etchings",
+    "density": 1.05,
+    "hero": "center",
+    "features_layout": "cards",
+    "ornament": "victorian",
+    "auto_height": true
+}

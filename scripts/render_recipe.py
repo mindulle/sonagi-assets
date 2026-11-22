@@ -1033,6 +1033,17 @@ class Renderer:
         c = self.colors
         cx = (x1 + x2) / 2
         half = 70
+        if self.ornament == "victorian":
+            # 굵은 선 + 가는 선의 이중 괘선, 가운데 로제트
+            parts = ['<g id="ornament">']
+            parts.append(f'<line x1="{x1}" y1="{y - 3}" x2="{x2}" y2="{y - 3}" stroke="{c["accent"]}" stroke-width="2"/>')
+            parts.append(f'<line x1="{x1}" y1="{y + 4}" x2="{x2}" y2="{y + 4}" stroke="{c["accent"]}" stroke-width="0.7"/>')
+            parts.append(f'<circle cx="{cx}" cy="{y}" r="7" fill="none" stroke="{c["accent"]}" stroke-width="1.2"/>')
+            parts.append(f'<circle cx="{cx}" cy="{y}" r="2.4" fill="{c["accent"]}"/>')
+            for dx, dy in ((-7, 0), (7, 0), (0, -7), (0, 7)):
+                parts.append(f'<circle cx="{cx + dx}" cy="{y + dy}" r="1.1" fill="{c["accent"]}"/>')
+            parts.append("</g>")
+            return "".join(parts), 46
         if self.ornament == "deco":
             parts = ['<g id="ornament">']
             parts.append(f'<line x1="{cx - 260}" y1="{y}" x2="{cx - 60}" y2="{y}" stroke="{c["accent"]}" stroke-width="1.4"/>')
@@ -1066,7 +1077,24 @@ class Renderer:
         if self.ornament == "none":
             return ""
         c = self.colors
-        i = 18
+        # 모바일은 본문 여백(20px)보다 프레임이 안쪽이면 글자를 가로지른다
+        i = 8 if self.bp == "mobile" else 18
+        if self.ornament == "victorian":
+            # 굵은 외곽 + 가는 내곽 + 네 모서리 사각 보강
+            k = 12
+            corners = []
+            for x, y, sx, sy in ((i, i, 1, 1), (W - i, i, -1, 1), (i, H - i, 1, -1), (W - i, H - i, -1, -1)):
+                corners.append(
+                    f'<path d="M {x} {y + sy * (k * 3)} L {x} {y} L {x + sx * (k * 3)} {y}" fill="none" stroke="{c["accent"]}" stroke-width="3"/>'
+                )
+                corners.append(f'<rect x="{x - 3}" y="{y - 3}" width="6" height="6" fill="{c["accent"]}"/>')
+            return (
+                f'<g id="ornament-frame">'
+                f'<rect x="{i}" y="{i}" width="{W - 2 * i}" height="{H - 2 * i}" fill="none" '
+                f'stroke="{c["accent"]}" stroke-width="2"/>'
+                f'<rect x="{i + 7}" y="{i + 7}" width="{W - 2 * (i + 7)}" height="{H - 2 * (i + 7)}" fill="none" '
+                f'stroke="{c["accent"]}" stroke-width="0.7"/>' + "".join(corners) + "</g>"
+            )
         if self.ornament == "deco":
             return (
                 f'<g id="ornament-frame">'
