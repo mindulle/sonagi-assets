@@ -31,6 +31,9 @@ FIELDS = {
     "faq": ({"items"}, {"title"}),
     "cta": ({"title", "cta"}, {"eyebrow", "body", "ctaIcon", "note"}),
     "footer": ({"left"}, {"right"}),
+    "table": ({"columns", "items"}, {"title", "note", "featured"}),
+    "pricing": ({"items"}, {"title", "note"}),
+    "gallery": ({"items"}, {"title", "note"}),
 }
 
 LIMITS = {
@@ -140,6 +143,15 @@ def tokenize(section, report):
     return fields, lists, groups
 
 
+def all_items(lists):
+    """섹션 안의 모든 목록 항목을 적힌 순서대로 모은다.
+
+    `- ` 줄은 마지막으로 읽은 필드에 붙으므로(table의 `columns:`, gallery의 `title:`),
+    목록이 하나뿐인 타입은 키를 따지지 않고 모으는 편이 안전하다.
+    """
+    return [item for values in lists.values() for item in values]
+
+
 def build_header(sec, fields, lists, groups, report):
     nav = lists.get("nav", [])
     if len(nav) > 4:
@@ -171,7 +183,7 @@ def build_hero(sec, fields, lists, groups, report):
 
 def build_stats(sec, fields, lists, groups, report):
     items = []
-    for entry in lists.get("items", []):
+    for entry in all_items(lists):
         value, _, label = entry.partition("|")
         if not label.strip():
             report.error(sec["line"], f"stats 항목은 `값 | 라벨` 형식입니다: {entry}")
@@ -201,7 +213,7 @@ def build_features(sec, fields, lists, groups, report):
 
 
 def build_logos(sec, fields, lists, groups, report):
-    items = lists.get("items", [])
+    items = all_items(lists)
     if len(items) > 5:
         report.error(sec["line"], f"logos는 5개까지입니다 (지금 {len(items)}개)")
     return {"type": "logos", "items": items}
@@ -241,6 +253,70 @@ def build_footer(sec, fields, lists, groups, report):
     return {"type": "footer", "left": fields.get("left", ""), "right": fields.get("right", "")}
 
 
+def build_table(sec, fields, lists, groups, report):
+    raw_columns = fields.get("columns", "")
+    if "|" not in raw_columns:
+        report.error(sec["line"], "table.columns는 `열 | 열 | 열` 형식입니다")
+    columns = [c.strip() for c in raw_columns.split("|") if c.strip()]
+    # `columns:` 바로 뒤의 `- ` 줄은 열 목록이 아니라 행으로 읽는다
+    entries = all_items(lists)
+    rows = []
+    for index, entry in enumerate(entries, start=1):
+        cells = [c.strip() for c in entry.split("|")]
+        if len(cells) != len(columns):
+            report.error(
+                sec["line"],
+                f"table {index}행의 열 개수가 다릅니다(열 {len(columns)}개, 행 {len(cells)}개): {entry}",
+            )
+        rows.append(cells)
+    featured = fields.get("featured", "").strip()
+    if featured:
+        if not featured.isdigit() or not 1 <= int(featured) <= len(columns):
+            report.error(sec["line"], f"table.featured는 1~{len(columns)} 사이 숫자입니다: {featured}")
+    if len(rows) > 8:
+        report.warn(sec["line"], f"table은 8행 이하를 권장합니다 (지금 {len(rows)}행)")
+    return {
+        "type": "table",
+        "title": fields.get("title", ""),
+        "columns": columns,
+        "rows": rows,
+        "featured": int(featured) if featured.isdigit() else 0,
+        "note": fields.get("note", ""),
+    }
+
+
+def build_pricing(sec, fields, lists, groups, report):
+    items = []
+    for group in groups:
+        bullets = [line for line in group["body"] if line.strip()]
+        featured = str(group["fields"].get("featured", "")).lower() in ("true", "yes", "1", "y")
+        items.append(
+            {
+                "title": group["title"],
+                "price": group["fields"].get("price", ""),
+                "period": group["fields"].get("period", ""),
+                "features": bullets,
+                "cta": group["fields"].get("cta", "시작하기"),
+                "featured": featured,
+            }
+        )
+        if not group["fields"].get("price"):
+            report.error(group["line"], f"pricing/{group['title']}: price가 비어 있습니다")
+    if len(items) > 3:
+        report.error(sec["line"], f"pricing 카드는 3개까지입니다 (지금 {len(items)}개)")
+    featured_count = sum(1 for item in items if item["featured"])
+    if featured_count > 1:
+        report.error(sec["line"], "pricing에서 featured는 하나만 지정할 수 있습니다")
+    return {"type": "pricing", "title": fields.get("title", ""), "note": fields.get("note", ""), "items": items}
+
+
+def build_gallery(sec, fields, lists, groups, report):
+    items = all_items(lists)
+    if len(items) > 6:
+        report.error(sec["line"], f"gallery는 6개까지입니다 (지금 {len(items)}개)")
+    return {"type": "gallery", "title": fields.get("title", ""), "note": fields.get("note", ""), "items": items}
+
+
 BUILDERS = {
     "header": build_header,
     "hero": build_hero,
@@ -251,9 +327,12 @@ BUILDERS = {
     "faq": build_faq,
     "cta": build_cta,
     "footer": build_footer,
+    "table": build_table,
+    "pricing": build_pricing,
+    "gallery": build_gallery,
 }
 
-CARD_TYPES = {"features", "faq"}
+CARD_TYPES = {"features", "faq", "pricing"}
 
 
 def check_fields(sec, fields, kind, report):
@@ -301,6 +380,9 @@ def check_assets(blocks, index, report):
         if kind == "hero":
             for name in block["illustration"]:
                 lookup(name, "illustration", "hero.illustration")
+        if kind == "gallery":
+            for name in block["items"]:
+                lookup(name, "illustration", "gallery")
         if kind == "features":
             for item in block["items"]:
                 lookup(item["icon"], "icon", f"features/{item['title']}")

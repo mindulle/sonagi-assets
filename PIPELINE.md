@@ -132,6 +132,9 @@ python3 scripts/import_content.py content/atelier-landing.md \
 | `scope`가 `bundle` 아님 | 오류 |
 | 문장 길이 초과 | 경고 |
 
+지원 블록 12종: header · hero · stats · features · logos · quote · faq · cta · footer ·
+table · pricing · gallery.
+
 렌더 단계에서 터지던 `asset not found`·`asset blocked`를 **임포트 단계로 앞당긴다**.
 생성된 레시피는 `content.source`·`content.sha256`으로 원본을 추적한다.
 
