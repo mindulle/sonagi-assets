@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 AXES_PATH = ROOT / "styles" / "axes.json"
-AXIS_KEYS = ("palette", "type", "geometry", "layout")
+AXIS_KEYS = ("palette", "type", "geometry", "layout", "ornament")
 
 
 def deep_merge(base: dict, override: dict) -> dict:
@@ -65,6 +65,15 @@ def resolve(spec: dict, axes: dict | None = None) -> dict:
             raise SystemExit(f"없는 layout: {layout_ref}")
         for key, value in axes["layout"][layout_ref].items():
             out[key] = value
+
+    ornament = spec.get("ornament")
+    if isinstance(ornament, str):
+        if ornament and ornament != "none":
+            if ornament not in axes.get("ornament", {}):
+                raise SystemExit(f"없는 ornament: {ornament}")
+            out["ornament"] = dict(axes["ornament"][ornament])
+    elif isinstance(ornament, dict):
+        out["ornament"] = deep_merge({"motif": "none", "frame": "none"}, ornament)
 
     # 명시 값이 축을 덮어쓴다
     for key in ("colors", "type", "geometry"):

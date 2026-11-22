@@ -45,6 +45,8 @@ python3 scripts/render_recipe.py \
 | `terracotta-editorial` | 테라코타·크림 | 2px, r8 | Cormorant·Gowun Batang | asymmetric | list |
 | `newsprint-victorian` | 뉴스프린트·먹 | 1px, r0 | Cormorant·Noto Serif KR | split | list |
 | `mint-swiss` | 민트·딥그린 | 2px, r0 | Archivo·대문자 | split | columns |
+| `floral-editorial` | 테라코타·크림 | 2px, r8 | Gowun Batang | asymmetric | list |
+| `deco-noir` | 뉴스프린트·먹 | 4px, r0 | Archivo·대문자 | center | cards |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -146,27 +148,31 @@ render_recipe.py ... --embed-max-width 900
 
 ## 장식(ornament)
 
-스킨이 `"ornament"`을 선언하면 섹션 구분선과 페이지 테두리에 장식을 그린다.
-블록 레이아웃은 그대로 두고 **장식만** 더한다.
+장식도 축이다. `styles/axes.json`의 `ornament` 항목이 `{motif, frame, weight, height}`를 정의하고,
+스타일은 이름으로 참조하거나 객체로 덮어쓴다.
 
-| 값 | 구분선 | 테두리 |
+| 이름 | 구분선 | 테두리 |
 | --- | --- | --- |
-| `none` (기본) | 없음 | 없음 |
-| `nouveau` | 양쪽에서 뻗는 곡선 줄기 + 봉오리 | 이중 가는 선 + 네 모서리 컬 |
-| `deco` | 직선 + 마름모 | 이중 직선 |
+| `none` | 없음 | 없음 |
+| `rule` | 얇은 단일 선 | 단일 선 |
+| `nouveau` | 곡선 줄기 + 봉오리 | 이중 가는 선 + 모서리 컬 |
 | `victorian` | 굵은/가는 이중 괘선 + 로제트 | 이중 괘선 + 모서리 브래킷 |
+| `deco` | 전폭 직선 + 마름모 | 이중 직선 |
+| `floral` | 잎 두 장 + 줄기 | 단일 선 |
 
 ```json
-{ "ornament": "nouveau" }
+{ "ornament": "floral" }
+{ "ornament": { "motif": "nouveau", "frame": "nouveau", "weight": 1.6 } }
 ```
 
-- 장식은 스타일 JSON만으로 켠다. 블록 코드는 건드리지 않는다.
-- 색은 스타일의 `accent`를 쓰므로 다크 변환도 자동으로 따라간다.
-- 장식 높이(46px)는 렌더러가 확보하고, 다음 섹션은 그 아래에서 시작한다.
-- 모바일에서는 프레임 안쪽 여백을 8px로 줄여 본문(20px)과 겹치지 않게 한다.
+- `weight`는 선 두께 배율이다(1.0이면 원본).
+- `height`는 구분선이 차지하는 세로 여백이다.
+- 새 모티프는 `render_recipe.py`의 `_divider_*` / `_frame_*` 메서드로 추가하고
+  `axes.json`에 등록한다. 축만 늘리면 스타일 파일은 건드리지 않는다.
+- 색은 스타일 `accent`를 쓰므로 다크 변환도 자동이다.
+- 모바일 프레임 여백은 8px로 줄여 본문(20px)과 겹치지 않게 한다.
 
-한계: 모티프는 렌더러에 내장된 3종뿐이다. 새 장식(꽃잎·깃털·격자)은
-`render_recipe.py`의 `ornament_divider`·`ornament_frame`에 경로를 추가해야 한다.
+리팩터 검증: 장식을 축으로 바꾼 뒤 기존 11종 SVG 해시가 모두 동일했다.
 
 ## 콘텐츠 임포터
 
@@ -202,7 +208,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```

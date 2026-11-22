@@ -1,0 +1,12 @@
+{
+    "name": "floral-editorial",
+    "theme": "editorial",
+    "palette": "terracotta",
+    "type": "gowun-etching",
+    "geometry": "r8b2",
+    "layout": "asymmetric-list",
+    "illustration": "mono",
+    "illustration_set": "etchings",
+    "ornament": "floral",
+    "density": 1.0
+}
