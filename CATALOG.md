@@ -85,6 +85,35 @@ sudo python3 scripts/tag_symbol_sheets.py \
 
 - DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-symboltags-20261122T110332Z`
 
+## 폰트 라이선스 실측 (2026-11-22)
+
+폰트 파일에 내장된 name table(ID 0·13·14)을 읽어 라이선스를 분류했다.
+
+```bash
+sudo python3 scripts/audit_font_licenses.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --library-root /srv/sonagi-assets/library --apply
+```
+
+| 라이선스 | 파일 수 |
+| --- | --- |
+| internal-only (미확인) | 4,483 |
+| OFL | 719 |
+| Apache | 46 |
+| **Commercial** | **24** |
+| GPL | 1 |
+| CC0 | 42 |
+| Personal-use | 2 |
+
+- Commercial/Personal 폰트는 **D2C·외주 납품물에서 제외**해야 한다.
+- WOFF2 분석에는 `brotli` 파이썬 패키지가 필요하다.
+- DB 백업: `asset_hub.db.bak-fontlicense-20261122T112249Z`
+
+## 아이콘/스펙시멘 분리 (2026-11-22)
+
+- 실제 아이콘 24개만 `kind:icon|illustration` 유지
+- 타이포 specimen·컬러 팔레트·프레임 49개는 `kind:specimen`으로 재분류
+
 ## 글리프 처리 (2026-11-22)
 
 폰트 글리프 SVG 2,818개에 `kind:glyph` 태그를 붙이고, 앱 기본 목록에서 제외했다.

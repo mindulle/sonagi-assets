@@ -169,11 +169,19 @@ def main():
         is_junk = name.startswith("._")  # macOS AppleDouble
         is_glyph = ext == "svg" and not is_junk and (bool(re.match(r"^uni[0-9a-f]{4,6}", name.lower())) or len(name.strip()) <= 2)
 
+        embedded_license = None
+        for tag in tags:
+            if tag.startswith("license:") and tag != "license:unknown":
+                embedded_license = tag.split(":", 1)[1]
+                break
+
         if is_junk:
             license_value, license_basis = "n/a", "appledouble-metadata"
         elif ext in FONT_EXTS:
             family = normalize_family(row["name"])
-            if family and family in google_families:
+            if embedded_license:
+                license_value, license_basis = embedded_license, "font-metadata"
+            elif family and family in google_families:
                 license_value, license_basis = "ofl", "google-fonts"
                 stats["fonts_matched"] += 1
             else:
