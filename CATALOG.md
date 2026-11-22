@@ -144,6 +144,33 @@ sudo python3 scripts/tag_symbol_sheets.py \
 | 영문 novelty/display (개인용 배포) | 63 | `ButterFly`, `starthings`, `tender kittens`, `HARLEQUI` |
 | TRGothic 2종 | 2 | 배포처 불명 |
 
+## 일러스트 세트 수급 (2026-11-22)
+
+온보딩 3화면의 빈 영역을 채우기 위해 flat 스타일 세트 1종을 임포트했다.
+스타일을 하나로 고정해야 이후 세트가 섞이지 않는다.
+
+| 세트 | 라이선스 | 파일 | 스타일 |
+| --- | --- | --- | --- |
+| illlustrations (vijay verma) | MIT | 146 | flat · color |
+
+```bash
+sudo python3 scripts/import_icon_pack.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --library-root /srv/sonagi-assets/library \
+  --src /tmp/stage --set illlustrations --license mit \
+  --provider illlustrations --url https://github.com/realvjy/illlustrations \
+  --kind illustration --topic illustration --style flat --palette color --form none --apply
+```
+
+- 태그: `kind:illustration`, `topic:illustration`, `style:flat`, `palette:color`, `scope:bundle`
+- 카탈로그 **14,876**, `bundle` **10,413**
+- 임포터가 `--kind/--topic/--style/--palette`를 받도록 일반화됨
+
+**주의**: 원본 SVG에 자체 배경색과 제작자 크레딧 텍스트가 들어 있다.
+그대로 배치하면 카드 안에 카드가 생기고 크레딧이 노출된다.
+현재는 `object-fit: cover`로 크롭해 쓰고 있고, 제대로 쓰려면 배경 제거·크레딧 제거
+전처리 단계가 필요하다. 컬러 토큰이 없어 임시로 흑백 처리했다.
+
 ## 아이콘 팩 수급 (2026-11-22)
 
 브리프 테스트에서 아이콘 슬롯 17개 중 0개가 채워진 것이 확인되어, 라이선스가 명확한
