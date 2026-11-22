@@ -141,6 +141,21 @@ def draw(kind: str, name: str, variables: dict, data: dict | None = None) -> str
         return ""
     parts = []
     for element in elements:
+        if element.get("el") == "pattern":
+            # 한 장의 타일로 전체를 채운다(선 수천 개 대신)
+            pid = f"orn-{element.get('id', name)}"
+            scope = dict(variables)
+            head = " ".join(f'{key}="{_fill(str(val), scope)}"' for key, val in element.get("attrs", {}).items())
+            inner = "".join(
+                f"<{child['el']} " + " ".join(f'{key}="{_fill(str(val), scope)}"' for key, val in child["attrs"].items()) + "/>"
+                for child in element.get("elements") or []
+            )
+            rect = element.get("rect") or {}
+            rect_attrs = " ".join(f'{key}="{_fill(str(val), scope)}"' for key, val in rect.items())
+            parts.append(f'<defs><pattern id="{pid}" {head}>{inner}</pattern></defs>')
+            parts.append(f'<rect {rect_attrs} fill="url(#{pid})"/>')
+            continue
+
         children = element.get("elements") or [element]
         for binding in _bindings(element, variables):
             local = dict(variables)

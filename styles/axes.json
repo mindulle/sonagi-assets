@@ -447,6 +447,20 @@
             "height": 44,
             "weight": 1,
             "background": "hatch"
+        },
+        "paper-lines": {
+            "motif": "rule",
+            "frame": "none",
+            "height": 40,
+            "weight": 1,
+            "background": "dots-lines"
+        },
+        "hatch-lines": {
+            "motif": "wave",
+            "frame": "none",
+            "height": 44,
+            "weight": 1,
+            "background": "hatch-lines"
         }
     }
 }

@@ -1,0 +1,10 @@
+{
+    "name": "hatch-editorial",
+    "theme": "editorial",
+    "palette": "newsprint",
+    "type": "archivo-plain",
+    "geometry": "r0b1",
+    "layout": "split-list",
+    "ornament": "hatch",
+    "density": 1.02
+}
