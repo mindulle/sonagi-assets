@@ -85,6 +85,44 @@ sudo python3 scripts/tag_symbol_sheets.py \
 
 - DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-symboltags-20261122T110332Z`
 
+## 아이콘·일러스트 태깅 (2026-11-22)
+
+심볼 시트/글리프/타이포 specimen/색상 팔레트를 제외한 벡터 에셋 73개에 4축 태그를 적용했다.
+
+| 축 | 값 |
+| --- | --- |
+| `kind:` | icon / illustration |
+| `form:` | line / filled / mixed |
+| `palette:` | mono / color |
+| `shape:` | geometric / organic |
+| `detail:` | simple / detailed |
+
+```bash
+sudo python3 scripts/tag_vector_assets.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --library-root /srv/sonagi-assets/library --apply
+```
+
+- DB 백업: `asset_hub.db.bak-vectortags-20261122T110744Z`
+- 주의: 코퍼스에 타이포/프레임 잔재가 섞여 있어 73개 중 일부는 수동 확인 필요
+
+## 폰트 라이선스 리포트 (2026-11-22)
+
+```bash
+sudo python3 scripts/font_license_report.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --google-fonts google-fonts.json \
+  --out /srv/sonagi-assets/catalog/font-license-report.json
+```
+
+| 항목 | 값 |
+| --- | --- |
+| 폰트 파일 | 1,785 |
+| 고유 패밀리 | 920 |
+| Google OFL 패밀리 | 67 |
+| 알려진 무료(Korean 등) | 84 |
+| **미확인** | **769 패밀리 / 1,307 파일** |
+
 ## 폰트 글리프 발견 (2026-11-22)
 
 스타일 클러스터링을 돌린 결과, SVG 3,425개 중 **2,954개가 `uniXXXX` 형태의 유니코드 글리프**였습니다.
