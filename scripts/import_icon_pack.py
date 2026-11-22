@@ -30,23 +30,25 @@ except ImportError:  # 썸네일 없이 등록
 THUMB_SIZE = 160
 
 
-def tags_for(name, pack, license_value, provider, url, form):
-    return sorted(
-        {
-            "category:ui-component",
-            "topic:icon",
-            "kind:icon",
-            "palette:mono",
-            f"set:{pack}",
-            f"form:{form}",
-            f"license:{license_value}",
-            "license_src:provider",
-            f"license_provider:{provider}",
-            f"license_url:{url}",
-            "scope:bundle",
-            "src:icon-pack",
-        }
-    )
+def tags_for(name, pack, license_value, provider, url, form, kind, topic, style, palette):
+    tags = {
+        "category:ui-component",
+        f"topic:{topic}",
+        f"kind:{kind}",
+        f"palette:{palette}",
+        f"set:{pack}",
+        f"license:{license_value}",
+        "license_src:provider",
+        f"license_provider:{provider}",
+        f"license_url:{url}",
+        "scope:bundle",
+        "src:asset-pack",
+    }
+    if form:
+        tags.add(f"form:{form}")
+    if style:
+        tags.add(f"style:{style}")
+    return sorted(tags)
 
 
 def main():
@@ -58,9 +60,17 @@ def main():
     ap.add_argument("--license", required=True)
     ap.add_argument("--provider", required=True)
     ap.add_argument("--url", required=True)
-    ap.add_argument("--form", default="line", choices=("line", "filled", "mixed"))
+    ap.add_argument("--form", default="line", choices=("line", "filled", "mixed", "none"))
+    ap.add_argument("--kind", default="icon", choices=("icon", "illustration"))
+    ap.add_argument("--topic", default=None)
+    ap.add_argument("--style", default=None, help="예: flat, line, isometric")
+    ap.add_argument("--palette", default=None, choices=("mono", "color", "duotone"))
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
+
+    topic = args.topic or ("icon" if args.kind == "icon" else "illustration")
+    palette = args.palette or ("mono" if args.kind == "icon" else "color")
+    form = None if args.form == "none" else args.form
 
     src = Path(args.src)
     library = Path(args.library_root)
@@ -133,7 +143,21 @@ def main():
                 item_id,
                 path.stem,
                 "svg",
-                json.dumps(tags_for(path.stem, args.pack, args.license, args.provider, args.url, args.form), ensure_ascii=False),
+                json.dumps(
+                    tags_for(
+                        path.stem,
+                        args.pack,
+                        args.license,
+                        args.provider,
+                        args.url,
+                        form,
+                        args.kind,
+                        topic,
+                        args.style,
+                        palette,
+                    ),
+                    ensure_ascii=False,
+                ),
                 None,
                 None,
                 thumb_path,
