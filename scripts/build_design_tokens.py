@@ -51,6 +51,11 @@ def read_scale(path):
     return out
 
 
+def dump_json(path, obj):
+    """biome(prettier) 규칙에 맞춰 4-space + 개행으로 쓴다."""
+    path.write_text(json.dumps(obj, indent=4, ensure_ascii=False) + "\n")
+
+
 def build_primitives(radix_dir):
     primitives = {}
     for name in LIGHT_SCALES + DARK_SCALES:
@@ -173,9 +178,9 @@ def main():
     primitives = build_primitives(args.radix)
     semantic = build_semantic()
 
-    (out / "primitives.json").write_text(json.dumps(primitives, indent=2))
-    (out / "semantic.json").write_text(json.dumps(semantic, indent=2))
-    (out / "tokens.figma.json").write_text(json.dumps(figma_json(semantic), indent=2))
+    dump_json(out / "primitives.json", primitives)
+    dump_json(out / "semantic.json", semantic)
+    dump_json(out / "tokens.figma.json", figma_json(semantic))
     write_css(out / "tokens.css", primitives, semantic)
 
     print(
