@@ -25,6 +25,7 @@ LICENSE_SCOPE = {
     # 파일 재배포까지 허용
     "ofl": SCOPE_BUNDLE,
     "mit": SCOPE_BUNDLE,
+    "isc": SCOPE_BUNDLE,
     "apache": SCOPE_BUNDLE,
     "cc0": SCOPE_BUNDLE,
     # 결과물 사용만 허용
