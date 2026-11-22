@@ -58,7 +58,6 @@ def load_allowlist():
     return _allowlist_cache["data"]
 
 
-
 class ImportUrlRequest(BaseModel):
     imageUrl: str
     author: Optional[str] = ""
