@@ -157,6 +157,29 @@ render_recipe.py ... --embed-max-width 900
 sudo python3 scripts/import_image_pack.py ... --origin generated --apply
 ```
 
+## 섹션 자동 구성과 베리에이션
+
+레시피 v2는 `content`(재료)만 주고, `compose_sections.py`가 섹션 조합을 샘플링한다.
+
+```bash
+python3 scripts/compose_sections.py --recipe recipes/landing-hero-v2.json \
+  --style styles/etching.json --catalog catalog/catalog.json \
+  --tokens tokens/semantic.json --variants 6 --seed 7 --out variants/
+```
+
+- 섹션: `header` · `hero` · `stats` · `quote` · `logos` · `features` · `faq` · `cta` · `footer`
+- 문법: `features` 필수, 증거 섹션(stats/quote/logos) 중 1개 이상, 증거 섹션 연속 금지
+- 점수: 섹션 수·증거 유무·서사 순서 가중, 6개 이상이면 감점
+- 같은 `seed`면 같은 6종이 나온다
+
+| 산출 | 내용 |
+| --- | --- |
+| `<name>-vN.svg` | 조합별 결과 |
+| `<name>-vN-CREDITS.md` | 자산 출처 |
+| `variants.json` | 조합·점수·sha256 목록 |
+
+고른 1종은 `blocks` 레시피로 동결하면 이후 결정론적으로 재생된다.
+
 ## 빌드업 타임랩스
 
 레이어 조립 과정을 프레임으로 남긴다. 사람의 붓질 기록(스피드 페인팅)과는 다르다.

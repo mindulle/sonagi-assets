@@ -463,6 +463,74 @@ class Renderer:
             parts.append("</g>")
         return f'<g id="features">{"".join(parts)}</g>', 320 * self.density
 
+    def stats(self, block, W, y0):
+        c = self.colors
+        gap = 24
+        col_w = (W - 112 - gap * 2) / 3
+        parts = []
+        for i, item in enumerate(block["items"][:3]):
+            x = 56 + i * (col_w + gap)
+            parts.append(f'<g id="stat-{i + 1}">')
+            parts.append(f'<line x1="{x}" y1="{y0}" x2="{x + col_w}" y2="{y0}" stroke="{c["border"]}" stroke-width="{self.border_w}"/>')
+            parts.append(self.text(x, y0 + 78 * self.scale, self.case(item["value"]), 56 * self.scale, 700, family=self.f_display))
+            parts.append(self.text(x, y0 + 112 * self.scale, self.case(item["label"]), 13, 400, c["text-muted"]))
+            parts.append("</g>")
+        return f'<g id="stats">{"".join(parts)}</g>', 200 * self.density
+
+    def quote(self, block, W, y0):
+        c = self.colors
+        size = 36 * self.scale
+        parts = [
+            '<g id="quote">',
+            f'<line x1="56" y1="{y0}" x2="56" y2="{y0 + 150}" stroke="{c["accent"]}" stroke-width="{self.border_w * 2}"/>',
+            self.text(96, y0 + 44, self.case(block["text"]), size, 400, family=self.f_display, leading=1.3),
+            self.text(96, y0 + 116, self.case(block.get("author", "")), 13, 600, c["text-muted"], family=self.f_mono, tracking=1.6),
+        ]
+        parts.append("</g>")
+        return f"{''.join(parts)}", 210 * self.density
+
+    def logos(self, block, W, y0):
+        c = self.colors
+        names = block.get("items", [])[:5]
+        gap = 24
+        col_w = (W - 112 - gap * (len(names) - 1)) / max(1, len(names))
+        parts = []
+        for i, name in enumerate(names):
+            x = 56 + i * (col_w + gap) + col_w / 2
+            parts.append(self.text(x, y0 + 40, self.case(name), 18, 700, c["text-faint"], family=self.f_display, anchor="middle", tracking=1.2))
+        return f'<g id="logos">{"".join(parts)}</g>', 110 * self.density
+
+    def faq(self, block, W, y0):
+        c = self.colors
+        parts = [self.text(56, y0, self.case(block.get("title", "자주 묻는 질문")), 30 * self.scale, 700, family=self.f_display)]
+        for i, item in enumerate(block["items"][:3]):
+            y = y0 + 56 + i * 92
+            parts.append(f'<g id="faq-{i + 1}">')
+            parts.append(self.text(56, y + 24, self.case(item["q"]), 17, 700, family=self.f_display))
+            parts.append(self.text(56, y + 54, self.case(item["a"]), 14, 400, c["text-secondary"]))
+            parts.append(f'<line x1="56" y1="{y + 76}" x2="{W - 56}" y2="{y + 76}" stroke="{c["border"]}" stroke-width="1"/>')
+            parts.append("</g>")
+        return f'<g id="faq">{"".join(parts)}</g>', 340 * self.density
+
+    def cta_band(self, block, W, y0):
+        c = self.colors
+        h = 220
+        parts = [
+            '<g id="cta-band">',
+            self.card(56, y0, W - 112, h, c["surface"]),
+            self.text(96, y0 + 72, self.case(block.get("eyebrow", "")), 12, 600, c["accent"], family=self.f_mono, tracking=2.6),
+            self.text(96, y0 + 118, self.case(block["title"]), 34 * self.scale, 700, family=self.f_display),
+            self.text(96, y0 + 152, self.case(block.get("body", "")), 15, 400, c["text-secondary"]),
+        ]
+        bw, bh = 208, 56
+        bx = W - 96 - bw
+        by = y0 + 82
+        parts.append(f'<g id="cta">{self.card(bx, by, bw, bh, c["accent"])}')
+        parts.append(self.text(bx + 28, by + 36, self.case(block["cta"]), 16, 700, c["accent-ink"]))
+        parts.append(self.icon(block.get("ctaIcon", "arrow-right"), bx + bw - 46, by + 19, 18, c["accent-ink"]))
+        parts.append("</g></g>")
+        return "".join(parts), h + 40
+
     def footer(self, block, W, y):
         c = self.colors
         parts = [
@@ -530,6 +598,26 @@ def main():
             y += adv
         elif kind == "features":
             svg, adv = r.features(block, W, y + 30)
+            body.append(svg)
+            y += adv
+        elif kind == "cta":
+            svg, adv = r.cta_band(block, W, y + 30)
+            body.append(svg)
+            y += adv
+        elif kind == "stats":
+            svg, adv = r.stats(block, W, y + 30)
+            body.append(svg)
+            y += adv
+        elif kind == "quote":
+            svg, adv = r.quote(block, W, y + 30)
+            body.append(svg)
+            y += adv
+        elif kind == "logos":
+            svg, adv = r.logos(block, W, y + 30)
+            body.append(svg)
+            y += adv
+        elif kind == "faq":
+            svg, adv = r.faq(block, W, y + 30)
             body.append(svg)
             y += adv
         elif kind == "footer":
