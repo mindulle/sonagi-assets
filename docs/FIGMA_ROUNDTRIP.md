@@ -50,3 +50,28 @@
 - **타이포: 폰트 설치·선택 규칙 없이는 납품 불가**
 
 다음 조치: Pretendard 재설치(또는 Bold 대체) + 납품 전 사용 폰트 목록을 클라이언트와 합의.
+
+
+## 2차 검증 (폰트 설치 후, 2026-11-22)
+
+Windows 머신(`mindulle-gp66-windows`)에 폰트 8종을 설치하고 Figma를 재시작한 뒤 재검증했다.
+
+| 항목 | 결과 |
+| --- | --- |
+| 패밀리 해석 | Archivo·Pretendard·JetBrains Mono·NanumSquare **모두 정상 매핑** (Inter 폴백 없음) |
+| NanumSquare | 설치 후 정상 렌더 |
+| Gowun Batang | 정상 |
+| Pretendard Bold | Figma **기본 텍스트와 동일하게** 두껍게 렌더 (임포트 문제 아님) |
+| 임포트 vs 네이티브 | 같은 속성·같은 모양 → **임포트 손실 없음** |
+
+### 결론
+
+- SVG 임포트는 폰트를 정확히 전달한다. 깨짐은 **설치된 Pretendard Bold의 렌더링 특성**이었다.
+- 한글 헤드라인은 **NanumSquare Bold**(또는 Gowun Batang)를 쓰는 편이 안전하다.
+- 스타일 팩의 `type.korean`을 NanumSquare/Gowun으로 고정했다.
+
+### 운영 메모
+
+- 폰트는 Figma가 도는 머신에 설치해야 한다(브리지는 SSH 터널로 연결됨).
+- 설치 위치: `%LOCALAPPDATA%\Microsoft\Windows\Fonts` + `HKCU` 레지스트리.
+- 설치 후 Figma 완전 재시작 필요. 재시작하면 Desktop Bridge 플러그인을 다시 열어야 한다.
