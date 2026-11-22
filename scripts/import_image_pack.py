@@ -89,10 +89,14 @@ def main():
             thumb_path = ""
 
         origin_tags = []
+        base_scope = ["scope:bundle"]
         if args.origin:
             origin_tags = [f"origin:{args.origin}"]
             if args.origin == "generated":
+                # 생성물은 재배포 금지(output)다. bundle 태그가 함께 붙으면
+                # 카탈로그가 알파벳 순으로 scope:bundle을 먼저 집어 잘못 승격된다.
                 origin_tags.append("scope:output")
+                base_scope = []
         tags = sorted(
             {
                 "category:ui-component",
@@ -105,7 +109,7 @@ def main():
                 "license_src:provider",
                 f"license_provider:{args.provider}",
                 f"license_url:{args.url}",
-                "scope:bundle",
+                *base_scope,
                 "src:asset-pack",
                 *origin_tags,
             }

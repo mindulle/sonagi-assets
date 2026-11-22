@@ -246,6 +246,8 @@ class Renderer:
         for item in sorted(catalog["items"], key=lambda i: (rank(i), i["name"])):
             self.items.setdefault(item["name"], item)
         self.used = []
+        self.output_only = []
+        self._clip_seq = 0
         self.bp = "desktop"
         self.M = 56
         self.K = 1.0
@@ -263,8 +265,12 @@ class Renderer:
             raise SystemExit(f"asset kind mismatch: {name} is not an icon")
         if kind == "illustration" and "kind:illustration" not in kinds:
             raise SystemExit(f"asset kind mismatch: {name} is not an illustration")
-        if self.strict and item.get("license_scope") != "bundle":
-            raise SystemExit(f"asset blocked: {name} (scope={item.get('license_scope')}, license={item.get('license')})")
+        scope = item.get("license_scope")
+        if scope == "blocked" and self.strict:
+            raise SystemExit(f"asset blocked: {name} (scope={scope}, license={item.get('license')})")
+        if scope == "output":
+            # 결과물에는 쓸 수 있지만 파일 재배포는 금지 → 매니페스트에 남긴다
+            self.output_only.append(name)
         origin = origin_from_tags(item.get("tags"))
         if origin == "generated" and item.get("license_scope") != "output":
             raise SystemExit(f"generated asset must be scope:output: {name}")
@@ -340,11 +346,14 @@ class Renderer:
             )
         item = self.asset(name, "illustration")
         if item.get("ext") in ("jpg", "jpeg", "png"):
-            clip = f"clip-{name}"
+            # 같은 자산을 여러 번 쓰면 clipPath id가 겹쳐 두 번째가 사라진다
+            self._clip_seq += 1
+            clip = f"clip-{name}-{self._clip_seq}"
             clip_def = f'<clipPath id="{clip}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}"/></clipPath>'
             return clip_def + self.raster_image(host_path(item["path"]), x, y, w, h, clip)
         body, vb = inner_svg(host_path(item["path"]))
-        clip = f"clip-{name}"
+        self._clip_seq += 1
+        clip = f"clip-{name}-{self._clip_seq}"
         clip_def = f'<clipPath id="{clip}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}"/></clipPath>'
         filt = ' filter="url(#mono)"' if self.illustration_mode == "mono" else ""
         return (
@@ -973,8 +982,17 @@ def write_credits(path, manifest):
     """납품용 출처·고지 문서."""
     lines = [f"# Credits — {manifest['recipe']}", "", f"- 스타일: `{manifest['style']}`", ""]
     lines += ["| 자산 | 종류 | 라이선스 | 출처 | 범위 |", "| --- | --- | --- | --- | --- |"]
+    seen = set()
     for a in manifest["assets"]:
+        key = (a["name"], a["kind"], a["license"], a["origin"], a["scope"])
+        if key in seen:
+            continue
+        seen.add(key)
         lines.append(f"| {a['name']} | {a['kind']} | {a['license']} | {a['origin']} | {a['scope']} |")
+    output_only = manifest.get("output_only") or []
+    if output_only:
+        lines += ["", "## 재배포 제한", ""]
+        lines += [f"- `{name}`: 결과물에만 사용. 파일 재배포·에셋 팩 포함 금지" for name in output_only]
     lines += ["", "## 고지", ""]
     for note in manifest["disclosure"]:
         lines.append(f"- {note}")
@@ -1114,7 +1132,8 @@ def main():
         "sha256": hashlib.sha256(svg.encode()).hexdigest(),
         "layers": re.findall(r'<g id="([^"]+)"', svg),
         "assets": r.used,
-        "license_ok": all(a["scope"] == "bundle" for a in r.used),
+        "license_ok": all(a["scope"] != "blocked" for a in r.used),
+        "output_only": sorted(set(r.output_only)),
         "disclosure": sorted({disclosure_for(a["origin"]) for a in r.used}),
     }
     (out / f"{name}.manifest.json").write_text(json.dumps(manifest, indent=4, ensure_ascii=False) + "\n")

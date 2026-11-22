@@ -124,6 +124,21 @@ def inspect_svg(path, max_hash_bytes):
     return {"bytes": size, "sha256": digest, "svg_groups": groups}
 
 
+def resolve_scope(tags, license_value, origin_value):
+    """scope 태그가 여러 개일 때 안전한 쪽을 고른다.
+
+    생성 자산은 무조건 output이다(재배포 금지). 태그가 충돌하면
+    bundle < output < blocked 순으로 보수적으로 판정한다.
+    """
+    if origin_value == "generated":
+        return "output"
+    scopes = {t.split(":", 1)[1] for t in tags if t.startswith("scope:")}
+    for candidate in ("blocked", "output", "bundle"):
+        if candidate in scopes:
+            return candidate
+    return scope_for_license(license_value)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--db", required=True)
@@ -198,10 +213,10 @@ def main():
         else:
             license_value, license_basis = "internal-only", "source-unverified"
 
-        scope_tag = next((t.split(":", 1)[1] for t in tags if t.startswith("scope:")), None)
         origin_value = origin_from_tags(tags)
         if origin_value == "unknown" and license_value:
             origin_value = origin_for_license(license_value)
+        scope_tag = resolve_scope(tags, license_value, origin_value)
         meta = inspect_svg(path, args.max_hash_bytes) if ext == "svg" else {"bytes": None, "sha256": None, "svg_groups": None}
 
         item = {
