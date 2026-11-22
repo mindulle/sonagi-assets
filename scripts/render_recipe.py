@@ -23,6 +23,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from provenance import disclosure_for, origin_from_tags  # noqa: E402
+
 SVG_OPEN = re.compile(r"<svg\b[^>]*>", re.S)
 SVG_CLOSE = re.compile(r"</svg>\s*$")
 VIEWBOX = re.compile(r'viewBox="([^"]+)"')
@@ -181,12 +184,16 @@ class Renderer:
             raise SystemExit(f"asset kind mismatch: {name} is not an illustration")
         if self.strict and item.get("license_scope") != "bundle":
             raise SystemExit(f"asset blocked: {name} (scope={item.get('license_scope')}, license={item.get('license')})")
+        origin = origin_from_tags(item.get("tags"))
+        if origin == "generated" and item.get("license_scope") != "output":
+            raise SystemExit(f"generated asset must be scope:output: {name}")
         self.used.append(
             {
                 "name": name,
                 "kind": kind,
                 "license": item.get("license"),
                 "scope": item.get("license_scope"),
+                "origin": origin,
             }
         )
         return item
@@ -444,6 +451,20 @@ class Renderer:
         return f'<g id="footer">{"".join(parts)}</g>'
 
 
+def write_credits(path, manifest):
+    """납품용 출처·고지 문서."""
+    lines = [f"# Credits — {manifest['recipe']}", "", f"- 스타일: `{manifest['style']}`", ""]
+    lines += ["| 자산 | 종류 | 라이선스 | 출처 | 범위 |", "| --- | --- | --- | --- | --- |"]
+    for a in manifest["assets"]:
+        lines.append(f"| {a['name']} | {a['kind']} | {a['license']} | {a['origin']} | {a['scope']} |")
+    lines += ["", "## 고지", ""]
+    for note in manifest["disclosure"]:
+        lines.append(f"- {note}")
+    if not any(a["origin"] == "generated" for a in manifest["assets"]):
+        lines += ["", "AI 생성 자산은 포함되지 않았습니다."]
+    path.write_text("\n".join(lines) + "\n")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--recipe", required=True)
@@ -516,8 +537,10 @@ def main():
         "layers": re.findall(r'<g id="([^"]+)"', svg),
         "assets": r.used,
         "license_ok": all(a["scope"] == "bundle" for a in r.used),
+        "disclosure": sorted({disclosure_for(a["origin"]) for a in r.used}),
     }
     (out / f"{name}.manifest.json").write_text(json.dumps(manifest, indent=4, ensure_ascii=False) + "\n")
+    write_credits(out / f"{name}-CREDITS.md", manifest)
     print(
         json.dumps(
             {"recipe": manifest["recipe"], "style": manifest["style"], "sha256": manifest["sha256"], "license_ok": manifest["license_ok"]},
