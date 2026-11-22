@@ -30,6 +30,8 @@ LICENSE_SCOPE = {
     "cc0": SCOPE_BUNDLE,
     # 결과물 사용만 허용
     "free": SCOPE_OUTPUT,
+    # AI 생성물: 결과물에는 쓸 수 있지만 파일 재배포는 하지 않는다
+    "generated": SCOPE_OUTPUT,
     # 사용 불가
     "gpl": SCOPE_BLOCKED,
     "commercial": SCOPE_BLOCKED,

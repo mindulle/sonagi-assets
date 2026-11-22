@@ -193,8 +193,23 @@ done
 
 ```bash
 # AI 생성 자산을 등록할 때
-sudo python3 scripts/import_image_pack.py ... --origin generated --apply
+sudo python3 scripts/import_image_pack.py ... \
+  --origin generated --license generated --apply
 ```
+
+### 구현 규칙
+
+| 지점 | 규칙 |
+| --- | --- |
+| `license_policy.py` | `generated` → `output` (파일 재배포 금지) |
+| `import_image_pack.py` | `--origin generated`면 `scope:bundle`을 붙이지 않는다 |
+| `build_asset_catalog.py` | scope 태그가 충돌하면 `bundle < output < blocked` 순으로 보수 판정, generated는 무조건 `output` |
+| `render_recipe.py` | `blocked`만 중단. `output`은 결과물에 허용하고 `output_only`로 매니페스트·CREDITS에 남긴다 |
+| `import_content.py` | `output` 자산은 경고("에셋 팩에 넣을 수 없습니다"), `blocked`는 오류 |
+
+`scope:bundle`과 `scope:output`이 동시에 붙으면 카탈로그가 알파벳 순으로 `bundle`을
+먼저 집어 AI 자산을 판매 가능으로 승격시키는 버그가 있었다. 지금은 태그를 붙이지 않고,
+카탈로그도 보수적으로 판정한다.
 
 ## 섹션 자동 구성과 베리에이션
 

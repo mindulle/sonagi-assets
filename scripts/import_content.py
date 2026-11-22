@@ -365,10 +365,16 @@ def check_assets(blocks, index, report):
         table = index.get(kind, {})
         if name in table:
             item = table[name]
-            if item.get("license_scope") != "bundle":
+            scope = item.get("license_scope")
+            if scope == "blocked":
                 report.error(
                     None,
-                    f"{where}: `{name}` 사용 불가 (scope={item.get('license_scope')}, license={item.get('license')})",
+                    f"{where}: `{name}` 사용 불가 (scope={scope}, license={item.get('license')})",
+                )
+            elif scope == "output":
+                report.warn(
+                    None,
+                    f"{where}: `{name}`은 결과물 전용입니다 (scope=output, license={item.get('license')}) — 에셋 팩에는 넣을 수 없습니다",
                 )
             return
         suggestion = difflib.get_close_matches(name, sorted(table), n=1)
