@@ -365,6 +365,39 @@ class Renderer:
         )
 
     # --- text --------------------------------------------------------------
+    @staticmethod
+    def measure(text, size):
+        """글자 폭을 대략 재서 줄바꿈에 쓴다(CJK 1em, 라틴 0.55em)."""
+        total = 0.0
+        for ch in str(text):
+            if ch == "\n":
+                continue
+            if ord(ch) >= 0x2E80:
+                total += size
+            elif ch == " ":
+                total += size * 0.3
+            else:
+                total += size * 0.55
+        return total
+
+    def wrap(self, text, size, max_width):
+        lines, current = [], ""
+        for word in str(text).split(" "):
+            trial = (current + " " + word).strip()
+            if not current or self.measure(trial, size) <= max_width:
+                current = trial
+                continue
+            lines.append(current)
+            current = word
+            # 공백 없는 긴 덩어리는 글자 단위로 자른다
+            while self.measure(current, size) > max_width:
+                cut = max(1, int(len(current) * max_width / max(self.measure(current, size), 1)))
+                lines.append(current[:cut])
+                current = current[cut:]
+        if current:
+            lines.append(current)
+        return "\n".join(lines) or str(text)
+
     def text(self, x, y, content, size, weight, color=None, family=None, anchor="start", tracking=None, leading=1.18):
         color = color or self.colors["text"]
         family = family or self.f_sans
@@ -521,7 +554,7 @@ class Renderer:
         )
         parts.append(self.text(m + bw + 24, by + 37, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
         parts.append("</g>")
-        return "".join(parts), (by + bh + 40) - y0
+        return "".join(parts), (by + bh + 70) - y0
 
     def hero_asymmetric(self, block, W, y0):
         c = self.colors
@@ -645,14 +678,18 @@ class Renderer:
         c = self.colors
         m = self.M
         size = 36 * self.scale * self.K
+        wrapped = self.wrap(self.case(block["text"]), size, W - 2 * m - 48)
+        lines = wrapped.count("\n") + 1
+        body_h = lines * size * 1.35
+        author_y = y0 + 44 + body_h + 14
         parts = [
             '<g id="quote">',
-            f'<line x1="{m}" y1="{y0}" x2="{m}" y2="{y0 + 150}" stroke="{c["accent"]}" stroke-width="{self.border_w * 2}"/>',
-            self.text(m + 24, y0 + 44, self.case(block["text"]), size, 400, family=self.f_display, leading=1.35),
-            self.text(m + 24, y0 + 116, self.case(block.get("author", "")), 12, 600, c["text-muted"], family=self.f_mono, tracking=1.6),
+            f'<line x1="{m}" y1="{y0}" x2="{m}" y2="{author_y + 6}" stroke="{c["accent"]}" stroke-width="{self.border_w * 2}"/>',
+            self.text(m + 24, y0 + 44, wrapped, size, 400, family=self.f_display, leading=1.35),
+            self.text(m + 24, author_y, self.case(block.get("author", "")), 12, 600, c["text-muted"], family=self.f_mono, tracking=1.6),
         ]
         parts.append("</g>")
-        return f"{''.join(parts)}", 210 * self.density
+        return f"{''.join(parts)}", (author_y + 54 - y0) * self.density
 
     def logos(self, block, W, y0):
         c = self.colors
@@ -676,7 +713,9 @@ class Renderer:
             parts.append(self.text(m, y + 52, self.case(item["a"]), 13 * self.K, 400, c["text-secondary"], leading=1.5))
             parts.append(f'<line x1="{m}" y1="{y + 76}" x2="{W - m}" y2="{y + 76}" stroke="{c["border"]}" stroke-width="1"/>')
             parts.append("</g>")
-        return f'<g id="faq">{"".join(parts)}</g>', 340 * self.density
+        # 항목 수에 맞춰 높이를 잡는다(2개일 때 빈 공간이 남던 문제)
+        count = min(len(block["items"]), 3)
+        return f'<g id="faq">{"".join(parts)}</g>', (count * 92 + 84) * self.density
 
     def cta_band(self, block, W, y0):
         c = self.colors
