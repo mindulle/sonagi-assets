@@ -192,6 +192,7 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 
 | 경로 | 역할 |
 | --- | --- |
+| `press` · `scripts/press.py` | 단일 CLI(check·render·package·styles·preview) |
 | `scripts/render_recipe.py` | 렌더러·스타일·다크 변환·매니페스트 |
 | `scripts/import_content.py` | content.md → recipe + 검증 |
 | `scripts/export_recipe.py` | PDF·PNG·WebP + 라이선스 게이트 |
