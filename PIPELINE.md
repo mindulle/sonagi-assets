@@ -25,6 +25,28 @@ python3 scripts/render_recipe.py \
   --out out/
 ```
 
+## 스타일 팩
+
+스킨은 레시피가 아니라 `styles/*.json`이 결정한다. 같은 레시피로 다른 스타일을 뽑는다.
+
+| 스타일 팩 | 색 | 기하 | 서체·케이스 | 일러스트 | 히어로 |
+| --- | --- | --- | --- | --- | --- |
+| `editorial` | 크림·잉크·앰버 | 2px, r8 | 나눔스퀘어 | 컬러 | split |
+| `brutalist` | 순흑백 | 4px, r0 | Archivo·대문자 | 숨김 | center |
+| `minimal` | 화이트·블루 | 1px, r4 | Archivo+나눔·자간 +0.5 | 흑백(mono) | split |
+
+```bash
+python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
+  --style styles/brutalist.json --catalog catalog/catalog.json \
+  --tokens tokens/semantic.json --out out/
+```
+
+스타일 팩 키: `colors`(토큰 덮어쓰기), `geometry`(반경·보더·그림자), `type`(서체·배율·대소문자·자간),
+`illustration`(color|mono|hidden), `density`, `hero`(split|center), `header`.
+
+한계: 지금 스타일 변화는 **스킨 축**이다. 블록 조합·그리드 자체를 바꾸는
+레이아웃 문법은 아직 하나(split/center)뿐이다.
+
 ## 레시피 형식
 
 ```json

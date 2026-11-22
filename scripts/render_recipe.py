@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""레시피(JSON) + 자산 + 토큰 → 레이어가 살아있는 SVG 1장.
+"""레시피(JSON) + 스타일 팩 + 자산 + 토큰 → 레이어가 살아있는 SVG 1장.
 
-생성 AI를 쓰지 않는다. 같은 레시피·시드는 항상 같은 바이트를 만든다.
+생성 AI를 쓰지 않는다. 같은 레시피·스타일·시드는 항상 같은 바이트를 만든다.
 출력 SVG는 `<g id="...">` 그룹으로 구성되어 Figma에서 레이어로 풀린다.
+
+스타일 팩(`styles/*.json`)이 스킨을 결정한다:
+색상·반경·보더·그림자·서체·대소문자·밀도·일러스트 처리·히어로 레이아웃.
 
 사용::
 
     python3 render_recipe.py --recipe recipes/landing-hero.json \\
-        --catalog catalog/catalog.json --out out/
-
-검증:
-- 레시피가 참조한 자산이 `scope:bundle`이 아니면 즉시 실패한다
-- 참조 자산을 찾지 못하면 실패한다
+        --style styles/brutalist.json --catalog catalog/catalog.json \\
+        --tokens tokens/semantic.json --out out/
 """
 
 import argparse
@@ -26,12 +26,23 @@ SVG_OPEN = re.compile(r"<svg\b[^>]*>", re.S)
 SVG_CLOSE = re.compile(r"</svg>\s*$")
 VIEWBOX = re.compile(r'viewBox="([^"]+)"')
 
-
-def host_path(p):
-    if p.startswith("/app/data/"):
-        return os.path.join("/srv/sonagi-assets/library", p[len("/app/data/") :])
-    return p
-
+DEFAULT_STYLE = {
+    "name": "default",
+    "colors": {},
+    "geometry": {"radius": 8, "borderWidth": 2, "shadow": "none"},
+    "type": {
+        "display": "NanumSquare",
+        "sans": "NanumSquare",
+        "mono": "JetBrains Mono",
+        "scale": 1.0,
+        "uppercase": False,
+        "tracking": 0,
+    },
+    "illustration": "color",
+    "density": 1.0,
+    "hero": "split",
+    "header": "rule",
+}
 
 STYLE_PROPS = {
     "fill",
@@ -46,6 +57,22 @@ STYLE_PROPS = {
     "fill-opacity",
     "stroke-opacity",
 }
+
+
+def deep_merge(base, override):
+    out = json.loads(json.dumps(base))
+    for key, value in (override or {}).items():
+        if isinstance(value, dict) and isinstance(out.get(key), dict):
+            out[key] = deep_merge(out[key], value)
+        else:
+            out[key] = value
+    return out
+
+
+def host_path(p):
+    if p.startswith("/app/data/"):
+        return os.path.join("/srv/sonagi-assets/library", p[len("/app/data/") :])
+    return p
 
 
 def inline_styles(body, css):
@@ -75,8 +102,7 @@ def inline_styles(body, css):
             return tag
         return tag[:-2] + " " + " ".join(attrs) + tag[-2:] if tag.endswith("/>") else tag
 
-    body = re.sub(r"<[a-zA-Z][^>]*class=\"[^\"]*\"[^>]*>", apply, body)
-    return body
+    return re.sub(r'<[a-zA-Z][^>]*class="[^"]*"[^>]*>', apply, body)
 
 
 def inner_svg(path):
@@ -101,33 +127,51 @@ def esc(s):
 
 
 class Renderer:
-    def __init__(self, catalog, tokens, theme, strict=True):
+    def __init__(self, catalog, tokens, theme, style, strict=True):
         self.theme = theme
-        self.colors = tokens[theme]
+        self.style = style
+        self.colors = dict(tokens[theme])
+        self.colors.update(style.get("colors") or {})
         self.strict = strict
+        g = style["geometry"]
+        self.radius = g["radius"]
+        self.border_w = g["borderWidth"]
+        self.shadow = g["shadow"]
+        t = style["type"]
+        self.f_display = t["display"]
+        self.f_sans = t["sans"]
+        self.f_mono = t["mono"]
+        self.scale = t["scale"]
+        self.upper = t["uppercase"]
+        self.tracking = t["tracking"]
+        self.density = style["density"]
+        self.illustration_mode = style["illustration"]
+        self.hero_layout = style["hero"]
+
         self.items = {}
-        # 같은 이름이 여러 팩에 있으므로 세트 우선순위로 고정한다(결정성)
         priority = {"lucide": 0, "tabler": 1, "phosphor": 2, "illlustrations": 3}
 
         def rank(item):
-            sets = [t.split(":", 1)[1] for t in item["tags"] if t.startswith("set:")]
+            sets = [x.split(":", 1)[1] for x in item["tags"] if x.startswith("set:")]
             return min((priority.get(s, 9) for s in sets), default=9)
 
         for item in sorted(catalog["items"], key=lambda i: (rank(i), i["name"])):
-            kinds = {t for t in item["tags"] if t.startswith("kind:")}
+            kinds = {x for x in item["tags"] if x.startswith("kind:")}
             if kinds & {"kind:icon", "kind:illustration"}:
                 self.items.setdefault(item["name"], item)
         for item in sorted(catalog["items"], key=lambda i: (rank(i), i["name"])):
             self.items.setdefault(item["name"], item)
         self.used = []
-        self.layers = []
+
+    def case(self, text):
+        return text.upper() if self.upper else text
 
     # --- asset -------------------------------------------------------------
     def asset(self, name, kind):
         item = self.items.get(name)
         if not item:
             raise SystemExit(f"asset not found: {name}")
-        kinds = {t for t in item["tags"] if t.startswith("kind:")}
+        kinds = {x for x in item["tags"] if x.startswith("kind:")}
         if kind == "icon" and "kind:icon" not in kinds:
             raise SystemExit(f"asset kind mismatch: {name} is not an icon")
         if kind == "illustration" and "kind:illustration" not in kinds:
@@ -146,7 +190,7 @@ class Renderer:
 
     def icon(self, name, x, y, size, color=None, stroke=2):
         item = self.asset(name, "icon")
-        body, vb = inner_svg(host_path(item["path"]))
+        body, _vb = inner_svg(host_path(item["path"]))
         color = color or self.colors["text"]
         return (
             f'<g id="icon-{name}" transform="translate({x} {y}) scale({size / 24:.4f})" '
@@ -155,77 +199,119 @@ class Renderer:
         )
 
     def illustration(self, name, x, y, w, h):
+        if self.illustration_mode == "hidden":
+            border = self.colors["border"]
+            return (
+                f'<g id="illo-slot"><rect x="{x}" y="{y}" width="{w}" height="{h}" '
+                f'rx="{self.radius}" fill="none" stroke="{border}" '
+                f'stroke-width="{self.border_w}" stroke-dasharray="6 8"/></g>'
+            )
         item = self.asset(name, "illustration")
         body, vb = inner_svg(host_path(item["path"]))
+        clip = f"clip-{name}"
+        clip_def = f'<clipPath id="{clip}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}"/></clipPath>'
+        filt = ' filter="url(#mono)"' if self.illustration_mode == "mono" else ""
         return (
-            f'<g id="illo-{name}"><svg x="{x}" y="{y}" width="{w}" height="{h}" viewBox="{vb}" preserveAspectRatio="xMidYMid slice">{body}</svg></g>'
+            clip_def
+            + f'<g id="illo-{name}" clip-path="url(#{clip})"><g{filt}>'
+            + f'<svg x="{x}" y="{y}" width="{w}" height="{h}" viewBox="{vb}" '
+            + f'preserveAspectRatio="xMidYMid slice">{body}</svg></g></g>'
         )
 
     # --- text --------------------------------------------------------------
-    def text(self, x, y, content, size, weight, color=None, family="Pretendard", anchor="start", tracking=0):
+    def text(self, x, y, content, size, weight, color=None, family=None, anchor="start", tracking=None):
         color = color or self.colors["text"]
+        family = family or self.f_sans
+        tracking = self.tracking if tracking is None else tracking
         return (
             f'<text x="{x}" y="{y}" font-family="{family}" font-size="{size}" font-weight="{weight}" '
             f'fill="{color}" text-anchor="{anchor}" letter-spacing="{tracking}">{esc(content)}</text>'
         )
 
+    def card(self, x, y, w, h, fill=None):
+        fill = fill or self.colors["surface"]
+        parts = []
+        if self.shadow == "crisp":
+            parts.append(f'<rect x="{x + 6}" y="{y + 6}" width="{w}" height="{h}" rx="{self.radius}" fill="{self.colors["border"]}"/>')
+        parts.append(
+            f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}" fill="{fill}" '
+            f'stroke="{self.colors["border"]}" stroke-width="{self.border_w}"/>'
+        )
+        return "".join(parts)
+
     # --- blocks ------------------------------------------------------------
     def header(self, block, W):
-        parts = [
-            self.text(56, 52, block["brand"], 20, 700),
-        ]
+        rule_w = 1 if self.border_w <= 2 else self.border_w
+        parts = [self.text(56, 52, self.case(block["brand"]), 20, 700, family=self.f_display)]
         x = W - 56
         for label in reversed(block.get("nav", [])):
-            parts.append(self.text(x, 52, label, 15, 500, self.colors["text-muted"], anchor="end"))
+            parts.append(self.text(x, 52, self.case(label), 15, 500, self.colors["text-muted"], anchor="end"))
             x -= 96
-        parts.append(f'<line x1="0" y1="88" x2="{W}" y2="88" stroke="{self.colors["border"]}" stroke-width="1"/>')
+        if self.style.get("header") == "rule":
+            parts.append(f'<line x1="0" y1="88" x2="{W}" y2="88" stroke="{self.colors["border"]}" stroke-width="{rule_w}"/>')
         return f'<g id="header">{"".join(parts)}</g>'
 
     def hero(self, block, W, y0):
         c = self.colors
+        s = self.scale
+        if self.hero_layout == "center":
+            cx = W / 2
+            parts = [
+                self.text(cx, y0 + 70, self.case(block["eyebrow"]), 12, 600, c["accent"], family=self.f_mono, anchor="middle", tracking=4),
+                self.text(cx, y0 + 170, self.case(block["title"]), 86 * s, 700, family=self.f_display, anchor="middle"),
+                self.text(cx, y0 + 240, self.case(block["body"]), 20 * s, 400, c["text-secondary"], anchor="middle"),
+            ]
+            bw, bh = 240, 64
+            bx = cx - bw / 2
+            by = y0 + 300
+            parts.append(
+                f'<g id="cta">{self.card(bx, by, bw, bh, c["accent"])}'
+                + self.text(cx, by + 40, self.case(block["cta"]), 16, 700, c["accent-ink"], anchor="middle")
+                + "</g>"
+            )
+            parts.append(self.text(cx, by + 104, self.case(block.get("note", "")), 13, 400, c["text-muted"], anchor="middle"))
+            return f'<g id="hero">{"".join(parts)}</g>', 470 * self.density
+
         parts = [
-            self.text(56, y0 + 40, block["eyebrow"], 12, 600, c["accent"], family="JetBrains Mono", tracking="2.6"),
-            self.text(56, y0 + 108, block["title"], 64, 700, family="NanumSquare"),
-            self.text(56, y0 + 186, block["body"], 18, 400, c["text-secondary"], tracking="-0.1"),
+            self.text(56, y0 + 40, self.case(block["eyebrow"]), 12, 600, c["accent"], family=self.f_mono, tracking=2.6),
+            self.text(56, y0 + 108, self.case(block["title"]), 64 * s, 700, family=self.f_display),
+            self.text(56, y0 + 186, self.case(block["body"]), 18 * s, 400, c["text-secondary"]),
         ]
-        # CTA
-        btn_w = 208
-        btn_h = 56
+        btn_w, btn_h = 208, 56
         parts.append(
-            f'<g id="cta"><rect x="56" y="{y0 + 232}" width="{btn_w}" height="{btn_h}" rx="6" '
-            f'fill="{c["accent"]}"/>'
-            + self.text(56 + 28, y0 + 232 + 36, block["cta"], 16, 700, c["accent-ink"])
+            f'<g id="cta">{self.card(56, y0 + 232, btn_w, btn_h, c["accent"])}'
+            + self.text(56 + 28, y0 + 232 + 36, self.case(block["cta"]), 16, 700, c["accent-ink"])
             + self.icon(block["ctaIcon"], 56 + btn_w - 46, y0 + 232 + 19, 18, c["accent-ink"])
             + "</g>"
         )
-        parts.append(self.text(288, y0 + 268, block.get("note", ""), 13, 400, c["text-muted"]))
+        parts.append(self.text(288, y0 + 268, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
         parts.append(self.illustration(block["illustration"], W - 56 - 520, y0 + 30, 520, 380))
-        return f'<g id="hero">{"".join(parts)}</g>', 500
+        return f'<g id="hero">{"".join(parts)}</g>', 500 * self.density
 
     def features(self, block, W, y0):
         c = self.colors
-        parts = [self.text(56, y0, block["title"], 36, 700)]
+        parts = [self.text(56, y0, self.case(block["title"]), 36 * self.scale, 700, family=self.f_display)]
         gap = 24
         card_w = (W - 112 - gap * 2) / 3
         for i, item in enumerate(block["items"][:3]):
             x = 56 + i * (card_w + gap)
             y = y0 + 40
             parts.append(
-                f'<g id="feature-{i + 1}"><rect x="{x}" y="{y}" width="{card_w}" height="212" rx="8" '
-                f'fill="{c["surface"]}" stroke="{c["border"]}" stroke-width="2"/>'
+                f'<g id="feature-{i + 1}">'
+                + self.card(x, y, card_w, 212)
                 + self.icon(item["icon"], x + 28, y + 28, 26, c["text"])
-                + self.text(x + 28, y + 108, item["title"], 22, 700)
-                + self.text(x + 28, y + 146, item["body"], 15, 400, c["text-secondary"])
+                + self.text(x + 28, y + 108, self.case(item["title"]), 22, 700, family=self.f_display)
+                + self.text(x + 28, y + 146, self.case(item["body"]), 15, 400, c["text-secondary"])
                 + "</g>"
             )
-        return f'<g id="features">{"".join(parts)}</g>', 300
+        return f'<g id="features">{"".join(parts)}</g>', 300 * self.density
 
     def footer(self, block, W, y):
         c = self.colors
         parts = [
-            f'<line x1="56" y1="{y}" x2="{W - 56}" y2="{y}" stroke="{c["border"]}" stroke-width="1"/>',
-            self.text(56, y + 40, block.get("left", ""), 12, 400, c["text-muted"]),
-            self.text(W - 56, y + 40, block.get("right", ""), 12, 400, c["text-muted"], anchor="end"),
+            f'<line x1="56" y1="{y}" x2="{W - 56}" y2="{y}" stroke="{c["border"]}" stroke-width="{1 if self.border_w <= 2 else self.border_w}"/>',
+            self.text(56, y + 40, self.case(block.get("left", "")), 12, 400, c["text-muted"], family=self.f_mono),
+            self.text(W - 56, y + 40, self.case(block.get("right", "")), 12, 400, c["text-muted"], family=self.f_mono, anchor="end"),
         ]
         return f'<g id="footer">{"".join(parts)}</g>'
 
@@ -236,6 +322,7 @@ def main():
     ap.add_argument("--catalog", required=True)
     ap.add_argument("--tokens", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--style", default=None, help="styles/*.json")
     ap.add_argument("--allow-blocked", action="store_true")
     args = ap.parse_args()
 
@@ -243,11 +330,18 @@ def main():
     catalog = json.loads(Path(args.catalog).read_text())
     tokens = json.loads(Path(args.tokens).read_text())
 
+    style_path = args.style or recipe.get("style")
+    style = DEFAULT_STYLE
+    if style_path:
+        style = deep_merge(DEFAULT_STYLE, json.loads(Path(style_path).read_text()))
+
     W = recipe["canvas"]["width"]
     H = recipe["canvas"]["height"]
-    r = Renderer(catalog, tokens, recipe["theme"], strict=not args.allow_blocked)
+    theme = style.get("theme") or recipe["theme"]
+    r = Renderer(catalog, tokens, theme, style, strict=not args.allow_blocked)
 
     body = [f'<rect id="background" width="{W}" height="{H}" fill="{r.colors["background"]}"/>']
+    body.append('<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter></defs>')
     y = 88
     for block in recipe["blocks"]:
         kind = block["type"]
@@ -275,8 +369,9 @@ def main():
 
     manifest = {
         "recipe": recipe.get("name"),
+        "style": style.get("name"),
         "seed": recipe.get("seed"),
-        "theme": recipe["theme"],
+        "theme": theme,
         "canvas": recipe["canvas"],
         "output": str(svg_path),
         "sha256": hashlib.sha256(svg.encode()).hexdigest(),
@@ -285,7 +380,12 @@ def main():
         "license_ok": all(a["scope"] == "bundle" for a in r.used),
     }
     (out / f"{name}.manifest.json").write_text(json.dumps(manifest, indent=4, ensure_ascii=False) + "\n")
-    print(json.dumps({k: manifest[k] for k in ("recipe", "sha256", "license_ok", "layers")}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {"recipe": manifest["recipe"], "style": manifest["style"], "sha256": manifest["sha256"], "license_ok": manifest["license_ok"]},
+            ensure_ascii=False,
+        )
+    )
     return 0
 
 

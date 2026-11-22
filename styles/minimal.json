@@ -1,0 +1,27 @@
+{
+    "name": "minimal",
+    "theme": "editorial",
+    "colors": {
+        "background": "#ffffff",
+        "surface": "#ffffff",
+        "text": "#111111",
+        "text-secondary": "#555555",
+        "text-muted": "#999999",
+        "border": "#e6e6e6",
+        "accent": "#1d4ed8",
+        "accent-ink": "#ffffff"
+    },
+    "geometry": { "radius": 4, "borderWidth": 1, "shadow": "none" },
+    "type": {
+        "display": "Archivo",
+        "sans": "NanumSquare",
+        "mono": "JetBrains Mono",
+        "scale": 0.9,
+        "uppercase": false,
+        "tracking": 0.5
+    },
+    "illustration": "mono",
+    "density": 0.92,
+    "hero": "split",
+    "header": "rule"
+}
