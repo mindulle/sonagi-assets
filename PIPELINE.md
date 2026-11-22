@@ -245,6 +245,31 @@ delivery/landing-v2/
 - 화면(SVG)이 있는 항목만 번들에 포함한다(중간 산출물 제외)
 - zip은 폴더 루트를 포함해 풀었을 때 구조가 유지된다
 
+## 결정론
+
+같은 입력이면 바이트까지 같은 산출물이 나온다.
+
+| 산출물 | 고정 방법 |
+| --- | --- |
+| SVG·manifest | 입력 해시(recipe·style·tokens·catalog) 기록, 경로 대신 파일명 |
+| PDF | pypdf로 `CreationDate`/`ModDate` 고정, `/ID`를 내용 해시로 교체 |
+| PNG·WebP | Chromium·Pillow 출력이 이미 결정론적 |
+| ZIP | 항목 타임스탬프 `1980-01-01`, 정렬된 순서, 권한 고정 |
+
+검증(같은 디렉터리 이름으로 두 번 실행):
+
+```
+svg    c2fcad7f0abebb98  c2fcad7f0abebb98
+mani   c230eedfa2e003e8  c230eedfa2e003e8
+pdf    88fa08b4ec1279c4  88fa08b4ec1279c4
+png    67a8f094b87052ab  67a8f094b87052ab
+webp   f24b8c2874b17f0e  f24b8c2874b17f0e
+zip    0db8ff6aecb32b39  0db8ff6aecb32b39
+```
+
+주의: `export.json`에 절대 경로를 넣으면 실행 위치마다 해시가 달라진다.
+번들 이름(`--name`)과 출력 폴더명은 zip 안 경로에 들어가므로 같아야 한다.
+
 ## 빌드업 타임랩스
 
 레이어 조립 과정을 프레임으로 남긴다. 사람의 붓질 기록(스피드 페인팅)과는 다르다.
