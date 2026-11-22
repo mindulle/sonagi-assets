@@ -65,6 +65,82 @@ STYLE_PROPS = {
 }
 
 
+# --- 다크 모드 -------------------------------------------------------------
+# 스타일 팩은 라이트 기준 hex를 직접 갖고 있다. 다크는 팔레트를 새로 쓰지 않고
+# 역할별 밝기 목표로 변환한다(색상 hue는 유지, 대비는 WCAG로 검증).
+
+DARK_LIGHTNESS = {
+    "background": 0.048,
+    "surface": 0.105,
+    "surface-sunken": 0.028,
+    "ink": 0.97,
+    "text": 0.95,
+    "text-secondary": 0.78,
+    "text-muted": 0.62,
+    "text-faint": 0.45,
+    "border": 0.26,
+    "border-strong": 0.66,
+    "accent": 0.66,
+    "accent-strong": 0.72,
+    "success": 0.66,
+    "warning": 0.72,
+    "danger": 0.64,
+    "info": 0.68,
+    "terminal": 0.8,
+}
+
+
+def hex_to_rgb(value):
+    value = value.lstrip("#")
+    if len(value) == 3:
+        value = "".join(c * 2 for c in value)
+    return tuple(int(value[i : i + 2], 16) / 255 for i in (0, 2, 4))
+
+
+def rgb_to_hex(rgb):
+    return "#" + "".join(f"{max(0, min(255, round(c * 255))):02x}" for c in rgb)
+
+
+def luminance(value):
+    def channel(c):
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+    r, g, b = (channel(c) for c in hex_to_rgb(value))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def contrast(a, b):
+    la, lb = luminance(a), luminance(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def to_dark(colors):
+    import colorsys
+
+    out = dict(colors)
+    accent = colors.get("accent")
+    for key, value in colors.items():
+        if not isinstance(value, str) or not value.startswith("#"):
+            continue
+        target = DARK_LIGHTNESS.get(key)
+        if target is None:
+            continue
+        r, g, b = hex_to_rgb(value)
+        hue, light, sat = colorsys.rgb_to_hls(r, g, b)
+        if key in ("accent", "accent-strong") and sat < 0.06 and light < 0.25:
+            # 검정 악센트(브루탈리스트·스케치)는 다크에서 흰색이 된다
+            target = 0.95
+        elif key not in ("accent", "accent-strong") and sat < 0.06:
+            sat = 0.0
+        nr, ng, nb = colorsys.hls_to_rgb(hue, target, min(sat, 0.85))
+        out[key] = rgb_to_hex((nr, ng, nb))
+    if accent:
+        base = out.get("accent", accent)
+        out["accent-ink"] = "#0d0d0d" if luminance(base) > 0.18 else "#f7f7f7"
+    return out
+
+
 def deep_merge(base, override):
     out = json.loads(json.dumps(base))
     for key, value in (override or {}).items():
@@ -816,7 +892,7 @@ class Renderer:
         if block.get("note"):
             parts.append(self.text(m, y + height + 26, self.case(block["note"]), 11, 400, c["text-muted"]))
         parts.append("</g>")
-        return "".join(parts), (y - y0) + height + (44 if block.get("note") else 26)
+        return "".join(parts), (y - y0) + height + (96 if block.get("note") else 56)
 
     def features_mobile(self, block, W, y0):
         c = self.colors
@@ -918,6 +994,7 @@ def main():
     ap.add_argument("--force-height", type=int, default=0, help="프레임 고정 높이(0이면 무시)")
     ap.add_argument("--embed-max-width", type=int, default=1200, help="래스터 임베드 최대 폭(0=원본)")
     ap.add_argument("--breakpoint", default="desktop", choices=("desktop", "tablet", "mobile"))
+    ap.add_argument("--dark", action="store_true", help="팔레트를 다크로 변환(레시피의 dark:true 보다 우선)")
     args = ap.parse_args()
 
     recipe = json.loads(Path(args.recipe).read_text())
@@ -940,12 +1017,15 @@ def main():
         H = args.force_height
     theme = style.get("theme") or recipe["theme"]
     r = Renderer(catalog, tokens, theme, style, strict=not args.allow_blocked)
+    dark = args.dark or bool(recipe.get("dark"))
+    if dark:
+        r.colors = to_dark(r.colors)
     r.embed_max_width = args.embed_max_width
     r.bp = args.breakpoint
     r.M = 56 if args.breakpoint == "desktop" else (32 if args.breakpoint == "tablet" else 20)
     r.K = 1.0 if args.breakpoint == "desktop" else (0.88 if args.breakpoint == "tablet" else 0.72)
 
-    body = [f'<rect id="background" width="{W}" height="{H}" fill="{r.colors["background"]}"/>']
+    body = []
     body.append('<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter></defs>')
     y = 88
     for block in recipe["blocks"]:
@@ -999,6 +1079,8 @@ def main():
 
     if auto_height:
         H = int(y + 110)
+    # 배경은 최종 높이가 정해진 뒤에 그린다(auto 높이에서 height="auto"가 되던 버그)
+    body.insert(0, f'<rect id="background" width="{W}" height="{H}" fill="{r.colors["background"]}"/>')
     svg = (
         f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
         + "".join(body)
@@ -1026,6 +1108,7 @@ def main():
         "style": style.get("name"),
         "seed": recipe.get("seed"),
         "theme": theme,
+        "dark": dark,
         "canvas": {"width": W, "height": H},
         "output": svg_path.name,
         "sha256": hashlib.sha256(svg.encode()).hexdigest(),

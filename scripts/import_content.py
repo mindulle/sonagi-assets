@@ -433,6 +433,7 @@ def build_recipe(path, meta, blocks):
         "name": name,
         "seed": meta.get("seed", 7),
         "theme": meta.get("theme", "editorial"),
+        "dark": bool(meta.get("dark", False)),
         "canvas": canvas,
         "content": {
             "source": Path(path).name,
