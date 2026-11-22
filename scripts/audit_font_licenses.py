@@ -12,7 +12,6 @@ import collections
 import datetime
 import json
 import os
-import re
 import sqlite3
 
 from fontTools.ttLib import TTFont
