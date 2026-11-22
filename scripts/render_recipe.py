@@ -41,6 +41,7 @@ DEFAULT_STYLE = {
     "illustration": "color",
     "density": 1.0,
     "hero": "split",
+    "features_layout": "cards",
     "header": "rule",
 }
 
@@ -146,7 +147,8 @@ class Renderer:
         self.tracking = t["tracking"]
         self.density = style["density"]
         self.illustration_mode = style["illustration"]
-        self.hero_layout = style["hero"]
+        self.hero_layout = style.get("hero", "split")
+        self.features_layout = style.get("features_layout", "cards")
 
         self.items = {}
         priority = {"lucide": 0, "tabler": 1, "phosphor": 2, "illlustrations": 3}
@@ -219,14 +221,20 @@ class Renderer:
         )
 
     # --- text --------------------------------------------------------------
-    def text(self, x, y, content, size, weight, color=None, family=None, anchor="start", tracking=None):
+    def text(self, x, y, content, size, weight, color=None, family=None, anchor="start", tracking=None, leading=1.18):
         color = color or self.colors["text"]
         family = family or self.f_sans
         tracking = self.tracking if tracking is None else tracking
-        return (
+        lines = str(content).split("\n")
+        head = (
             f'<text x="{x}" y="{y}" font-family="{family}" font-size="{size}" font-weight="{weight}" '
-            f'fill="{color}" text-anchor="{anchor}" letter-spacing="{tracking}">{esc(content)}</text>'
+            f'fill="{color}" text-anchor="{anchor}" letter-spacing="{tracking}">'
         )
+        if len(lines) == 1:
+            return head + esc(lines[0]) + "</text>"
+        dy = round(size * leading, 2)
+        spans = [f'<tspan x="{x}" dy="{0 if i == 0 else dy}">{esc(line)}</tspan>' for i, line in enumerate(lines)]
+        return head + "".join(spans) + "</text>"
 
     def card(self, x, y, w, h, fill=None):
         fill = fill or self.colors["surface"]
@@ -254,6 +262,10 @@ class Renderer:
     def hero(self, block, W, y0):
         c = self.colors
         s = self.scale
+        if self.hero_layout == "asymmetric":
+            return self.hero_asymmetric(block, W, y0)
+        if self.hero_layout == "poster":
+            return self.hero_poster(block, W, y0)
         if self.hero_layout == "center":
             cx = W / 2
             parts = [
@@ -272,23 +284,82 @@ class Renderer:
             parts.append(self.text(cx, by + 104, self.case(block.get("note", "")), 13, 400, c["text-muted"], anchor="middle"))
             return f'<g id="hero">{"".join(parts)}</g>', 470 * self.density
 
+        size = 64 * s
+        lines = block["title"].count("\n") + 1
+        title_h = size * 1.12 * lines
+        body_y = y0 + 108 + (title_h - size) + 46
         parts = [
             self.text(56, y0 + 40, self.case(block["eyebrow"]), 12, 600, c["accent"], family=self.f_mono, tracking=2.6),
-            self.text(56, y0 + 108, self.case(block["title"]), 64 * s, 700, family=self.f_display),
-            self.text(56, y0 + 186, self.case(block["body"]), 18 * s, 400, c["text-secondary"]),
+            self.text(56, y0 + 108, self.case(block["title"]), size, 700, family=self.f_display, leading=1.12),
+            self.text(56, body_y, self.case(block["body"]), 18 * s, 400, c["text-secondary"]),
         ]
         btn_w, btn_h = 208, 56
+        by = body_y + 46
         parts.append(
-            f'<g id="cta">{self.card(56, y0 + 232, btn_w, btn_h, c["accent"])}'
-            + self.text(56 + 28, y0 + 232 + 36, self.case(block["cta"]), 16, 700, c["accent-ink"])
-            + self.icon(block["ctaIcon"], 56 + btn_w - 46, y0 + 232 + 19, 18, c["accent-ink"])
+            f'<g id="cta">{self.card(56, by, btn_w, btn_h, c["accent"])}'
+            + self.text(56 + 28, by + 36, self.case(block["cta"]), 16, 700, c["accent-ink"])
+            + self.icon(block["ctaIcon"], 56 + btn_w - 46, by + 19, 18, c["accent-ink"])
             + "</g>"
         )
-        parts.append(self.text(288, y0 + 268, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
+        parts.append(self.text(288, by + 36, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
         parts.append(self.illustration(block["illustration"], W - 56 - 520, y0 + 30, 520, 380))
-        return f'<g id="hero">{"".join(parts)}</g>', 500 * self.density
+        return f'<g id="hero">{"".join(parts)}</g>', max(500, by + 160) * self.density
+
+    def hero_asymmetric(self, block, W, y0):
+        c = self.colors
+        s = self.scale
+        size = 84 * s
+        lines = block["title"].count("\n") + 1
+        title_h = size * 1.12 * lines
+        parts = [
+            self.illustration(block["illustration"], W - 600, y0 - 20, 600, 470),
+            self.text(56, y0 + 150, self.case(block["eyebrow"]), 12, 600, c["accent"], family=self.f_mono, tracking=3.2),
+            self.text(56, y0 + 150 + size, self.case(block["title"]), size, 700, family=self.f_display, leading=1.12),
+        ]
+        body_y = y0 + 150 + size + title_h + 24
+        parts.append(self.text(56, body_y, self.case(block["body"]), 17 * s, 400, c["text-secondary"]))
+        by = body_y + 42
+        bw, bh = 208, 56
+        parts.append(
+            f'<g id="cta">{self.card(56, by, bw, bh, c["accent"])}'
+            + self.text(84, by + 36, self.case(block["cta"]), 16, 700, c["accent-ink"])
+            + self.icon(block["ctaIcon"], 56 + bw - 46, by + 19, 18, c["accent-ink"])
+            + "</g>"
+        )
+        parts.append(self.text(288, by + 36, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
+        return f'<g id="hero">{"".join(parts)}</g>', max(520, body_y + 120) * self.density
+
+    def hero_poster(self, block, W, y0):
+        c = self.colors
+        s = self.scale
+        h = 600
+        panel_w = 660
+        size = 68 * s
+        lines = block["title"].count("\n") + 1
+        title_h = size * 1.06 * lines
+        parts = [
+            self.illustration(block["illustration"], panel_w, 88, W - panel_w, h),
+            f'<rect id="panel" x="0" y="88" width="{panel_w}" height="{h}" fill="{c["background"]}"/>',
+            self.text(56, y0 + 90, self.case(block["eyebrow"]), 12, 600, c["accent"], family=self.f_mono, tracking=4),
+            self.text(56, y0 + 90 + size, self.case(block["title"]), size, 700, family=self.f_display, leading=1.06),
+            self.text(56, y0 + 90 + size + title_h + 34, self.case(block["body"]), 18 * s, 400, c["text-secondary"]),
+        ]
+        by = y0 + 90 + size + title_h + 84
+        bw, bh = 232, 60
+        parts.append(
+            f'<g id="cta">{self.card(56, by, bw, bh, c["accent"])}'
+            + self.text(84, by + 39, self.case(block["cta"]), 16, 700, c["accent-ink"])
+            + self.icon(block["ctaIcon"], 56 + bw - 46, by + 21, 18, c["accent-ink"])
+            + "</g>"
+        )
+        parts.append(self.text(56, by + 100, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
+        return f'<g id="hero">{"".join(parts)}</g>', h + 40
 
     def features(self, block, W, y0):
+        if self.features_layout == "list":
+            return self.features_list(block, W, y0)
+        if self.features_layout == "columns":
+            return self.features_columns(block, W, y0)
         c = self.colors
         parts = [self.text(56, y0, self.case(block["title"]), 36 * self.scale, 700, family=self.f_display)]
         gap = 24
@@ -305,6 +376,36 @@ class Renderer:
                 + "</g>"
             )
         return f'<g id="features">{"".join(parts)}</g>', 300 * self.density
+
+    def features_list(self, block, W, y0):
+        c = self.colors
+        parts = [self.text(56, y0, self.case(block["title"]), 30 * self.scale, 700, family=self.f_display)]
+        for i, item in enumerate(block["items"][:3]):
+            y = y0 + 56 + i * 108
+            parts.append(f'<g id="feature-{i + 1}">')
+            parts.append(self.text(56, y + 30, f"0{i + 1}", 14, 600, c["text-muted"], family=self.f_mono))
+            parts.append(self.text(120, y + 30, self.case(item["title"]), 24, 700, family=self.f_display))
+            parts.append(self.text(120, y + 62, self.case(item["body"]), 15, 400, c["text-secondary"]))
+            parts.append(f'<line x1="56" y1="{y + 84}" x2="{W - 56}" y2="{y + 84}" stroke="{c["border"]}" stroke-width="1"/>')
+            parts.append(self.icon(item["icon"], W - 88, y + 8, 22, c["text"]))
+            parts.append("</g>")
+        return f'<g id="features">{"".join(parts)}</g>', 400 * self.density
+
+    def features_columns(self, block, W, y0):
+        c = self.colors
+        parts = [self.text(56, y0, self.case(block["title"]), 28 * self.scale, 700, family=self.f_display)]
+        gap = 32
+        col_w = (W - 112 - gap * 2) / 3
+        for i, item in enumerate(block["items"][:3]):
+            x = 56 + i * (col_w + gap)
+            y = y0 + 48
+            parts.append(f'<g id="feature-{i + 1}">')
+            parts.append(f'<line x1="{x}" y1="{y}" x2="{x + col_w}" y2="{y}" stroke="{c["border"]}" stroke-width="{self.border_w}"/>')
+            parts.append(self.text(x, y + 34, f"0{i + 1} /", 11, 600, c["accent"], family=self.f_mono, tracking=2))
+            parts.append(self.text(x, y + 78, self.case(item["title"]), 19, 700, family=self.f_display))
+            parts.append(self.text(x, y + 112, self.case(item["body"]), 14, 400, c["text-secondary"], leading=1.5))
+            parts.append("</g>")
+        return f'<g id="features">{"".join(parts)}</g>', 320 * self.density
 
     def footer(self, block, W, y):
         c = self.colors
@@ -337,6 +438,7 @@ def main():
 
     W = recipe["canvas"]["width"]
     H = recipe["canvas"]["height"]
+    auto_height = H == "auto" or bool(style.get("auto_height"))
     theme = style.get("theme") or recipe["theme"]
     r = Renderer(catalog, tokens, theme, style, strict=not args.allow_blocked)
 
@@ -360,6 +462,8 @@ def main():
         else:
             raise SystemExit(f"unknown block: {kind}")
 
+    if auto_height:
+        H = int(y + 110)
     svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">' + "".join(body) + "</svg>"
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -372,7 +476,7 @@ def main():
         "style": style.get("name"),
         "seed": recipe.get("seed"),
         "theme": theme,
-        "canvas": recipe["canvas"],
+        "canvas": {"width": W, "height": H},
         "output": str(svg_path),
         "sha256": hashlib.sha256(svg.encode()).hexdigest(),
         "layers": re.findall(r'<g id="([^"]+)"', svg),
