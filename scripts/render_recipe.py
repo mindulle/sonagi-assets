@@ -230,6 +230,7 @@ class Renderer:
         self.density = style["density"]
         self.illustration_mode = style["illustration"]
         self.hero_layout = style.get("hero", "split")
+        self.ornament = style.get("ornament", "none")
         self.features_layout = style.get("features_layout", "cards")
 
         self.items = {}
@@ -535,6 +536,26 @@ class Renderer:
         c = self.colors
         s = self.scale
         m = self.M
+        if self.hero_layout == "center":
+            cx = W / 2
+            size = 76 * s
+            lines = block["title"].count("\n") + 1
+            title_y = y0 + 196
+            body_y = title_y + (lines - 1) * size * 1.12 + 60
+            bw, bh = 232, 58
+            by = body_y + 44
+            parts = [
+                '<g id="hero">',
+                self.text(cx, y0 + 96, self.case(block.get("eyebrow", "")), 11, 600, c["accent"], family=self.f_mono, anchor="middle", tracking=3.2),
+                self.text(cx, title_y, self.case(block["title"]), size, 700, family=self.f_display, anchor="middle", leading=1.12),
+                self.text(cx, body_y, self.case(block["body"]), 17 * s, 400, c["text-secondary"], anchor="middle", leading=1.55),
+                f'<g id="cta">{self.card(cx - bw / 2, by, bw, bh, c["accent"])}'
+                + self.text(cx, by + 37, self.case(block["cta"]), 15, 700, c["accent-ink"], anchor="middle")
+                + "</g>",
+                self.text(cx, by + bh + 32, self.case(block.get("note", "")), 11, 400, c["text-muted"], anchor="middle"),
+                "</g>",
+            ]
+            return "".join(parts), (by + bh + 110) - y0
         size = 84 * s
         lines = block["title"].count("\n") + 1
         body_y = y0 + 140 + size + (lines - 1) * size * 1.12 + 40
@@ -1002,6 +1023,76 @@ class Renderer:
         parts.append("</g></g>")
         return "".join(parts), h + 30
 
+    # --- 장식(ornament) ----------------------------------------------------
+    # 스킨이 "ornament": "nouveau" | "deco" 를 선언하면 섹션 구분과 페이지
+    # 테두리에 곡선 장식을 그린다. 블록 레이아웃은 건드리지 않는다.
+
+    def ornament_divider(self, x1, x2, y):
+        if self.ornament == "none":
+            return "", 0
+        c = self.colors
+        cx = (x1 + x2) / 2
+        half = 70
+        if self.ornament == "deco":
+            parts = ['<g id="ornament">']
+            parts.append(f'<line x1="{cx - 260}" y1="{y}" x2="{cx - 60}" y2="{y}" stroke="{c["accent"]}" stroke-width="1.4"/>')
+            parts.append(f'<line x1="{cx + 60}" y1="{y}" x2="{cx + 260}" y2="{y}" stroke="{c["accent"]}" stroke-width="1.4"/>')
+            parts.append(
+                f'<path d="M {cx - 40} {y} L {cx} {y - 22} L {cx + 40} {y} L {cx} {y + 22} Z" fill="none" stroke="{c["accent"]}" stroke-width="1.6"/>'
+            )
+            parts.append("</g>")
+            return "".join(parts), 46
+
+        # nouveau: 양쪽에서 뻗어 나오는 곡선 줄기 + 가운데 봉오리
+        left = f"M {x1} {y} C {x1 + (cx - x1) * 0.35:.1f} {y + 16}, {cx - half * 1.9:.1f} {y - 18}, {cx - 22} {y}"
+        right = f"M {x2} {y} C {x2 - (x2 - cx) * 0.35:.1f} {y + 16}, {cx + half * 1.9:.1f} {y - 18}, {cx + 22} {y}"
+        parts = ['<g id="ornament">']
+        for d in (left, right):
+            parts.append(f'<path d="{d}" fill="none" stroke="{c["accent"]}" stroke-width="1.3" stroke-linecap="round"/>')
+        for sx in (-1, 1):
+            bx = cx + sx * 10
+            parts.append(
+                f'<path d="M {cx} {y} C {bx} {y - 24}, {cx + sx * 34} {y - 20}, {cx + sx * 30} {y - 2} '
+                f'C {cx + sx * 26} {y + 12}, {cx + sx * 8} {y + 8}, {cx} {y}" '
+                f'fill="none" stroke="{c["accent"]}" stroke-width="1.3" stroke-linecap="round"/>'
+            )
+        parts.append(f'<circle cx="{cx}" cy="{y}" r="3.2" fill="{c["accent"]}"/>')
+        for sx in (-1, 1):
+            parts.append(f'<circle cx="{cx + sx * 30}" cy="{y - 6}" r="2.1" fill="{c["accent"]}"/>')
+        parts.append("</g>")
+        return "".join(parts), 46
+
+    def ornament_frame(self, W, H):
+        if self.ornament == "none":
+            return ""
+        c = self.colors
+        i = 18
+        if self.ornament == "deco":
+            return (
+                f'<g id="ornament-frame">'
+                f'<rect x="{i}" y="{i}" width="{W - 2 * i}" height="{H - 2 * i}" fill="none" '
+                f'stroke="{c["accent"]}" stroke-width="2"/>'
+                f'<rect x="{i + 6}" y="{i + 6}" width="{W - 2 * (i + 6)}" height="{H - 2 * (i + 6)}" fill="none" '
+                f'stroke="{c["accent"]}" stroke-width="0.8"/>'
+                f"</g>"
+            )
+        # nouveau: 이중 가는 선 + 네 모서리 컬
+        rl = 46
+        corners = []
+        for x, y, sx, sy in ((i, i, 1, 1), (W - i, i, -1, 1), (i, H - i, 1, -1), (W - i, H - i, -1, -1)):
+            corners.append(
+                f'<path d="M {x + sx * rl} {y} C {x + sx * (rl * 0.42)} {y}, {x} {y + sy * (rl * 0.42)}, '
+                f'{x} {y + sy * rl}" fill="none" stroke="{c["accent"]}" stroke-width="1.4"/>'
+            )
+            corners.append(f'<circle cx="{x + sx * (rl + 8)}" cy="{y + sy * 6}" r="2.4" fill="{c["accent"]}"/>')
+        return (
+            f'<g id="ornament-frame">'
+            f'<rect x="{i}" y="{i}" width="{W - 2 * i}" height="{H - 2 * i}" fill="none" '
+            f'stroke="{c["accent"]}" stroke-width="1.1"/>'
+            f'<rect x="{i + 5}" y="{i + 5}" width="{W - 2 * (i + 5)}" height="{H - 2 * (i + 5)}" fill="none" '
+            f'stroke="{c["accent"]}" stroke-width="0.6"/>' + "".join(corners) + "</g>"
+        )
+
     def footer(self, block, W, y):
         c = self.colors
         if self.bp == "mobile":
@@ -1109,8 +1200,13 @@ def main():
     body = []
     body.append('<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter></defs>')
     y = 88
-    for block in recipe["blocks"]:
+    ornament_types = {"stats", "features", "quote", "faq", "table", "pricing", "gallery", "logos", "cta"}
+    for index, block in enumerate(recipe["blocks"]):
         kind = block["type"]
+        if r.ornament != "none" and index > 0 and kind in ornament_types:
+            divider, adv = r.ornament_divider(56, W - 56, y + 8)
+            body.append(divider)
+            y += adv
         if kind == "header":
             body.append(r.header(block, W))
         elif kind == "hero":
@@ -1162,6 +1258,8 @@ def main():
         H = int(y + 110)
     # 배경은 최종 높이가 정해진 뒤에 그린다(auto 높이에서 height="auto"가 되던 버그)
     body.insert(0, f'<rect id="background" width="{W}" height="{H}" fill="{r.colors["background"]}"/>')
+    if r.ornament != "none":
+        body.append(r.ornament_frame(W, H))
     svg = (
         f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
         + "".join(body)
