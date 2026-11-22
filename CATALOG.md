@@ -125,14 +125,17 @@ sudo python3 scripts/audit_font_licenses.py \
 
 | 라이선스 | 파일 수 |
 | --- | --- |
-| internal-only (미확인) | 3,947 |
-| OFL | 715 |
-| Apache | 46 |
-| **Commercial** | **517** |
+| **Commercial** | **787** |
+| internal-only (미확인) | 3,678 |
+| OFL | 714 |
 | Free (사이트 기준) | 47 |
+| Apache | 46 |
 | CC0 | 42 |
 | Personal-use | 2 |
 | GPL | 1 |
+
+`All rights reserved` 문구가 있는 미분류 폰트 270개를 commercial로 확정했다.
+(백업: `asset_hub.db.bak-rightsreserved-20261122T113851Z`)
 
 - Commercial/Personal 폰트는 **D2C·외주 납품물에서 제외**해야 한다.
 - WOFF2 분석에는 `brotli` 파이썬 패키지가 필요하다.
