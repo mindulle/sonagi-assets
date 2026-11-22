@@ -35,8 +35,9 @@ DEFAULT_STYLE = {
     "colors": {},
     "geometry": {"radius": 8, "borderWidth": 2, "shadow": "none"},
     "type": {
-        "display": "NanumSquare",
-        "sans": "NanumSquare",
+        "display": "Archivo",
+        "sans": "Pretendard",
+        "korean": "Pretendard",
         "mono": "JetBrains Mono",
         "scale": 1.0,
         "uppercase": False,
@@ -146,6 +147,7 @@ class Renderer:
         self.f_display = t["display"]
         self.f_sans = t["sans"]
         self.f_mono = t["mono"]
+        self.f_korean = t.get("korean") or self.f_sans
         self.scale = t["scale"]
         self.upper = t["uppercase"]
         self.tracking = t["tracking"]
@@ -258,6 +260,9 @@ class Renderer:
     def text(self, x, y, content, size, weight, color=None, family=None, anchor="start", tracking=None, leading=1.18):
         color = color or self.colors["text"]
         family = family or self.f_sans
+        # 라틴 전용 서체에 한글이 오면 Figma에서 글자가 깨진다 → 한글 서체로 교체
+        if re.search(r"[가-힣]", str(content)) and family in (self.f_display, self.f_mono):
+            family = self.f_korean
         tracking = self.tracking if tracking is None else tracking
         lines = str(content).split("\n")
         head = (

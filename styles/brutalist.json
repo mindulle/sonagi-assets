@@ -22,7 +22,8 @@
         "mono": "JetBrains Mono",
         "scale": 1.12,
         "uppercase": true,
-        "tracking": -1
+        "tracking": -1,
+        "korean": "Pretendard"
     },
     "illustration": "hidden",
     "density": 1.15,

@@ -19,11 +19,12 @@
     },
     "type": {
         "display": "Archivo",
-        "sans": "NanumSquare",
+        "sans": "Pretendard",
         "mono": "JetBrains Mono",
         "scale": 1.1,
         "uppercase": false,
-        "tracking": -1
+        "tracking": -1,
+        "korean": "Pretendard"
     },
     "illustration": "color",
     "density": 0.95,
