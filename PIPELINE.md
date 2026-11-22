@@ -197,6 +197,31 @@ sudo python3 scripts/import_image_pack.py ... \
   --origin generated --license generated --apply
 ```
 
+### 생성 메타데이터
+
+AI 생성 자산은 모델·프롬프트·생성일을 `items.annotation`에 남긴다.
+CREDITS의 "생성 정보" 절에 그대로 출력된다.
+
+```bash
+# 파일별 프롬프트가 다르면 meta-json으로 넘긴다
+sudo python3 scripts/import_image_pack.py ... --origin generated \
+  --meta-json /tmp/gen-ai/meta.json --apply
+
+# 이미 등록된 자산의 메타데이터만 고칠 때
+sudo python3 scripts/import_image_pack.py ... --origin generated \
+  --meta-json /tmp/gen-ai/meta.json --refresh-meta --apply
+```
+
+```json
+{
+  "ai-archive-drawer": {
+    "model": "gemini-3.1-flash-image",
+    "prompt": "flat vector editorial illustration, wooden archive drawer ...",
+    "generated_at": "2026-11-22T18:13:00Z"
+  }
+}
+```
+
 ### 구현 규칙
 
 | 지점 | 규칙 |

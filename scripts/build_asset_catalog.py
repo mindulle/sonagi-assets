@@ -236,6 +236,7 @@ def main():
             "origin": origin_value,
             "junk": is_junk,
             "kind": "glyph" if is_glyph else "asset",
+            "annotation": row["annotation"],
             "brand": None,
             "tags": tags,
             "path": path,
