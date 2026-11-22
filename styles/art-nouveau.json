@@ -1,39 +1,13 @@
 {
     "name": "art-nouveau",
     "theme": "editorial",
-    "colors": {
-        "background": "#f4ecdc",
-        "surface": "#f8f2e6",
-        "surface-sunken": "#ece2cf",
-        "text": "#2c2a24",
-        "text-secondary": "#4b4436",
-        "text-muted": "#7d7462",
-        "text-faint": "#a89e8a",
-        "border": "#d9c9a8",
-        "border-strong": "#6e7a45",
-        "accent": "#6e7a45",
-        "accent-strong": "#b08d57",
-        "accent-ink": "#fbf6ea"
-    },
-    "geometry": {
-        "radius": 26,
-        "borderWidth": 1,
-        "shadow": "none"
-    },
-    "type": {
-        "display": "Cormorant Garamond",
-        "sans": "Pretendard",
-        "mono": "JetBrains Mono",
-        "korean": "Gowun Batang",
-        "scale": 1.0,
-        "uppercase": false,
-        "tracking": 0.6
-    },
+    "palette": "art-nouveau",
+    "type": "cormorant-nouveau",
+    "geometry": "r26b1",
+    "layout": "center-cards-plain",
     "illustration": "mono",
     "illustration_set": "etchings",
     "density": 1.05,
-    "hero": "center",
-    "features_layout": "cards",
     "ornament": "nouveau",
     "auto_height": true
 }

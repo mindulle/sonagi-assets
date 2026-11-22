@@ -1,0 +1,370 @@
+{
+    "palette": {
+        "editorial": {
+            "colors": {}
+        },
+        "brutalist": {
+            "colors": {
+                "background": "#ffffff",
+                "surface": "#ffffff",
+                "text": "#000000",
+                "text-secondary": "#1a1a1a",
+                "text-muted": "#444444",
+                "border": "#000000",
+                "accent": "#000000",
+                "accent-ink": "#ffffff"
+            }
+        },
+        "minimal": {
+            "colors": {
+                "background": "#ffffff",
+                "surface": "#ffffff",
+                "text": "#111111",
+                "text-secondary": "#555555",
+                "text-muted": "#999999",
+                "border": "#e6e6e6",
+                "accent": "#1d4ed8",
+                "accent-ink": "#ffffff"
+            }
+        },
+        "magazine": {
+            "colors": {
+                "background": "#fbf9f5",
+                "surface": "#fbf9f5",
+                "text": "#161616",
+                "text-secondary": "#3a3a36",
+                "text-muted": "#7a7670",
+                "border": "#161616",
+                "accent": "#b45309",
+                "accent-ink": "#ffffff"
+            }
+        },
+        "swiss": {
+            "colors": {
+                "background": "#ffffff",
+                "surface": "#ffffff",
+                "text": "#111111",
+                "text-secondary": "#444444",
+                "text-muted": "#8a8a8a",
+                "border": "#111111",
+                "accent": "#d92b1f",
+                "accent-ink": "#ffffff"
+            }
+        },
+        "poster": {
+            "colors": {
+                "background": "#060911",
+                "surface": "#090d16",
+                "text": "#ffffff",
+                "text-secondary": "#c9d1d9",
+                "text-muted": "#9aa4b2",
+                "border": "#30363d",
+                "accent": "#ffd166",
+                "accent-strong": "#00ffcc",
+                "accent-ink": "#060911"
+            }
+        },
+        "sketch": {
+            "colors": {
+                "background": "#ffffff",
+                "surface": "#ffffff",
+                "text": "#111111",
+                "text-secondary": "#333333",
+                "text-muted": "#777777",
+                "border": "#111111",
+                "accent": "#111111",
+                "accent-ink": "#ffffff"
+            }
+        },
+        "etching": {
+            "colors": {
+                "background": "#f7f3ea",
+                "surface": "#f7f3ea",
+                "text": "#17140f",
+                "text-secondary": "#3b352c",
+                "text-muted": "#7b7264",
+                "border": "#17140f",
+                "accent": "#8a4b12",
+                "accent-ink": "#f7f3ea"
+            }
+        },
+        "sonagi-blog": {
+            "colors": {
+                "background": "#fbfbfa",
+                "surface": "#ffffff",
+                "text": "#18181b",
+                "text-secondary": "#52525b",
+                "text-muted": "#71717a",
+                "text-faint": "#a1a1aa",
+                "border": "#e4e4e7",
+                "border-strong": "#b86a04",
+                "accent": "#b86a04",
+                "accent-strong": "#eab308",
+                "accent-ink": "#ffffff",
+                "surface-sunken": "#f4f4f5"
+            }
+        },
+        "art-nouveau": {
+            "colors": {
+                "background": "#f4ecdc",
+                "surface": "#f8f2e6",
+                "surface-sunken": "#ece2cf",
+                "text": "#2c2a24",
+                "text-secondary": "#4b4436",
+                "text-muted": "#7d7462",
+                "text-faint": "#a89e8a",
+                "border": "#d9c9a8",
+                "border-strong": "#6e7a45",
+                "accent": "#6e7a45",
+                "accent-strong": "#b08d57",
+                "accent-ink": "#fbf6ea"
+            }
+        },
+        "victorian": {
+            "colors": {
+                "background": "#f5efe2",
+                "surface": "#faf5ea",
+                "surface-sunken": "#ece4d3",
+                "text": "#23201c",
+                "text-secondary": "#4a423a",
+                "text-muted": "#7a6f61",
+                "text-faint": "#a29786",
+                "border": "#c9b48c",
+                "border-strong": "#5c2a2e",
+                "accent": "#5c2a2e",
+                "accent-strong": "#a9853f",
+                "accent-ink": "#f7f2e6"
+            }
+        },
+        "terracotta": {
+            "colors": {
+                "background": "#f6ece4",
+                "surface": "#fdf7f2",
+                "surface-sunken": "#efe0d5",
+                "text": "#2a1f1a",
+                "text-secondary": "#5a463c",
+                "text-muted": "#8a7466",
+                "text-faint": "#b09b8c",
+                "border": "#e2cfc2",
+                "border-strong": "#b4532a",
+                "accent": "#b4532a",
+                "accent-strong": "#d97706",
+                "accent-ink": "#fdf7f2"
+            }
+        },
+        "newsprint": {
+            "colors": {
+                "background": "#f2f0ea",
+                "surface": "#f7f5ef",
+                "surface-sunken": "#e9e6de",
+                "text": "#1c1c1c",
+                "text-secondary": "#3f3f3d",
+                "text-muted": "#6f6f6a",
+                "text-faint": "#9b9b94",
+                "border": "#cfccc2",
+                "border-strong": "#1c1c1c",
+                "accent": "#1c1c1c",
+                "accent-strong": "#8a2b1f",
+                "accent-ink": "#f7f5ef"
+            }
+        },
+        "mint": {
+            "colors": {
+                "background": "#f1f7f4",
+                "surface": "#ffffff",
+                "surface-sunken": "#e4f0ea",
+                "text": "#10231c",
+                "text-secondary": "#2f4a40",
+                "text-muted": "#5f7a70",
+                "text-faint": "#8fa9a0",
+                "border": "#cfe3da",
+                "border-strong": "#0f7a5a",
+                "accent": "#0f7a5a",
+                "accent-strong": "#0ea5a0",
+                "accent-ink": "#ffffff"
+            }
+        }
+    },
+    "type": {
+        "nanumsquare": {
+            "display": "NanumSquare",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "scale": 1.0,
+            "uppercase": false,
+            "tracking": 0,
+            "korean": "NanumSquare"
+        },
+        "archivo-caps-loud": {
+            "display": "Archivo",
+            "sans": "Archivo",
+            "mono": "JetBrains Mono",
+            "scale": 1.12,
+            "uppercase": true,
+            "tracking": -1,
+            "korean": "NanumSquare"
+        },
+        "archivo-airy": {
+            "display": "Archivo",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "scale": 0.9,
+            "uppercase": false,
+            "tracking": 0.5,
+            "korean": "NanumSquare"
+        },
+        "gowun-magazine": {
+            "display": "Gowun Batang",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "scale": 1.05,
+            "uppercase": false,
+            "tracking": -0.5,
+            "korean": "Gowun Batang"
+        },
+        "archivo-caps-tight": {
+            "display": "Archivo",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "scale": 0.95,
+            "uppercase": true,
+            "tracking": -0.4,
+            "korean": "NanumSquare"
+        },
+        "archivo-tight": {
+            "display": "Archivo",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "scale": 1.1,
+            "uppercase": false,
+            "tracking": -1,
+            "korean": "NanumSquare"
+        },
+        "archivo-plain": {
+            "display": "Archivo",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "scale": 1.0,
+            "uppercase": false,
+            "tracking": 0,
+            "korean": "NanumSquare"
+        },
+        "gowun-etching": {
+            "display": "Gowun Batang",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "scale": 1.05,
+            "uppercase": false,
+            "tracking": -0.4,
+            "korean": "Gowun Batang"
+        },
+        "cormorant-serif": {
+            "display": "Cormorant Garamond",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "korean": "Noto Serif KR",
+            "scale": 1.0,
+            "uppercase": false,
+            "tracking": 0
+        },
+        "cormorant-nouveau": {
+            "display": "Cormorant Garamond",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "korean": "Gowun Batang",
+            "scale": 1.0,
+            "uppercase": false,
+            "tracking": 0.6
+        },
+        "cormorant-victorian": {
+            "display": "Cormorant Garamond",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "korean": "Gowun Batang",
+            "scale": 1.0,
+            "uppercase": false,
+            "tracking": 0.8
+        }
+    },
+    "geometry": {
+        "r8b2": {
+            "radius": 8,
+            "borderWidth": 2,
+            "shadow": "none"
+        },
+        "r0b4": {
+            "radius": 0,
+            "borderWidth": 4,
+            "shadow": "none"
+        },
+        "r4b1": {
+            "radius": 4,
+            "borderWidth": 1,
+            "shadow": "none"
+        },
+        "r0b1": {
+            "radius": 0,
+            "borderWidth": 1,
+            "shadow": "none"
+        },
+        "r0b2": {
+            "radius": 0,
+            "borderWidth": 2,
+            "shadow": "none"
+        },
+        "r2b2-crisp": {
+            "radius": 2,
+            "borderWidth": 2,
+            "shadow": "crisp"
+        },
+        "r10b1": {
+            "radius": 10,
+            "borderWidth": 1,
+            "shadow": "none"
+        },
+        "r26b1": {
+            "radius": 26,
+            "borderWidth": 1,
+            "shadow": "none"
+        },
+        "r2b2": {
+            "radius": 2,
+            "borderWidth": 2,
+            "shadow": "none"
+        }
+    },
+    "layout": {
+        "split-cards": {
+            "hero": "split",
+            "header": "rule"
+        },
+        "center-cards": {
+            "hero": "center",
+            "header": "rule"
+        },
+        "asymmetric-list": {
+            "hero": "asymmetric",
+            "features_layout": "list",
+            "header": "rule"
+        },
+        "split-columns": {
+            "hero": "split",
+            "features_layout": "columns",
+            "header": "rule"
+        },
+        "poster-cards": {
+            "hero": "poster",
+            "features_layout": "cards",
+            "header": "rule"
+        },
+        "split-list": {
+            "hero": "split",
+            "features_layout": "list",
+            "header": "rule"
+        },
+        "center-cards-plain": {
+            "hero": "center",
+            "features_layout": "cards"
+        }
+    }
+}

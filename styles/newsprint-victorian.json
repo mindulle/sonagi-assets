@@ -1,0 +1,10 @@
+{
+    "name": "newsprint-victorian",
+    "theme": "editorial",
+    "palette": "newsprint",
+    "type": "cormorant-serif",
+    "geometry": "r0b1",
+    "layout": "split-list",
+    "ornament": "victorian",
+    "density": 1.02
+}

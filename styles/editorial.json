@@ -1,23 +1,11 @@
 {
     "name": "editorial",
     "theme": "editorial",
-    "geometry": {
-        "radius": 8,
-        "borderWidth": 2,
-        "shadow": "none"
-    },
-    "type": {
-        "display": "NanumSquare",
-        "sans": "Pretendard",
-        "mono": "JetBrains Mono",
-        "scale": 1.0,
-        "uppercase": false,
-        "tracking": 0,
-        "korean": "NanumSquare"
-    },
+    "palette": "editorial",
+    "type": "nanumsquare",
+    "geometry": "r8b2",
+    "layout": "split-cards",
     "illustration": "color",
-    "density": 1.0,
-    "hero": "split",
-    "header": "rule",
-    "illustration_set": "illlustrations"
+    "illustration_set": "illlustrations",
+    "density": 1.0
 }

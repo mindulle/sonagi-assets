@@ -42,6 +42,9 @@ python3 scripts/render_recipe.py \
 | `sonagi-blog` | 웨더드 페이퍼·브론즈 | 1px, r10 | Cormorant·Noto Serif KR | split | cards |
 | `art-nouveau` | 파치먼트·올리브·금 | 1px, r26 | Cormorant·Gowun Batang | center | cards |
 | `victorian` | 크림·적갈·금 | 2px, r2 | Cormorant·Gowun Batang | center | cards |
+| `terracotta-editorial` | 테라코타·크림 | 2px, r8 | Cormorant·Gowun Batang | asymmetric | list |
+| `newsprint-victorian` | 뉴스프린트·먹 | 1px, r0 | Cormorant·Noto Serif KR | split | list |
+| `mint-swiss` | 민트·딥그린 | 2px, r0 | Archivo·대문자 | split | columns |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -110,6 +113,37 @@ render_recipe.py ... --embed-max-width 900
 }
 ```
 
+## 스타일 축
+
+스타일은 **손으로 쓴 덩어리**가 아니라 축의 조합이다. 축 정의는 `styles/axes.json`.
+
+```json
+{
+    "name": "terracotta-editorial",
+    "theme": "editorial",
+    "palette": "terracotta",
+    "type": "cormorant-nouveau",
+    "geometry": "r8b2",
+    "layout": "asymmetric-list",
+    "illustration": "mono",
+    "illustration_set": "etchings"
+}
+```
+
+| 축 | 정의 위치 | 예 |
+| --- | --- | --- |
+| `palette` | `axes.palette[*].colors` | 14종 |
+| `type` | `axes.type[*]` | 11종 (서체·자간·배율·한글 서체) |
+| `geometry` | `axes.geometry[*]` | 9종 (반경·선 두께·그림자) |
+| `layout` | `axes.layout[*]` | 7종 (hero·features·header) |
+
+해석은 `scripts/style_axes.py`가 한다. 순서는 palette → type → geometry → layout →
+스타일 파일의 명시 값(우선). 기존 형태(`colors`·`type` 객체를 직접 가진 파일)도 그대로 동작한다.
+
+새 스타일 = 축 참조 5줄. 축을 늘리면 조합이 곱으로 늘어난다.
+
+리팩터 검증: 기존 11종을 조합 형태로 바꾼 뒤 같은 입력으로 렌더해 **11종 SVG 해시가 모두 동일**했다.
+
 ## 장식(ornament)
 
 스킨이 `"ornament"`을 선언하면 섹션 구분선과 페이지 테두리에 장식을 그린다.
@@ -168,7 +202,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```

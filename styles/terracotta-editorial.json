@@ -1,0 +1,11 @@
+{
+    "name": "terracotta-editorial",
+    "theme": "editorial",
+    "palette": "terracotta",
+    "type": "cormorant-nouveau",
+    "geometry": "r8b2",
+    "layout": "asymmetric-list",
+    "illustration": "mono",
+    "illustration_set": "etchings",
+    "density": 1.0
+}

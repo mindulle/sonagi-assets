@@ -1,34 +1,11 @@
 {
     "name": "sketch",
     "theme": "editorial",
-    "colors": {
-        "background": "#ffffff",
-        "surface": "#ffffff",
-        "text": "#111111",
-        "text-secondary": "#333333",
-        "text-muted": "#777777",
-        "border": "#111111",
-        "accent": "#111111",
-        "accent-ink": "#ffffff"
-    },
-    "geometry": {
-        "radius": 2,
-        "borderWidth": 2,
-        "shadow": "crisp"
-    },
-    "type": {
-        "display": "Archivo",
-        "sans": "Pretendard",
-        "mono": "JetBrains Mono",
-        "scale": 1.0,
-        "uppercase": false,
-        "tracking": 0,
-        "korean": "NanumSquare"
-    },
+    "palette": "sketch",
+    "type": "archivo-plain",
+    "geometry": "r2b2-crisp",
+    "layout": "split-list",
     "illustration": "color",
     "illustration_set": "opendoodles",
-    "density": 1.0,
-    "hero": "split",
-    "features_layout": "list",
-    "header": "rule"
+    "density": 1.0
 }

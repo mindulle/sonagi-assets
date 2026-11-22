@@ -1,37 +1,11 @@
 {
     "name": "sonagi-blog",
     "theme": "editorial",
-    "colors": {
-        "background": "#fbfbfa",
-        "surface": "#ffffff",
-        "text": "#18181b",
-        "text-secondary": "#52525b",
-        "text-muted": "#71717a",
-        "text-faint": "#a1a1aa",
-        "border": "#e4e4e7",
-        "border-strong": "#b86a04",
-        "accent": "#b86a04",
-        "accent-strong": "#eab308",
-        "accent-ink": "#ffffff",
-        "surface-sunken": "#f4f4f5"
-    },
-    "geometry": {
-        "radius": 10,
-        "borderWidth": 1,
-        "shadow": "none"
-    },
-    "type": {
-        "display": "Cormorant Garamond",
-        "sans": "Pretendard",
-        "mono": "JetBrains Mono",
-        "korean": "Noto Serif KR",
-        "scale": 1.0,
-        "uppercase": false,
-        "tracking": 0
-    },
+    "palette": "sonagi-blog",
+    "type": "cormorant-serif",
+    "geometry": "r10b1",
+    "layout": "split-cards",
     "illustration": "mono",
     "density": 1.0,
-    "hero": "split",
-    "header": "rule",
     "auto_height": true
 }

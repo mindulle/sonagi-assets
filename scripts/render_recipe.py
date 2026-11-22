@@ -25,6 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from provenance import disclosure_for, origin_from_tags  # noqa: E402
+from style_axes import load_style  # noqa: E402
 
 SVG_OPEN = re.compile(r"<svg\b[^>]*>", re.S)
 SVG_CLOSE = re.compile(r"</svg>\s*$")
@@ -1204,7 +1205,7 @@ def main():
     style_path = args.style or recipe.get("style")
     style = DEFAULT_STYLE
     if style_path:
-        style = deep_merge(DEFAULT_STYLE, json.loads(Path(style_path).read_text()))
+        style = deep_merge(DEFAULT_STYLE, load_style(style_path))
 
     W = recipe["canvas"]["width"]
     if args.breakpoint == "tablet":
