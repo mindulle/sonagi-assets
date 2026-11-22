@@ -729,6 +729,91 @@
                     }
                 ]
             }
+        ],
+        "bead": [
+            {
+                "el": "rect",
+                "attrs": {
+                    "x": "{i}",
+                    "y": "{i}",
+                    "width": "{W - 2 * i}",
+                    "height": "{H - 2 * i}",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}",
+                    "stroke-opacity": "0.85"
+                }
+            },
+            {
+                "el": "circle",
+                "grid": {
+                    "cols": "(W - 2 * i - 20) / 20 + 1",
+                    "x": "i + 10 + col * 20",
+                    "y": "{i}"
+                },
+                "attrs": {
+                    "cx": "{x}",
+                    "cy": "{y}",
+                    "r": "2.2",
+                    "fill": "{accent}",
+                    "fill-opacity": "0.7"
+                }
+            },
+            {
+                "el": "circle",
+                "grid": {
+                    "cols": "(W - 2 * i - 20) / 20 + 1",
+                    "x": "i + 10 + col * 20",
+                    "y": "{H - i}"
+                },
+                "attrs": {
+                    "cx": "{x}",
+                    "cy": "{y}",
+                    "r": "2.2",
+                    "fill": "{accent}",
+                    "fill-opacity": "0.7"
+                }
+            }
+        ]
+    },
+    "background": {
+        "dots": [
+            {
+                "el": "circle",
+                "grid": {
+                    "cols": "(W - 80) / 40 + 1",
+                    "rows": "(H - 80) / 40 + 1",
+                    "x": "40 + col * 40",
+                    "y": "40 + row * 40"
+                },
+                "attrs": {
+                    "cx": "{x}",
+                    "cy": "{y}",
+                    "r": "1.3",
+                    "fill": "{accent}",
+                    "fill-opacity": "0.5"
+                }
+            }
+        ],
+        "hatch": [
+            {
+                "el": "line",
+                "grid": {
+                    "cols": "W / 28 + 1",
+                    "rows": "H / 28 + 1",
+                    "x": "col * 28",
+                    "y": "row * 28"
+                },
+                "attrs": {
+                    "x1": "{x}",
+                    "y1": "{y}",
+                    "x2": "{x + 10}",
+                    "y2": "{y + 10}",
+                    "stroke": "{accent}",
+                    "stroke-width": "0.7",
+                    "stroke-opacity": "0.18"
+                }
+            }
         ]
     }
 }
