@@ -15,6 +15,7 @@
 """
 
 import argparse
+import base64
 import hashlib
 import json
 import os
@@ -210,6 +211,17 @@ class Renderer:
                     return name
         return candidates[0]
 
+    def raster_image(self, path, x, y, w, h, clip):
+        ext = Path(path).suffix.lower()
+        mime = "image/png" if ext == ".png" else "image/jpeg"
+        data = base64.b64encode(Path(path).read_bytes()).decode()
+        href = f"data:{mime};base64,{data}"
+        return (
+            f'<g id="illo-raster" clip-path="url(#{clip})">'
+            f'<image x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid slice" '
+            f'href="{href}" xlink:href="{href}"/></g>'
+        )
+
     def illustration(self, spec, x, y, w, h):
         name = self.pick_illustration(spec)
         if self.illustration_mode == "hidden":
@@ -220,6 +232,10 @@ class Renderer:
                 f'stroke-width="{self.border_w}" stroke-dasharray="6 8"/></g>'
             )
         item = self.asset(name, "illustration")
+        if item.get("ext") in ("jpg", "jpeg", "png"):
+            clip = f"clip-{name}"
+            clip_def = f'<clipPath id="{clip}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}"/></clipPath>'
+            return clip_def + self.raster_image(host_path(item["path"]), x, y, w, h, clip)
         body, vb = inner_svg(host_path(item["path"]))
         clip = f"clip-{name}"
         clip_def = f'<clipPath id="{clip}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}"/></clipPath>'
@@ -475,7 +491,11 @@ def main():
 
     if auto_height:
         H = int(y + 110)
-    svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">' + "".join(body) + "</svg>"
+    svg = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
+        + "".join(body)
+        + "</svg>"
+    )
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     name = recipe.get("name", "output")
