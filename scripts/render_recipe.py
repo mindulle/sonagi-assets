@@ -223,7 +223,24 @@ class Renderer:
     def raster_image(self, path, x, y, w, h, clip):
         ext = Path(path).suffix.lower()
         mime = "image/png" if ext == ".png" else "image/jpeg"
-        data = base64.b64encode(Path(path).read_bytes()).decode()
+        raw = Path(path).read_bytes()
+        limit = getattr(self, "embed_max_width", 0)
+        if limit and ext in (".jpg", ".jpeg", ".png"):
+            try:
+                from io import BytesIO
+
+                from PIL import Image
+
+                im = Image.open(BytesIO(raw))
+                if im.width > limit:
+                    im = im.convert("RGB").resize((limit, int(im.height * limit / im.width)), Image.LANCZOS)
+                    buf = BytesIO()
+                    im.save(buf, "JPEG", quality=82, optimize=True)
+                    raw = buf.getvalue()
+                    mime = "image/jpeg"
+            except Exception:
+                pass
+        data = base64.b64encode(raw).decode()
         href = f"data:{mime};base64,{data}"
         return (
             f'<g id="illo-raster" clip-path="url(#{clip})">'
@@ -479,6 +496,7 @@ def main():
     ap.add_argument("--style", default=None, help="styles/*.json")
     ap.add_argument("--allow-blocked", action="store_true")
     ap.add_argument("--force-height", type=int, default=0, help="프레임 고정 높이(0이면 무시)")
+    ap.add_argument("--embed-max-width", type=int, default=1200, help="래스터 임베드 최대 폭(0=원본)")
     args = ap.parse_args()
 
     recipe = json.loads(Path(args.recipe).read_text())
@@ -497,6 +515,7 @@ def main():
         H = args.force_height
     theme = style.get("theme") or recipe["theme"]
     r = Renderer(catalog, tokens, theme, style, strict=not args.allow_blocked)
+    r.embed_max_width = args.embed_max_width
 
     body = [f'<rect id="background" width="{W}" height="{H}" fill="{r.colors["background"]}"/>']
     body.append('<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter></defs>')
