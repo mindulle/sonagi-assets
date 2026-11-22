@@ -1,0 +1,10 @@
+{
+    "name": "deco-noir",
+    "theme": "editorial",
+    "palette": "newsprint",
+    "type": "archivo-caps-loud",
+    "geometry": "r0b4",
+    "layout": "center-cards",
+    "ornament": "deco",
+    "density": 1.05
+}

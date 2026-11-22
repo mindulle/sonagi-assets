@@ -366,5 +366,36 @@
             "hero": "center",
             "features_layout": "cards"
         }
+    },
+    "ornament": {
+        "none": {
+            "motif": "none",
+            "frame": "none"
+        },
+        "rule": {
+            "motif": "rule",
+            "frame": "plain",
+            "height": 40
+        },
+        "nouveau": {
+            "motif": "nouveau",
+            "frame": "nouveau",
+            "height": 46
+        },
+        "victorian": {
+            "motif": "victorian",
+            "frame": "victorian",
+            "height": 46
+        },
+        "deco": {
+            "motif": "deco",
+            "frame": "deco",
+            "height": 46
+        },
+        "floral": {
+            "motif": "floral",
+            "frame": "plain",
+            "height": 44
+        }
     }
 }
