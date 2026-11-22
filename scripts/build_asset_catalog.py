@@ -197,6 +197,7 @@ def main():
         else:
             license_value, license_basis = "internal-only", "source-unverified"
 
+        scope_tag = next((t.split(":", 1)[1] for t in tags if t.startswith("scope:")), None)
         meta = inspect_svg(path, args.max_hash_bytes) if ext == "svg" else {"bytes": None, "sha256": None, "svg_groups": None}
 
         item = {
@@ -212,7 +213,7 @@ def main():
             "style": [],
             "license": license_value,
             "license_basis": license_basis,
-            "license_scope": scope_for_license(license_value),
+            "license_scope": scope_tag or scope_for_license(license_value),
             "junk": is_junk,
             "kind": "glyph" if is_glyph else "asset",
             "brand": None,
