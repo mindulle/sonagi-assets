@@ -427,6 +427,26 @@
             "frame": "label",
             "height": 44,
             "weight": 1
+        },
+        "bead": {
+            "motif": "trellis",
+            "frame": "bead",
+            "height": 44,
+            "weight": 1
+        },
+        "paper": {
+            "motif": "rule",
+            "frame": "none",
+            "height": 40,
+            "weight": 1,
+            "background": "dots"
+        },
+        "hatch": {
+            "motif": "wave",
+            "frame": "none",
+            "height": 44,
+            "weight": 1,
+            "background": "hatch"
         }
     }
 }

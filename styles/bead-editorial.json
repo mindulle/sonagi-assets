@@ -1,0 +1,10 @@
+{
+    "name": "bead-editorial",
+    "theme": "editorial",
+    "palette": "terracotta",
+    "type": "gowun-magazine",
+    "geometry": "r8b2",
+    "layout": "asymmetric-list",
+    "ornament": "bead",
+    "density": 1.0
+}

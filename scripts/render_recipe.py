@@ -1048,6 +1048,23 @@ class Renderer:
             return "", 0
         return f'<g id="ornament">{body}</g>', height + offset
 
+    def background_layer(self, W, H):
+        """스타일이 background 패턴을 선언하면 본문 뒤에 반복 장식을 깐다."""
+        name = self.ornament.get("background") if isinstance(self.ornament, dict) else None
+        if not name:
+            return ""
+        body = ornament_data.draw(
+            "background",
+            name,
+            {
+                "W": W,
+                "H": H,
+                "accent": self.colors.get("text-faint") or self.colors["border"],
+                "weight": self.ornament.get("weight", 1),
+            },
+        )
+        return f'<g id="background-pattern">{body}</g>' if body else ""
+
     def ornament_frame(self, W, H):
         motif = self.ornament.get("frame", "none")
         if motif == "none":
@@ -1227,6 +1244,9 @@ def main():
         H = int(y + 110)
     # 배경은 최종 높이가 정해진 뒤에 그린다(auto 높이에서 height="auto"가 되던 버그)
     body.insert(0, f'<rect id="background" width="{W}" height="{H}" fill="{r.colors["background"]}"/>')
+    pattern = r.background_layer(W, H)
+    if pattern:
+        body.insert(1, pattern)
     if r.ornament.get("frame", "none") != "none":
         body.append(r.ornament_frame(W, H))
     svg = (

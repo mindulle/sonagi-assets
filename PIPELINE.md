@@ -49,6 +49,8 @@ python3 scripts/render_recipe.py \
 | `deco-noir` | 뉴스프린트·먹 | 4px, r0 | Archivo·대문자 | center | cards |
 | `star-editorial` | 민트·딥그린 | 1px, r4 | Archivo | split | cards |
 | `arch-classic` | 테라코타·크림 | 2px, r8 | Cormorant·Gowun Batang | split | cards |
+| `paper-editorial` | 뉴스프린트·먹 | 1px, r0 | Cormorant·Noto Serif KR | split | list |
+| `bead-editorial` | 테라코타·크림 | 2px, r8 | Gowun Batang | asymmetric | list |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -161,6 +163,7 @@ render_recipe.py ... --embed-max-width 900
 | `arch` | 낮은 아치 + 양 끝 점 | 모서리 틱 사각 |
 | `trellis` | 마름모 반복 | 모서리 틱 사각 |
 | `wave` | 폭에 맞춰 늘어나는 사인 곡선 | 없음 |
+| `bead` | 마름모 반복 | 얇은 사각 + 위아래 비드 |
 | `nouveau` | 곡선 줄기 + 봉오리 | 이중 가는 선 + 모서리 컬 |
 | `victorian` | 굵은/가는 이중 괘선 + 로제트 | 이중 괘선 + 모서리 브래킷 |
 | `deco` | 전폭 직선 + 마름모 | 이중 직선 |
@@ -174,6 +177,9 @@ render_recipe.py ... --embed-max-width 900
 - `weight`는 선 두께 배율이다(1.0이면 원본).
 - `height`는 구분선이 차지하는 세로 여백이다.
 - `offset`은 선을 아래로 내리는 값이다(아치처럼 위로 솟는 모티프가 앞 블록을 침범하지 않게).
+- `repeat` 대신 `grid`를 주면 2차원으로 반복한다: `{cols, rows, x, y}`에 표현식을 쓰고
+  `col`·`row` 변수를 받는다.
+- 장식 축에 `background`를 넣으면 본문 뒤에 패턴을 깐다(`dots`, `hatch`).
 - 모티프는 **데이터**다. `styles/ornaments.json`에 SVG 요소 목록을 추가하고 `axes.json`에 이름만 등록하면 끝난다.
   렌더러 코드는 건드리지 않는다.
 - 요소는 `{el, attrs, repeat?, elements?}` 형태다. `repeat`는 변수 묶음 반복(모서리 4곳, 좌우 대칭),
@@ -228,7 +234,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial arch-classic; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial arch-classic paper-editorial bead-editorial; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```

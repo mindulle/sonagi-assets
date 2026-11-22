@@ -67,7 +67,8 @@ def sheet(data, width, accent, bg, weight):
     frame_row_h = 260
     cols = max(1, (width - pad * 2 + 20) // (frame_box + 20))
     rows = (len(frames) + cols - 1) // cols
-    height = pad + 30 + len(dividers) * row + 30 + rows * frame_row_h + pad
+    bg_rows = ((len(data.get("background") or {}) + cols - 1) // cols) if data.get("background") else 0
+    height = pad + 30 + len(dividers) * row + 30 + (bg_rows + rows) * frame_row_h + pad
 
     parts = [f'<rect width="{width}" height="{height}" fill="{bg}"/>']
     parts.append(label("dividers", pad, pad + 8, size=12, color="#9a9a9a"))
@@ -76,6 +77,26 @@ def sheet(data, width, accent, bg, weight):
         parts.append(label(name, pad, y - 24, size=11, color="#8a8a8a"))
         parts.append(divider_svg(name, pad + 120, width - pad, y, width, accent, weight))
         y += row
+
+    backgrounds = sorted(data.get("background") or {})
+    if backgrounds:
+        parts.append(label("backgrounds", pad, y + 4, size=12, color="#9a9a9a"))
+        y += 24
+        for index, name in enumerate(backgrounds):
+            col = index % cols
+            rowindex = index // cols
+            x = pad + col * (frame_box + 20)
+            top = y + rowindex * frame_row_h
+            sample = ornament_data.draw("background", name, {"W": frame_box, "H": 200, "accent": accent, "weight": weight})
+            parts.append(
+                f'<g transform="translate({x} {top})">'
+                + label(name, 0, 16, size=11, color="#8a8a8a")
+                + f'<g transform="translate(0 26)">'
+                + f'<rect x="0" y="0" width="{frame_box}" height="200" fill="none" stroke="#d9d4c8"/>'
+                + f'<svg x="0" y="0" width="{frame_box}" height="200">{sample}</svg>'
+                + "</g></g>"
+            )
+        y += ((len(backgrounds) + cols - 1) // cols) * frame_row_h
 
     parts.append(label("frames", pad, y + 4, size=12, color="#9a9a9a"))
     y += 24
