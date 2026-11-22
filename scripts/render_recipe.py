@@ -516,7 +516,7 @@ class Renderer:
         c = self.colors
         h = 220
         parts = [
-            f'<g id="cta-band">',
+            '<g id="cta-band">',
             self.card(56, y0, W - 112, h, c["surface"]),
             self.text(96, y0 + 72, self.case(block.get("eyebrow", "")), 12, 600, c["accent"], family=self.f_mono, tracking=2.6),
             self.text(96, y0 + 118, self.case(block["title"]), 34 * self.scale, 700, family=self.f_display),
