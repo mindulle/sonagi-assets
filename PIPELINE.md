@@ -157,6 +157,9 @@ render_recipe.py ... --embed-max-width 900
 
 리팩터 검증: 기존 11종을 조합 형태로 바꾼 뒤 같은 입력으로 렌더해 **11종 SVG 해시가 모두 동일**했다.
 
+로고·브랜딩 납품은 `docs/IDENTITY_DELIVERY.md` 참조. 저작은 VectorCraft/DesignCraft,
+시스템화·export는 이 파이프라인이 맡는다.
+
 ## 장식(ornament)
 
 장식도 축이다. `styles/axes.json`의 `ornament` 항목이 `{motif, frame, weight, height}`를 정의하고,

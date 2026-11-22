@@ -181,6 +181,7 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 | `scripts/license_policy.py` | 라이선스 → scope 단일 출처 |
 | `CONTENT_FORMAT.md` · `PIPELINE.md` | 규격·계약 |
 | `docs/FIGMA_ROUNDTRIP.md` | Figma 재임포트 검증 |
+| `docs/IDENTITY_DELIVERY.md` | 로고·브랜딩 납품 규격(락업·규격·법적 게이트) |
 | `content/*.md` | 실제 콘텐츠 예시 5종 |
 | `styles/axes.json` · `styles/ornaments.json` · `styles/*.json` | 축 정의 + 장식 템플릿(2D·패턴) + 스킨 27종 |
 | `tokens/` | 프리미티브·시맨틱·Figma 변수 |
