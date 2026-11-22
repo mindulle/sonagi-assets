@@ -133,28 +133,39 @@ app.add_middleware(
 
 
 @app.get("/api/items")
-def get_items(limit: int = Query(50, le=100), offset: int = Query(0, ge=0), search: str = ""):
+def get_items(
+    limit: int = Query(50, le=100),
+    offset: int = Query(0, ge=0),
+    search: str = "",
+    include_glyphs: bool = False,
+):
     conn = get_db()
     try:
         c = conn.cursor()
-        base_query = "FROM items"
-        where_clause = ""
+        conditions = []
         params = []
 
+        if not include_glyphs:
+            conditions.append("tags NOT LIKE ?")
+            params.append("%kind:glyph%")
+
         if search:
-            where_clause = " WHERE name LIKE ? OR tags LIKE ? OR ext LIKE ?"
+            conditions.append("(name LIKE ? OR tags LIKE ? OR ext LIKE ?)")
             search_term = "%" + search + "%"
             params.extend([search_term, search_term, search_term])
-            base_query += where_clause
+
+        base_query = "FROM items"
+        if conditions:
+            base_query += " WHERE " + " AND ".join(conditions)
 
         count_query = f"SELECT COUNT(*) as total {base_query}"
         c.execute(count_query, params)
         total_count = c.fetchone()["total"]
 
         query = f"SELECT * {base_query} ORDER BY created_at DESC LIMIT ? OFFSET ?"
-        params.extend([limit, offset])
+        list_params = params + [limit, offset]
 
-        c.execute(query, params)
+        c.execute(query, list_params)
         rows = c.fetchall()
 
         items = []

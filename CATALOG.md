@@ -85,6 +85,20 @@ sudo python3 scripts/tag_symbol_sheets.py \
 
 - DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-symboltags-20261122T110332Z`
 
+## 글리프 처리 (2026-11-22)
+
+폰트 글리프 SVG 2,818개에 `kind:glyph` 태그를 붙이고, 앱 기본 목록에서 제외했다.
+
+- `GET /api/items` → 2,499개 (글리프 제외)
+- `GET /api/items?include_glyphs=1` → 5,317개 (전체)
+- 파일은 삭제하지 않음 (6.7MB, 아이콘 소스로 재사용 가능)
+
+```bash
+sudo python3 scripts/tag_glyphs.py --db /srv/sonagi-assets/asset_hub.db --apply
+```
+
+DB 백업: `asset_hub.db.bak-glyphtags-20261122T111506Z`
+
 ## 아이콘·일러스트 태깅 (2026-11-22)
 
 심볼 시트/글리프/타이포 specimen/색상 팔레트를 제외한 벡터 에셋 73개에 4축 태그를 적용했다.
