@@ -39,6 +39,7 @@ def main():
     ap.add_argument("--url", required=True)
     ap.add_argument("--style", required=True)
     ap.add_argument("--palette", default="mono")
+    ap.add_argument("--origin", default=None, help="open-source|public-domain|freeware|commercial|generated|in-house")
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
 
@@ -87,6 +88,11 @@ def main():
         except Exception:
             thumb_path = ""
 
+        origin_tags = []
+        if args.origin:
+            origin_tags = [f"origin:{args.origin}"]
+            if args.origin == "generated":
+                origin_tags.append("scope:output")
         tags = sorted(
             {
                 "category:ui-component",
@@ -101,6 +107,7 @@ def main():
                 f"license_url:{args.url}",
                 "scope:bundle",
                 "src:asset-pack",
+                *origin_tags,
             }
         )
         conn.execute(

@@ -115,6 +115,37 @@ python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
 
 납품 시 매니페스트를 함께 보내면 "이 결과물에 무엇이 들어갔는지"가 자동으로 증명된다.
 
+## 출처(origin)와 사용 범위
+
+라이선스는 "무엇을 해도 되는가", 출처는 "어디서 왔는가"다. 둘을 분리해 태그한다.
+
+| origin | 뜻 | 기본 scope | 쓰이는 곳 |
+| --- | --- | --- | --- |
+| `open-source` | OFL·MIT·ISC·Apache | bundle | 폰트·아이콘·오픈 일러스트 |
+| `public-domain` | CC0·PD | bundle | 박물관 이미지·동판화 |
+| `in-house` | 자체 제작 | bundle | 직접 만든 컴포넌트·레시피 |
+| `freeware` | 무료지만 재배포 제한 | output | KOTRA·롯데마트 등 |
+| `generated` | AI 생성·합성 | **output 강제** | 히어로 삽화 등 1회성 |
+| `commercial` | 유료 라이선스 | blocked | 구매 전 사용 금지 |
+| `unknown` | 출처 불명 | blocked | 납품·판매 금지 |
+
+### 어디에 쓰이는가
+
+| 산출물 | 사용 가능 origin |
+| --- | --- |
+| **판매용 에셋 팩** (파일 재배포) | open-source · public-domain · in-house |
+| **클라이언트 납품물** (화면·인쇄) | 위 + freeware · generated(고지) |
+| **내부 작업** | 전부(commercial 제외) |
+| **재배포 금지 계약** | above minus generated |
+
+납품 시 `render_recipe.py`가 `<name>-CREDITS.md`를 자동 생성한다.
+`origin:generated` 자산은 등록 단계에서 `scope:output`이 강제되므로 판매 팩에 들어갈 수 없다.
+
+```bash
+# AI 생성 자산을 등록할 때
+sudo python3 scripts/import_image_pack.py ... --origin generated --apply
+```
+
 ## 빌드업 타임랩스
 
 레이어 조립 과정을 프레임으로 남긴다. 사람의 붓질 기록(스피드 페인팅)과는 다르다.

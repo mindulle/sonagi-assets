@@ -57,6 +57,7 @@ WEIGHT_TOKENS = (
 )
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from license_policy import scope_for_license  # noqa: E402
+from provenance import origin_for_license, origin_from_tags  # noqa: E402
 
 FONT_EXTS = {"ttf", "otf", "woff", "woff2"}
 
@@ -198,6 +199,9 @@ def main():
             license_value, license_basis = "internal-only", "source-unverified"
 
         scope_tag = next((t.split(":", 1)[1] for t in tags if t.startswith("scope:")), None)
+        origin_value = origin_from_tags(tags)
+        if origin_value == "unknown" and license_value:
+            origin_value = origin_for_license(license_value)
         meta = inspect_svg(path, args.max_hash_bytes) if ext == "svg" else {"bytes": None, "sha256": None, "svg_groups": None}
 
         item = {
@@ -214,6 +218,7 @@ def main():
             "license": license_value,
             "license_basis": license_basis,
             "license_scope": scope_tag or scope_for_license(license_value),
+            "origin": origin_value,
             "junk": is_junk,
             "kind": "glyph" if is_glyph else "asset",
             "brand": None,
