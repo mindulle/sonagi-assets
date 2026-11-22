@@ -41,6 +41,7 @@ python3 scripts/render_recipe.py \
 | `etching` | 아이보리·황토 | 1px, r0 | Gowun Batang | asymmetric | list |
 | `sonagi-blog` | 웨더드 페이퍼·브론즈 | 1px, r10 | Cormorant·Noto Serif KR | split | cards |
 | `art-nouveau` | 파치먼트·올리브·금 | 1px, r26 | Cormorant·Gowun Batang | center | cards |
+| `victorian` | 크림·적갈·금 | 2px, r2 | Cormorant·Gowun Batang | center | cards |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -119,6 +120,7 @@ render_recipe.py ... --embed-max-width 900
 | `none` (기본) | 없음 | 없음 |
 | `nouveau` | 양쪽에서 뻗는 곡선 줄기 + 봉오리 | 이중 가는 선 + 네 모서리 컬 |
 | `deco` | 직선 + 마름모 | 이중 직선 |
+| `victorian` | 굵은/가는 이중 괘선 + 로제트 | 이중 괘선 + 모서리 브래킷 |
 
 ```json
 { "ornament": "nouveau" }
@@ -127,8 +129,9 @@ render_recipe.py ... --embed-max-width 900
 - 장식은 스타일 JSON만으로 켠다. 블록 코드는 건드리지 않는다.
 - 색은 스타일의 `accent`를 쓰므로 다크 변환도 자동으로 따라간다.
 - 장식 높이(46px)는 렌더러가 확보하고, 다음 섹션은 그 아래에서 시작한다.
+- 모바일에서는 프레임 안쪽 여백을 8px로 줄여 본문(20px)과 겹치지 않게 한다.
 
-한계: 모티프는 렌더러에 내장된 2종뿐이다. 새 장식(꽃잎·깃털·격자)은
+한계: 모티프는 렌더러에 내장된 3종뿐이다. 새 장식(꽃잎·깃털·격자)은
 `render_recipe.py`의 `ornament_divider`·`ornament_frame`에 경로를 추가해야 한다.
 
 ## 콘텐츠 임포터
@@ -165,7 +168,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```
