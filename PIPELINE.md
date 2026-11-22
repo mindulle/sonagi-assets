@@ -38,6 +38,7 @@ python3 scripts/render_recipe.py \
 | `swiss` | 화이트·레드 | 2px, r0 | Archivo·대문자 | split | **columns** |
 | `poster` | 다크·앰버 | 2px, r0 | Archivo | **poster** | cards |
 | `sketch` | 화이트·블랙 | 2px, r2 | Archivo | split | list |
+| `etching` | 아이보리·황토 | 1px, r0 | Gowun Batang | asymmetric | list |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -58,8 +59,12 @@ python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
 | --- | --- | --- | --- |
 | `illlustrations` | MIT | 133 | flat color |
 | `opendoodles` | CC0 | 33 | line drawing |
+| `etchings` | CC0(PD) | 25 | 동판화 래스터 |
 
-레시피: `"illustration": ["open-vault", "float"]` → 스타일에 맞는 후보를 선택.
+레시피: `"illustration": ["open-vault", "float", "<etching 이름>"]` → 스타일에 맞는 후보를 선택.
+
+래스터(jpg/png)는 SVG에 base64로 임베드한다. 외부 참조가 없어 파일 단독으로 열리지만
+파일이 커진다(1600px 동판화 1장 ≈ 2.5MB). Figma 임포트 전에는 폭을 줄이는 편이 좋다.
 
 ### 레이아웃 문법
 

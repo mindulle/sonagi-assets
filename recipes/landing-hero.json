@@ -20,7 +20,11 @@
             "cta": "컬렉션 보기",
             "ctaIcon": "arrow-right",
             "note": "CC0 원본 · 국내 제작 · 3–5일 배송",
-            "illustration": ["open-vault", "float"]
+            "illustration": [
+                "open-vault",
+                "float",
+                "abraham-bosse-l-imprimerie-en-taille-dou-165996734"
+            ]
         },
         {
             "type": "features",
@@ -46,7 +50,7 @@
         {
             "type": "footer",
             "left": "© 2026 Atelier Sonagi",
-            "right": "Met Open Access · CC0"
+            "right": "CC0 · Public domain"
         }
     ]
 }
