@@ -9,7 +9,7 @@
     python3 scripts/check_pack.py --allowlist catalog/font-allowlist.json \\
         pack/fonts/NanumGothic.ttf pack/fonts/GmarketSans.ttf
 
-    python3 scripts/check_pack.py --sha256 ... 
+    python3 scripts/check_pack.py --sha256 ...
 """
 
 import argparse
