@@ -62,6 +62,9 @@ cta: 컬렉션 보기
 | `faq` | `items` | `title` |
 | `cta` | `title`, `cta` | `eyebrow`, `body`, `ctaIcon`, `note` |
 | `footer` | `left` | `right` |
+| `table` | `columns`, `items` | `title`, `note`, `featured` |
+| `pricing` | `items` (≤3) | `title`, `note` |
+| `gallery` | `items` (≤6) | `title`, `note` |
 
 `features`·`faq`의 `items`는 `### 제목`으로 만든다.
 
@@ -88,6 +91,52 @@ title: 자주 묻는 질문
 
 `### 제목`이 질문, 아래 문장이 답이 된다.
 
+### table — 비교표
+
+```markdown
+## table
+title: 포함 범위
+columns: 항목 | 무료 | 스탠다드 | 프로
+featured: 4
+- 원본 색보정 | 기본 | 정밀 | 정밀
+- 인화 크기 | A4 | A3 | A2
+- 소스 파일 | ✕ | ✓ | ✓
+note: 모든 요금은 1점 기준입니다.
+```
+
+- **첫 열은 행 이름**, 나머지가 값이다. `columns` 개수와 행의 칸 수가 같아야 한다.
+- `featured`는 강조할 열 번호(1부터). 해당 열에 배경과 강조색이 들어간다.
+
+### pricing — 요금 카드
+
+```markdown
+## pricing
+title: 요금제
+
+### 스탠다드
+price: 49,000원
+period: A3 · 1점
+- 색보정 2회
+- 소스 파일 제공
+cta: 주문하기
+featured: true
+```
+
+- `### 카드명` 아래 `- ` 줄이 포함 항목이 된다.
+- `featured: true`는 한 카드에만. 강조 테두리와 채워진 버튼이 된다.
+
+### gallery — 이미지 격자
+
+```markdown
+## gallery
+title: 최근 에디션
+- angelica-kauffman-self-portrait-etching--46884898
+- a-dog-fight-rowlandson-1811-68643479
+note: CC0 · 메트로폴리탄 미술관
+```
+
+카탈로그의 일러스트 이름만 쓴다. 3열(모바일 2열)로 배치된다.
+
 ## 4. 검증
 
 `import_content.py`가 렌더 전에 막는 것.
@@ -99,6 +148,10 @@ title: 자주 묻는 질문
 | 목록 항목 수 초과 (nav 4, logos 5, illustration 2) | 오류 |
 | 아이콘·일러스트 이름이 카탈로그에 없음 | 오류 + 유사 이름 제안 |
 | `scope`가 `bundle`이 아님(차단·생성 자산) | 오류 |
+| table 열 개수와 행 칸 수 불일치 | 오류 |
+| `table.featured` 범위 밖 | 오류 |
+| pricing 카드 4개 이상, featured 중복 | 오류 |
+| gallery 7개 이상 | 오류 |
 | 문장 길이 초과 | 경고 |
 
 `--catalog`를 주면 자산 검사까지 한다. 없으면 구조 검사만 한다.

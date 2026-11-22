@@ -252,6 +252,8 @@ class Renderer:
         )
 
     def illustration(self, spec, x, y, w, h):
+        if not spec:
+            return ""
         name = self.pick_illustration(spec)
         if self.illustration_mode == "hidden":
             border = self.colors["border"]
@@ -339,9 +341,12 @@ class Renderer:
         body_y = y0 + 24 + 24 + title_h + 16
         parts.append(self.text(m, body_y, self.case(block["body"]), 14 * s, 400, c["text-secondary"], leading=1.6))
         illo_y = body_y + 34
-        aspect = 0.58 if big else 0.72
-        parts.append(self.illustration(block["illustration"], m, illo_y, W - 2 * m, (W - 2 * m) * aspect))
-        by = illo_y + (W - 2 * m) * aspect + 28
+        if block.get("illustration"):
+            aspect = 0.58 if big else 0.72
+            parts.append(self.illustration(block["illustration"], m, illo_y, W - 2 * m, (W - 2 * m) * aspect))
+            by = illo_y + (W - 2 * m) * aspect + 28
+        else:
+            by = body_y + 34
         bw, bh = W - 2 * m, 52
         parts.append(
             f'<g id="cta">{self.card(m, by, bw, bh, c["accent"])}'
@@ -357,6 +362,8 @@ class Renderer:
         s = self.scale
         if self.bp in ("mobile", "tablet"):
             return self.hero_mobile(block, W, y0)
+        if not block.get("illustration"):
+            return self.hero_plain(block, W, y0)
         if self.hero_layout == "asymmetric":
             return self.hero_asymmetric(block, W, y0)
         if self.hero_layout == "poster":
@@ -404,6 +411,31 @@ class Renderer:
         parts.append(self.text(288, by + 36, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
         parts.append(self.illustration(block["illustration"], W - 56 - 520, y0 + 30, 520, 380))
         return f'<g id="hero">{"".join(parts)}</g>', max(500, by + 160) * self.density
+
+    def hero_plain(self, block, W, y0):
+        c = self.colors
+        s = self.scale
+        m = self.M
+        size = 84 * s
+        lines = block["title"].count("\n") + 1
+        body_y = y0 + 140 + size + (lines - 1) * size * 1.12 + 40
+        parts = [
+            '<g id="hero">',
+            self.text(m, y0 + 140, self.case(block.get("eyebrow", "")), 12, 600, c["accent"], family=self.f_mono, tracking=3.2),
+            self.text(m, y0 + 140 + size, self.case(block["title"]), size, 700, family=self.f_display, leading=1.12),
+            self.text(m, body_y, self.case(block["body"]), 18 * s, 400, c["text-secondary"], leading=1.5),
+        ]
+        bw, bh = 232, 58
+        by = body_y + 46
+        parts.append(
+            f'<g id="cta">{self.card(m, by, bw, bh, c["accent"])}'
+            + self.text(m + 26, by + 37, self.case(block["cta"]), 16, 700, c["accent-ink"])
+            + self.icon(block["ctaIcon"], m + bw - 44, by + 20, 18, c["accent-ink"])
+            + "</g>"
+        )
+        parts.append(self.text(m + bw + 24, by + 37, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
+        parts.append("</g>")
+        return "".join(parts), (by + bh + 40) - y0
 
     def hero_asymmetric(self, block, W, y0):
         c = self.colors
@@ -579,6 +611,213 @@ class Renderer:
         parts.append("</g></g>")
         return "".join(parts), h + 40
 
+    def table(self, block, W, y0):
+        c = self.colors
+        m = self.M
+        k = self.K
+        cols = block["columns"] or [""]
+        rows = block["rows"]
+        n = len(cols)
+        width = W - 2 * m
+        col_w = width / n
+        featured = block.get("featured", 0)
+        y = y0
+        parts = ['<g id="table">']
+        if block.get("title"):
+            parts.append(
+                self.text(
+                    m,
+                    y + 30 * self.scale * k,
+                    self.case(block["title"]),
+                    28 * self.scale * k,
+                    700,
+                    family=self.f_display,
+                )
+            )
+            y += 58
+        header_h = 44
+        grid_h = header_h + len(rows) * 54 + (30 if block.get("note") else 0)
+        if featured and 1 <= featured <= n:
+            fx = m + (featured - 1) * col_w
+            parts.append(f'<rect id="table-featured" x="{fx}" y="{y}" width="{col_w}" height="{grid_h}" fill="{c["surface"]}"/>')
+        for i, col in enumerate(cols):
+            on = featured == i + 1
+            parts.append(
+                self.text(
+                    m + i * col_w + 16,
+                    y + 28,
+                    self.case(col),
+                    11 * k,
+                    700 if on else 600,
+                    c["accent"] if on else c["text-muted"],
+                    family=self.f_mono,
+                    tracking=1.6,
+                )
+            )
+        parts.append(
+            f'<line x1="{m}" y1="{y + header_h}" x2="{W - m}" y2="{y + header_h}" '
+            f'stroke="{c["text"]}" stroke-width="{2 if self.border_w <= 2 else self.border_w}"/>'
+        )
+        for r, cells in enumerate(rows):
+            ry = y + header_h + r * 54
+            for i, cell in enumerate(cells[:n]):
+                on = featured == i + 1
+                parts.append(
+                    self.text(
+                        m + i * col_w + 16,
+                        ry + 34,
+                        cell if i else self.case(cell),
+                        13 * k,
+                        700 if on else (600 if i == 0 else 400),
+                        c["text"] if (on or i == 0) else c["text-secondary"],
+                        family=self.f_display if i == 0 else None,
+                    )
+                )
+            parts.append(f'<line x1="{m}" y1="{ry + 54}" x2="{W - m}" y2="{ry + 54}" stroke="{c["border"]}" stroke-width="1"/>')
+        if block.get("note"):
+            parts.append(
+                self.text(
+                    m,
+                    y + header_h + len(rows) * 54 + 22,
+                    self.case(block["note"]),
+                    11,
+                    400,
+                    c["text-muted"],
+                )
+            )
+        parts.append("</g>")
+        return "".join(parts), (y - y0) + grid_h + 24
+
+    def table_mobile(self, block, W, y0):
+        c = self.colors
+        m = self.M
+        k = self.K
+        cols = block["columns"] or [""]
+        rows = block["rows"]
+        step = 36 + (len(cols) - 1) * 21
+        parts = ['<g id="table">']
+        y = y0
+        if block.get("title"):
+            parts.append(self.text(m, y + 22 * k, self.case(block["title"]), 22 * k, 700, family=self.f_display))
+            y += 44
+        for r, cells in enumerate(rows):
+            ry = y + r * step
+            parts.append(self.text(m, ry + 18, self.case(cells[0]), 13.5 * k, 700, family=self.f_display))
+            for i, col in enumerate(cols[1:], start=1):
+                value = cells[i] if i < len(cells) else ""
+                parts.append(self.text(m, ry + 18 + i * 21, f"{col}  {value}", 11 * k, 400, c["text-muted"]))
+            parts.append(f'<line x1="{m}" y1="{ry + step - 12}" x2="{W - m}" y2="{ry + step - 12}" stroke="{c["border"]}" stroke-width="1"/>')
+        parts.append("</g>")
+        return "".join(parts), len(rows) * step + 66
+
+    def price_card(self, item, x, y, w, h):
+        c = self.colors
+        featured = item.get("featured")
+        bullets = item.get("features", [])
+        parts = [
+            '<g id="plan">',
+            self.card(x, y, w, h, c["surface"] if featured else c["background"]),
+        ]
+        if featured:
+            parts.append(
+                f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}" fill="none" '
+                f'stroke="{c["accent"]}" stroke-width="{max(2, self.border_w)}"/>'
+            )
+        parts.append(
+            self.text(
+                x + 20,
+                y + 32,
+                self.case(item["title"]),
+                12,
+                700,
+                c["accent"] if featured else c["text-muted"],
+                family=self.f_mono,
+                tracking=1.8,
+            )
+        )
+        parts.append(self.text(x + 20, y + 78, item["price"], 32 * self.scale, 700, family=self.f_display))
+        if item.get("period"):
+            parts.append(self.text(x + 20, y + 98, item["period"], 11, 400, c["text-muted"]))
+        for i, line in enumerate(bullets):
+            parts.append(self.text(x + 20, y + 134 + i * 26, f"· {line}", 12.5, 400, c["text-secondary"]))
+        bw, bh = w - 40, 40
+        by = y + h - 26 - bh
+        parts.append(
+            '<g id="plan-cta">'
+            + self.card(x + 20, by, bw, bh, c["accent"] if featured else c["surface"])
+            + self.text(x + 36, by + 26, self.case(item["cta"]), 13, 700, c["accent-ink"] if featured else c["text"])
+            + "</g>"
+        )
+        parts.append("</g>")
+        return "".join(parts)
+
+    def pricing(self, block, W, y0):
+        m = self.M
+        items = block["items"][:3]
+        gap = 20
+        cols = max(1, len(items))
+        card_w = (W - 2 * m - gap * (cols - 1)) / cols
+        bullets = max((len(item.get("features", [])) for item in items), default=0)
+        h = 134 + bullets * 26 + 66
+        parts = ['<g id="pricing">']
+        y = y0
+        if block.get("title"):
+            parts.append(self.text(m, y + 30 * self.scale * self.K, self.case(block["title"]), 28 * self.scale * self.K, 700, family=self.f_display))
+            y += 58
+        for i, item in enumerate(items):
+            parts.append(self.price_card(item, m + i * (card_w + gap), y, card_w, h))
+        if block.get("note"):
+            parts.append(self.text(m, y + h + 26, self.case(block["note"]), 11, 400, self.colors["text-muted"]))
+        parts.append("</g>")
+        return "".join(parts), (y - y0) + h + (42 if block.get("note") else 24)
+
+    def pricing_mobile(self, block, W, y0):
+        m = self.M
+        items = block["items"][:3]
+        parts = ['<g id="pricing">']
+        y = y0
+        if block.get("title"):
+            parts.append(self.text(m, y + 22 * self.K, self.case(block["title"]), 22 * self.K, 700, family=self.f_display))
+            y += 44
+        for item in items:
+            bullets = len(item.get("features", []))
+            h = 130 + bullets * 26 + 66
+            parts.append(self.price_card(item, m, y, W - 2 * m, h))
+            y += h + 16
+        if block.get("note"):
+            parts.append(self.text(m, y + 6, self.case(block["note"]), 11, 400, self.colors["text-muted"]))
+            y += 26
+        parts.append("</g>")
+        return "".join(parts), (y - y0) + 22
+
+    def gallery(self, block, W, y0):
+        c = self.colors
+        m = self.M
+        names = block["items"][:6]
+        cols = 3 if self.bp == "tablet" else 3
+        if self.bp == "mobile":
+            cols = 2
+        cols = min(cols, max(1, len(names)))
+        gap = 16
+        cell_w = (W - 2 * m - gap * (cols - 1)) / cols
+        cell_h = cell_w * 0.78
+        rows = (len(names) + cols - 1) // cols
+        parts = ['<g id="gallery">']
+        y = y0
+        if block.get("title"):
+            parts.append(self.text(m, y + 30 * self.scale * self.K, self.case(block["title"]), 28 * self.scale * self.K, 700, family=self.f_display))
+            y += 58
+        for i, name in enumerate(names):
+            row, col = divmod(i, cols)
+            x = m + col * (cell_w + gap)
+            ty = y + row * (cell_h + gap)
+            parts.append(self.illustration(name, x, ty, cell_w, cell_h))
+        height = rows * cell_h + (rows - 1) * gap
+        if block.get("note"):
+            parts.append(self.text(m, y + height + 26, self.case(block["note"]), 11, 400, c["text-muted"]))
+        parts.append("</g>")
+        return "".join(parts), (y - y0) + height + (44 if block.get("note") else 26)
+
     def features_mobile(self, block, W, y0):
         c = self.colors
         m = self.M
@@ -735,6 +974,18 @@ def main():
             y += adv
         elif kind == "logos":
             svg, adv = (r.logos_mobile if r.bp == "mobile" else r.logos)(block, W, y + 30)
+            body.append(svg)
+            y += adv
+        elif kind == "table":
+            svg, adv = (r.table_mobile if r.bp == "mobile" else r.table)(block, W, y + 30)
+            body.append(svg)
+            y += adv
+        elif kind == "pricing":
+            svg, adv = (r.pricing_mobile if r.bp == "mobile" else r.pricing)(block, W, y + 30)
+            body.append(svg)
+            y += adv
+        elif kind == "gallery":
+            svg, adv = r.gallery(block, W, y + 30)
             body.append(svg)
             y += adv
         elif kind == "faq":
