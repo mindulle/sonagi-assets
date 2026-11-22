@@ -34,6 +34,48 @@ TAG_MAP = {
 }
 PREFIXES = ("category", "topic", "src", "dept", "medium", "format")
 
+WEIGHT_TOKENS = (
+    "thin",
+    "extralight",
+    "ultralight",
+    "light",
+    "regular",
+    "book",
+    "medium",
+    "semibold",
+    "demibold",
+    "bold",
+    "extrabold",
+    "ultrabold",
+    "black",
+    "heavy",
+    "italic",
+    "oblique",
+    "variable",
+    "wght",
+    "width",
+)
+FONT_EXTS = {"ttf", "otf", "woff", "woff2"}
+
+
+def normalize_family(name):
+    """'BebasNeue_004' / 'Roboto-Bold' → 비교 가능한 family 문자열"""
+    base = re.sub(r"\.[A-Za-z0-9]+$", "", name or "")
+    base = re.sub(r"[_\-\s]?\d+$", "", base)  # trailing _004
+    base = base.replace("_", " ").replace("-", " ")
+    base = re.sub(r"\s+", " ", base).strip().lower()
+    words = [w for w in base.split(" ") if w and w not in WEIGHT_TOKENS]
+    return "".join(words)
+
+
+def load_google_families(path):
+    if not path or not os.path.isfile(path):
+        return set()
+    with open(path) as f:
+        data = json.load(f)
+    families = data.get("familyMetadataList") or data.get("families") or []
+    return {normalize_family(f.get("family") or "") for f in families if f.get("family")}
+
 
 def normalize_tags(raw_tags):
     out = []
@@ -84,9 +126,11 @@ def main():
     ap.add_argument("--library-root", required=True)
     ap.add_argument("--out-dir", required=True)
     ap.add_argument("--max-hash-bytes", type=int, default=20 * 1024 * 1024)
+    ap.add_argument("--google-fonts", default=None, help="Google Fonts metadata JSON (family list)")
     args = ap.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
+    google_families = load_google_families(args.google_fonts)
     conn = sqlite3.connect(f"file:{args.db}?mode=ro", uri=True)
     conn.row_factory = sqlite3.Row
     rows = list(conn.execute("select * from items"))
@@ -98,8 +142,13 @@ def main():
         "by_ext": collections.Counter(),
         "style_tagged": 0,
         "license_known": 0,
+        "license": collections.Counter(),
+        "fonts_matched": 0,
         "with_svg_groups": 0,
         "missing_file": 0,
+        "junk": 0,
+        "junk_by_ext": collections.Counter(),
+        "real_total": 0,
     }
     tag_usage = collections.Counter()
 
@@ -113,20 +162,40 @@ def main():
         tags = normalize_tags(raw)
         buckets = split_buckets(tags)
         path = host_path(row["original_path"], args.library_root)
-        meta = inspect_svg(path, args.max_hash_bytes) if (row["ext"] or "").lower() == "svg" else {"bytes": None, "sha256": None, "svg_groups": None}
+        ext = (row["ext"] or "").lower()
+        source = (buckets.get("src") or [None])[0]
+        is_junk = (row["name"] or "").startswith("._")  # macOS AppleDouble
+
+        if is_junk:
+            license_value, license_basis = "n/a", "appledouble-metadata"
+        elif ext in FONT_EXTS:
+            family = normalize_family(row["name"])
+            if family and family in google_families:
+                license_value, license_basis = "ofl", "google-fonts"
+                stats["fonts_matched"] += 1
+            else:
+                license_value, license_basis = "internal-only", "font-unverified"
+        elif source in ("the-met", "cma"):
+            license_value, license_basis = "cc0", f"{source}-open-access"
+        else:
+            license_value, license_basis = "internal-only", "source-unverified"
+
+        meta = inspect_svg(path, args.max_hash_bytes) if ext == "svg" else {"bytes": None, "sha256": None, "svg_groups": None}
 
         item = {
             "id": row["id"],
             "name": row["name"],
-            "ext": (row["ext"] or "").lower(),
+            "ext": ext,
             "category": (buckets.get("category") or [None])[0],
             "topics": sorted(buckets.get("topic") or []),
-            "source": (buckets.get("src") or [None])[0],
+            "source": source,
             "dept": sorted(buckets.get("dept") or []),
             "medium": sorted(buckets.get("medium") or []),
             "format": (buckets.get("format") or [None])[0],
             "style": [],
-            "license": "unknown",
+            "license": license_value,
+            "license_basis": license_basis,
+            "junk": is_junk,
             "brand": None,
             "tags": tags,
             "path": path,
@@ -134,10 +203,16 @@ def main():
         }
         items.append(item)
         stats["by_ext"][item["ext"]] += 1
-        stats["style_tagged"] += int(bool(item["style"]))
-        stats["license_known"] += int(item["license"] != "unknown")
-        stats["with_svg_groups"] += int(bool(item["svg_groups"]))
-        stats["missing_file"] += int(bool(path) and not os.path.isfile(path))
+        if is_junk:
+            stats["junk"] += 1
+            stats["junk_by_ext"][item["ext"]] += 1
+        else:
+            stats["real_total"] += 1
+            stats["style_tagged"] += int(bool(item["style"]))
+            stats["license_known"] += int(item["license"] in ("cc0", "ofl", "cleared"))
+            stats["with_svg_groups"] += int(bool(item["svg_groups"]))
+            stats["missing_file"] += int(bool(path) and not os.path.isfile(path))
+        stats["license"][item["license"]] += 1
         for tag in tags:
             tag_usage[tag] += 1
 
@@ -161,9 +236,13 @@ def main():
         "counts": catalog["counts"],
         "top_tags": tag_usage.most_common(40),
         "gaps": {
-            "style": len(items) - stats["style_tagged"],
-            "license": len(items) - stats["license_known"],
-            "svg_without_groups": max(0, stats["by_ext"]["svg"] - stats["with_svg_groups"]),
+            "style": stats["real_total"] - stats["style_tagged"],
+            "license": stats["real_total"] - stats["license_known"],
+            "svg_without_groups": max(
+                0,
+                stats["by_ext"]["svg"] - stats["junk_by_ext"]["svg"] - stats["with_svg_groups"],
+            ),
+            "junk": stats["junk"],
         },
     }
     with open(os.path.join(args.out_dir, "summary.json"), "w") as f:
