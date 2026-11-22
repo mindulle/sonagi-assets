@@ -67,6 +67,24 @@ sudo python3 scripts/clean_appledouble.py \
 - 아카이브: `/srv/archive/appledouble-20261122T102623Z.tar.gz`
 - DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-appledouble-20261122T102623Z`
 
+## 심볼 시트 태깅 (2026-11-22)
+
+`Dingbats·Symbols·Math·Music` 시트 74개에 3축 태그를 적용했다.
+
+| 축 | 값 | 분포 |
+| --- | --- | --- |
+| `form:` | line / filled / mixed | filled 58, mixed 16 |
+| `palette:` | mono / color | mono 74 |
+| `theme:` | 이름의 `____` 뒤 슬러그 | military, food, navigation-signs … |
+
+```bash
+sudo python3 scripts/tag_symbol_sheets.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --library-root /srv/sonagi-assets/library --apply
+```
+
+- DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-symboltags-20261122T110332Z`
+
 ## 폰트 글리프 발견 (2026-11-22)
 
 스타일 클러스터링을 돌린 결과, SVG 3,425개 중 **2,954개가 `uniXXXX` 형태의 유니코드 글리프**였습니다.
