@@ -408,6 +408,25 @@
             "frame": "inset",
             "height": 44,
             "weight": 1
+        },
+        "arch": {
+            "motif": "arch",
+            "frame": "label",
+            "height": 26,
+            "offset": 58,
+            "weight": 1
+        },
+        "wave": {
+            "motif": "wave",
+            "frame": "none",
+            "height": 44,
+            "weight": 1
+        },
+        "trellis": {
+            "motif": "trellis",
+            "frame": "label",
+            "height": 44,
+            "weight": 1
         }
     }
 }

@@ -308,6 +308,155 @@
                     "fill": "{accent}"
                 }
             }
+        ],
+        "arch": [
+            {
+                "el": "line",
+                "attrs": {
+                    "x1": "{x1}",
+                    "y1": "{y}",
+                    "x2": "{cx - 120}",
+                    "y2": "{y}",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}",
+                    "stroke-opacity": "0.8"
+                }
+            },
+            {
+                "el": "line",
+                "attrs": {
+                    "x1": "{cx + 120}",
+                    "y1": "{y}",
+                    "x2": "{x2}",
+                    "y2": "{y}",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}",
+                    "stroke-opacity": "0.8"
+                }
+            },
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {cx - 120} {y} C {cx - 80} {y - 34}, {cx - 50} {y - 52}, {cx} {y - 52} C {cx + 50} {y - 52}, {cx + 80} {y - 34}, {cx + 120} {y}",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{1.2 * weight}"
+                }
+            },
+            {
+                "el": "circle",
+                "repeat": [
+                    {
+                        "s": -1
+                    },
+                    {
+                        "s": 1
+                    }
+                ],
+                "attrs": {
+                    "cx": "{cx + s * 120}",
+                    "cy": "{y}",
+                    "r": "2.4",
+                    "fill": "{accent}"
+                }
+            },
+            {
+                "el": "circle",
+                "attrs": {
+                    "cx": "{cx}",
+                    "cy": "{y - 52}",
+                    "r": "2.8",
+                    "fill": "{accent}"
+                }
+            }
+        ],
+        "wave": [
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {x1} {y} C {x1 + (x2 - x1) * 0.0417} {y + -12}, {x1 + (x2 - x1) * 0.0833} {y + -12}, {x1 + (x2 - x1) * 0.1250} {y} C {x1 + (x2 - x1) * 0.1667} {y + 12}, {x1 + (x2 - x1) * 0.2083} {y + 12}, {x1 + (x2 - x1) * 0.2500} {y} C {x1 + (x2 - x1) * 0.2917} {y + -12}, {x1 + (x2 - x1) * 0.3333} {y + -12}, {x1 + (x2 - x1) * 0.3750} {y} C {x1 + (x2 - x1) * 0.4167} {y + 12}, {x1 + (x2 - x1) * 0.4583} {y + 12}, {x1 + (x2 - x1) * 0.5000} {y} C {x1 + (x2 - x1) * 0.5417} {y + -12}, {x1 + (x2 - x1) * 0.5833} {y + -12}, {x1 + (x2 - x1) * 0.6250} {y} C {x1 + (x2 - x1) * 0.6667} {y + 12}, {x1 + (x2 - x1) * 0.7083} {y + 12}, {x1 + (x2 - x1) * 0.7500} {y} C {x1 + (x2 - x1) * 0.7917} {y + -12}, {x1 + (x2 - x1) * 0.8333} {y + -12}, {x1 + (x2 - x1) * 0.8750} {y} C {x1 + (x2 - x1) * 0.9167} {y + 12}, {x1 + (x2 - x1) * 0.9583} {y + 12}, {x1 + (x2 - x1) * 1.0000} {y}",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{1.1 * weight}"
+                }
+            }
+        ],
+        "trellis": [
+            {
+                "el": "line",
+                "attrs": {
+                    "x1": "{x1}",
+                    "y1": "{y}",
+                    "x2": "{x2}",
+                    "y2": "{y}",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.7 * weight}",
+                    "stroke-opacity": "0.6"
+                }
+            },
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {cx + -180} {y} L {cx + -166} {y - 11} L {cx + -152} {y} L {cx + -166} {y + 11} Z",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}"
+                }
+            },
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {cx + -120} {y} L {cx + -106} {y - 11} L {cx + -92} {y} L {cx + -106} {y + 11} Z",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}"
+                }
+            },
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {cx + -60} {y} L {cx + -46} {y - 11} L {cx + -32} {y} L {cx + -46} {y + 11} Z",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}"
+                }
+            },
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {cx + 0} {y} L {cx + 14} {y - 11} L {cx + 28} {y} L {cx + 14} {y + 11} Z",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}"
+                }
+            },
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {cx + 60} {y} L {cx + 74} {y - 11} L {cx + 88} {y} L {cx + 74} {y + 11} Z",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}"
+                }
+            },
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {cx + 120} {y} L {cx + 134} {y - 11} L {cx + 148} {y} L {cx + 134} {y + 11} Z",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}"
+                }
+            },
+            {
+                "el": "path",
+                "attrs": {
+                    "d": "M {cx + 180} {y} L {cx + 194} {y - 11} L {cx + 208} {y} L {cx + 194} {y + 11} Z",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}"
+                }
+            }
         ]
     },
     "frame": {
@@ -525,6 +674,60 @@
                     "stroke": "{accent}",
                     "stroke-width": "{0.5 * weight}"
                 }
+            }
+        ],
+        "label": [
+            {
+                "el": "rect",
+                "attrs": {
+                    "x": "{i}",
+                    "y": "{i}",
+                    "width": "{W - 2 * i}",
+                    "height": "{H - 2 * i}",
+                    "fill": "none",
+                    "stroke": "{accent}",
+                    "stroke-width": "{0.9 * weight}",
+                    "stroke-opacity": "0.8"
+                }
+            },
+            {
+                "repeat": [
+                    {
+                        "sx": 1,
+                        "sy": 1,
+                        "x": "{i}",
+                        "y": "{i}"
+                    },
+                    {
+                        "sx": -1,
+                        "sy": 1,
+                        "x": "{W - i}",
+                        "y": "{i}"
+                    },
+                    {
+                        "sx": 1,
+                        "sy": -1,
+                        "x": "{i}",
+                        "y": "{H - i}"
+                    },
+                    {
+                        "sx": -1,
+                        "sy": -1,
+                        "x": "{W - i}",
+                        "y": "{H - i}"
+                    }
+                ],
+                "elements": [
+                    {
+                        "el": "path",
+                        "attrs": {
+                            "d": "M {x + sx * 16} {y} L {x} {y} L {x} {y + sy * 16}",
+                            "fill": "none",
+                            "stroke": "{accent}",
+                            "stroke-width": "{1.6 * weight}"
+                        }
+                    }
+                ]
             }
         ]
     }
