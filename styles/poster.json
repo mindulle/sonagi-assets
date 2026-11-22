@@ -1,0 +1,34 @@
+{
+    "name": "poster",
+    "theme": "architecture",
+    "colors": {
+        "background": "#060911",
+        "surface": "#090d16",
+        "text": "#ffffff",
+        "text-secondary": "#c9d1d9",
+        "text-muted": "#9aa4b2",
+        "border": "#30363d",
+        "accent": "#ffd166",
+        "accent-strong": "#00ffcc",
+        "accent-ink": "#060911"
+    },
+    "geometry": {
+        "radius": 0,
+        "borderWidth": 2,
+        "shadow": "none"
+    },
+    "type": {
+        "display": "Archivo",
+        "sans": "NanumSquare",
+        "mono": "JetBrains Mono",
+        "scale": 1.1,
+        "uppercase": false,
+        "tracking": -1
+    },
+    "illustration": "color",
+    "density": 0.95,
+    "hero": "poster",
+    "features_layout": "cards",
+    "header": "rule",
+    "auto_height": true
+}

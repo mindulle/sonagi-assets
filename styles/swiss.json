@@ -1,0 +1,32 @@
+{
+    "name": "swiss",
+    "theme": "editorial",
+    "colors": {
+        "background": "#ffffff",
+        "surface": "#ffffff",
+        "text": "#111111",
+        "text-secondary": "#444444",
+        "text-muted": "#8a8a8a",
+        "border": "#111111",
+        "accent": "#d92b1f",
+        "accent-ink": "#ffffff"
+    },
+    "geometry": {
+        "radius": 0,
+        "borderWidth": 2,
+        "shadow": "none"
+    },
+    "type": {
+        "display": "Archivo",
+        "sans": "NanumSquare",
+        "mono": "JetBrains Mono",
+        "scale": 0.95,
+        "uppercase": true,
+        "tracking": -0.4
+    },
+    "illustration": "mono",
+    "density": 1.0,
+    "hero": "split",
+    "features_layout": "columns",
+    "header": "rule"
+}

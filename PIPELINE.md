@@ -29,23 +29,32 @@ python3 scripts/render_recipe.py \
 
 스킨은 레시피가 아니라 `styles/*.json`이 결정한다. 같은 레시피로 다른 스타일을 뽑는다.
 
-| 스타일 팩 | 색 | 기하 | 서체·케이스 | 일러스트 | 히어로 |
+| 스타일 팩 | 색 | 기하 | 서체 | 히어로 | 피처 |
 | --- | --- | --- | --- | --- | --- |
-| `editorial` | 크림·잉크·앰버 | 2px, r8 | 나눔스퀘어 | 컬러 | split |
-| `brutalist` | 순흑백 | 4px, r0 | Archivo·대문자 | 숨김 | center |
-| `minimal` | 화이트·블루 | 1px, r4 | Archivo+나눔·자간 +0.5 | 흑백(mono) | split |
+| `editorial` | 크림·잉크·앰버 | 2px, r8 | 나눔스퀘어 | split | cards |
+| `brutalist` | 순흑백 | 4px, r0 | Archivo·대문자 | center | cards |
+| `minimal` | 화이트·블루 | 1px, r4 | Archivo+나눔 | split | cards |
+| `magazine` | 크림·황토 | 1px, r0 | Gowun Batang | **asymmetric** | **list** |
+| `swiss` | 화이트·레드 | 2px, r0 | Archivo·대문자 | split | **columns** |
+| `poster` | 다크·앰버 | 2px, r0 | Archivo | **poster** | cards |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
-  --style styles/brutalist.json --catalog catalog/catalog.json \
+  --style styles/magazine.json --catalog catalog/catalog.json \
   --tokens tokens/semantic.json --out out/
 ```
 
-스타일 팩 키: `colors`(토큰 덮어쓰기), `geometry`(반경·보더·그림자), `type`(서체·배율·대소문자·자간),
-`illustration`(color|mono|hidden), `density`, `hero`(split|center), `header`.
+### 레이아웃 문법
 
-한계: 지금 스타일 변화는 **스킨 축**이다. 블록 조합·그리드 자체를 바꾸는
-레이아웃 문법은 아직 하나(split/center)뿐이다.
+| 블록 | 변형 |
+| --- | --- |
+| hero | `split`(좌우) · `center`(중앙) · `asymmetric`(이미지 우측 블리드) · `poster`(패널+전면 이미지) |
+| features | `cards`(카드 3열) · `list`(번호+룰) · `columns`(상단 룰 3단) |
+
+`canvas.height`가 `"auto"`이거나 스타일 팩에 `auto_height: true`가 있으면
+콘텐츠 높이에 맞춰 캔버스를 늘린다(magazine·poster가 사용).
+
+한계: 블록 조합 자체(섹션 순서·개수)는 아직 레시피가 고정한다.
 
 ## 레시피 형식
 
