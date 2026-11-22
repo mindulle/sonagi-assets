@@ -200,7 +200,18 @@ class Renderer:
             f'stroke-linecap="round" stroke-linejoin="round">{body}</g>'
         )
 
-    def illustration(self, name, x, y, w, h):
+    def pick_illustration(self, spec):
+        candidates = [spec] if isinstance(spec, str) else list(spec)
+        pref = self.style.get("illustration_set")
+        if pref:
+            for name in candidates:
+                item = self.items.get(name)
+                if item and f"set:{pref}" in item["tags"]:
+                    return name
+        return candidates[0]
+
+    def illustration(self, spec, x, y, w, h):
+        name = self.pick_illustration(spec)
         if self.illustration_mode == "hidden":
             border = self.colors["border"]
             return (

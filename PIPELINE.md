@@ -37,12 +37,29 @@ python3 scripts/render_recipe.py \
 | `magazine` | 크림·황토 | 1px, r0 | Gowun Batang | **asymmetric** | **list** |
 | `swiss` | 화이트·레드 | 2px, r0 | Archivo·대문자 | split | **columns** |
 | `poster` | 다크·앰버 | 2px, r0 | Archivo | **poster** | cards |
+| `sketch` | 화이트·블랙 | 2px, r2 | Archivo | split | list |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
   --style styles/magazine.json --catalog catalog/catalog.json \
   --tokens tokens/semantic.json --out out/
 ```
+
+### 일러스트 선택
+
+스타일 팩의 `illustration_set`이 그림체를 고정한다. 레시피는 후보 목록을 주고,
+렌더러가 그 세트에 있는 후보를 고른다.
+
+```json
+{ "illustration_set": "opendoodles", "illustration": "mono" }
+```
+
+| 세트 | 라이선스 | 수 | 그림체 |
+| --- | --- | --- | --- |
+| `illlustrations` | MIT | 133 | flat color |
+| `opendoodles` | CC0 | 33 | line drawing |
+
+레시피: `"illustration": ["open-vault", "float"]` → 스타일에 맞는 후보를 선택.
 
 ### 레이아웃 문법
 
