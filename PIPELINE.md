@@ -39,6 +39,7 @@ python3 scripts/render_recipe.py \
 | `poster` | 다크·앰버 | 2px, r0 | Archivo | **poster** | cards |
 | `sketch` | 화이트·블랙 | 2px, r2 | Archivo | split | list |
 | `etching` | 아이보리·황토 | 1px, r0 | Gowun Batang | asymmetric | list |
+| `sonagi-blog` | 웨더드 페이퍼·브론즈 | 1px, r10 | Cormorant·Noto Serif KR | split | cards |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -141,7 +142,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```
