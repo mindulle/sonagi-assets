@@ -47,6 +47,7 @@ python3 scripts/render_recipe.py \
 | `mint-swiss` | 민트·딥그린 | 2px, r0 | Archivo·대문자 | split | columns |
 | `floral-editorial` | 테라코타·크림 | 2px, r8 | Gowun Batang | asymmetric | list |
 | `deco-noir` | 뉴스프린트·먹 | 4px, r0 | Archivo·대문자 | center | cards |
+| `star-editorial` | 민트·딥그린 | 1px, r4 | Archivo | split | cards |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -155,6 +156,7 @@ render_recipe.py ... --embed-max-width 900
 | --- | --- | --- |
 | `none` | 없음 | 없음 |
 | `rule` | 얇은 단일 선 | 단일 선 |
+| `star` | 중앙 8방 광선 + 선 | 이중 사각 |
 | `nouveau` | 곡선 줄기 + 봉오리 | 이중 가는 선 + 모서리 컬 |
 | `victorian` | 굵은/가는 이중 괘선 + 로제트 | 이중 괘선 + 모서리 브래킷 |
 | `deco` | 전폭 직선 + 마름모 | 이중 직선 |
@@ -167,12 +169,16 @@ render_recipe.py ... --embed-max-width 900
 
 - `weight`는 선 두께 배율이다(1.0이면 원본).
 - `height`는 구분선이 차지하는 세로 여백이다.
-- 새 모티프는 `render_recipe.py`의 `_divider_*` / `_frame_*` 메서드로 추가하고
-  `axes.json`에 등록한다. 축만 늘리면 스타일 파일은 건드리지 않는다.
+- 모티프는 **데이터**다. `styles/ornaments.json`에 SVG 요소 목록을 추가하고 `axes.json`에 이름만 등록하면 끝난다.
+  렌더러 코드는 건드리지 않는다.
+- 요소는 `{el, attrs, repeat?, elements?}` 형태다. `repeat`는 변수 묶음 반복(모서리 4곳, 좌우 대칭),
+  `elements`는 그 묶음 안에서 여러 요소를 순서대로 그린다.
+- 좌표는 `{x1 + (cx - x1) * 0.35:.1f}` 같은 **표현식 템플릿**이다. 사칙연산·변수만 허용하고
+  `ast`로 검사한다(함수 호출·속성 접근 불가).
 - 색은 스타일 `accent`를 쓰므로 다크 변환도 자동이다.
 - 모바일 프레임 여백은 8px로 줄여 본문(20px)과 겹치지 않게 한다.
 
-리팩터 검증: 장식을 축으로 바꾼 뒤 기존 11종 SVG 해시가 모두 동일했다.
+리팩터 검증: 장식을 축으로 바꾸고, 이어서 데이터(ornaments.json)로 옮긴 뒤에도 기존 11종 SVG 해시가 모두 동일했다.
 
 ## 콘텐츠 임포터
 
@@ -208,7 +214,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```
