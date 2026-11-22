@@ -40,7 +40,6 @@ def features_of(path):
     for d in d_attrs:
         cmd_counts.update(PATH_CMD_RE.findall(d))
     curve = sum(cmd_counts[c] for c in CURVE_CMDS)
-    line = sum(cmd_counts[c] for c in LINE_CMDS)
     total_cmds = sum(cmd_counts.values())
 
     return {
