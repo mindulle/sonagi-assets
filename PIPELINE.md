@@ -48,6 +48,7 @@ python3 scripts/render_recipe.py \
 | `floral-editorial` | 테라코타·크림 | 2px, r8 | Gowun Batang | asymmetric | list |
 | `deco-noir` | 뉴스프린트·먹 | 4px, r0 | Archivo·대문자 | center | cards |
 | `star-editorial` | 민트·딥그린 | 1px, r4 | Archivo | split | cards |
+| `arch-classic` | 테라코타·크림 | 2px, r8 | Cormorant·Gowun Batang | split | cards |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -157,6 +158,9 @@ render_recipe.py ... --embed-max-width 900
 | `none` | 없음 | 없음 |
 | `rule` | 얇은 단일 선 | 단일 선 |
 | `star` | 중앙 8방 광선 + 선 | 이중 사각 |
+| `arch` | 낮은 아치 + 양 끝 점 | 모서리 틱 사각 |
+| `trellis` | 마름모 반복 | 모서리 틱 사각 |
+| `wave` | 폭에 맞춰 늘어나는 사인 곡선 | 없음 |
 | `nouveau` | 곡선 줄기 + 봉오리 | 이중 가는 선 + 모서리 컬 |
 | `victorian` | 굵은/가는 이중 괘선 + 로제트 | 이중 괘선 + 모서리 브래킷 |
 | `deco` | 전폭 직선 + 마름모 | 이중 직선 |
@@ -169,6 +173,7 @@ render_recipe.py ... --embed-max-width 900
 
 - `weight`는 선 두께 배율이다(1.0이면 원본).
 - `height`는 구분선이 차지하는 세로 여백이다.
+- `offset`은 선을 아래로 내리는 값이다(아치처럼 위로 솟는 모티프가 앞 블록을 침범하지 않게).
 - 모티프는 **데이터**다. `styles/ornaments.json`에 SVG 요소 목록을 추가하고 `axes.json`에 이름만 등록하면 끝난다.
   렌더러 코드는 건드리지 않는다.
 - 요소는 `{el, attrs, repeat?, elements?}` 형태다. `repeat`는 변수 묶음 반복(모서리 4곳, 좌우 대칭),
@@ -223,7 +228,7 @@ table · pricing · gallery.
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
 
 ```bash
-for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial; do
+for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial arch-classic; do
   render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
 done
 ```

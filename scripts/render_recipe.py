@@ -1034,18 +1034,19 @@ class Renderer:
         if motif == "none":
             return "", 0
         height = int(self.ornament.get("height", 46))
+        offset = int(self.ornament.get("offset", 0))
         variables = {
             "x1": x1,
             "x2": x2,
             "cx": (x1 + x2) / 2,
-            "y": y,
+            "y": y + offset,
             "weight": self.ornament.get("weight", 1),
             "accent": self.colors["accent"],
         }
         body = ornament_data.draw("divider", motif, variables)
         if not body:
             return "", 0
-        return f'<g id="ornament">{body}</g>', height
+        return f'<g id="ornament">{body}</g>', height + offset
 
     def ornament_frame(self, W, H):
         motif = self.ornament.get("frame", "none")
