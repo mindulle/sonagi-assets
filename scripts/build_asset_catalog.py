@@ -149,6 +149,7 @@ def main():
         "junk": 0,
         "junk_by_ext": collections.Counter(),
         "real_total": 0,
+        "glyph": 0,
     }
     tag_usage = collections.Counter()
 
@@ -164,7 +165,9 @@ def main():
         path = host_path(row["original_path"], args.library_root)
         ext = (row["ext"] or "").lower()
         source = (buckets.get("src") or [None])[0]
-        is_junk = (row["name"] or "").startswith("._")  # macOS AppleDouble
+        name = row["name"] or ""
+        is_junk = name.startswith("._")  # macOS AppleDouble
+        is_glyph = ext == "svg" and not is_junk and (bool(re.match(r"^uni[0-9a-f]{4,6}", name.lower())) or len(name.strip()) <= 2)
 
         if is_junk:
             license_value, license_basis = "n/a", "appledouble-metadata"
@@ -196,6 +199,7 @@ def main():
             "license": license_value,
             "license_basis": license_basis,
             "junk": is_junk,
+            "kind": "glyph" if is_glyph else "asset",
             "brand": None,
             "tags": tags,
             "path": path,
@@ -208,6 +212,7 @@ def main():
             stats["junk_by_ext"][item["ext"]] += 1
         else:
             stats["real_total"] += 1
+            stats["glyph"] += int(is_glyph)
             stats["style_tagged"] += int(bool(item["style"]))
             stats["license_known"] += int(item["license"] in ("cc0", "ofl", "cleared"))
             stats["with_svg_groups"] += int(bool(item["svg_groups"]))
