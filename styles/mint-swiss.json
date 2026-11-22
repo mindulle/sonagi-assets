@@ -1,0 +1,9 @@
+{
+    "name": "mint-swiss",
+    "theme": "editorial",
+    "palette": "mint",
+    "type": "archivo-caps-tight",
+    "geometry": "r0b2",
+    "layout": "split-columns",
+    "density": 1.0
+}

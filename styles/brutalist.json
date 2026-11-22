@@ -1,33 +1,11 @@
 {
     "name": "brutalist",
     "theme": "editorial",
-    "colors": {
-        "background": "#ffffff",
-        "surface": "#ffffff",
-        "text": "#000000",
-        "text-secondary": "#1a1a1a",
-        "text-muted": "#444444",
-        "border": "#000000",
-        "accent": "#000000",
-        "accent-ink": "#ffffff"
-    },
-    "geometry": {
-        "radius": 0,
-        "borderWidth": 4,
-        "shadow": "none"
-    },
-    "type": {
-        "display": "Archivo",
-        "sans": "Archivo",
-        "mono": "JetBrains Mono",
-        "scale": 1.12,
-        "uppercase": true,
-        "tracking": -1,
-        "korean": "NanumSquare"
-    },
+    "palette": "brutalist",
+    "type": "archivo-caps-loud",
+    "geometry": "r0b4",
+    "layout": "center-cards",
     "illustration": "hidden",
-    "density": 1.15,
-    "hero": "center",
-    "header": "rule",
-    "illustration_set": "opendoodles"
+    "illustration_set": "opendoodles",
+    "density": 1.15
 }

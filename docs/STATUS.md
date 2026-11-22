@@ -11,7 +11,7 @@
    │  catalog.json + license/scope/origin 태그
    ▼
 content.md ──import──▶ recipe.json ──render──▶ SVG (+manifest, CREDITS)
-   │                    │  style 11종
+   │                    │  style 14종
    │                    │  breakpoint 3종
    │                    └  light | dark
    ▼
@@ -55,10 +55,11 @@ scope 태그가 충돌하면 `bundle < output < blocked` 순으로 보수적으�
 | 축 | 값 |
 | --- | --- |
 | 블록 | 12종 (header·hero·stats·features·logos·quote·faq·cta·footer·table·pricing·gallery) |
-| 스타일 | 11종 (editorial·brutalist·minimal·magazine·swiss·poster·sketch·etching·sonagi-blog·art-nouveau·victorian) |
+| 스타일 | 14종 — palette 14 × type 11 × geometry 9 × layout 7 조합 |
 | 브레이크포인트 | desktop 1440 · tablet 768 · mobile 390 |
 | 테마 | light · dark (`dark: true`) |
 | 장식 | `ornament`: nouveau · deco · victorian (섹션 구분선·페이지 프레임) |
+| 스타일 구조 | 축 조합(`palette × type × geometry × layout`) — 기존 11종 리팩터 후 SVG 해시 동일 |
 
 결정론:
 
@@ -181,5 +182,5 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 | `CONTENT_FORMAT.md` · `PIPELINE.md` | 규격·계약 |
 | `docs/FIGMA_ROUNDTRIP.md` | Figma 재임포트 검증 |
 | `content/*.md` | 실제 콘텐츠 예시 5종 |
-| `styles/*.json` | 스킨 11종 |
+| `styles/axes.json` · `styles/*.json` | 축 정의 + 스킨 14종 |
 | `tokens/` | 프리미티브·시맨틱·Figma 변수 |
