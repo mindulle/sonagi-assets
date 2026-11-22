@@ -85,6 +85,42 @@ sudo python3 scripts/tag_symbol_sheets.py \
 
 - DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-symboltags-20261122T110332Z`
 
+## 배포처 근거 분류 (2026-11-22)
+
+폰트 파일에 라이선스 문구·URL이 없어도 배포처의 공식 정책으로 확정할 수 있다.
+이름 규칙 + 근거 URL을 코드에 남기고, 확정된 85개 파일에 적용했다.
+
+| 배포처 | 라이선스 | 파일 수 |
+| --- | --- | --- |
+| Google Fonts (OFL·Apache) | ofl 17, apache 1 | 18 |
+| KBIZ 한마음 | free | 9 |
+| 문체부 | free | 8 |
+| 조선일보 | free | 7 |
+| 눈서리 (SF싸락눈 등) | free | 7 |
+| LINE Seed | ofl | 6 |
+| EBS | free | 6 |
+| 토끼네활자공장 (HS) | free | 6 |
+| Mapo | free | 4 |
+| Ubuntu | free | 4 |
+| utoimage·123RF (비비트리) | free | 11 |
+| Cafe24·Pretendard·나눔 | ofl/free | 5 |
+| 성신여대 | internal-only | 2 |
+| 다온폰트 | commercial | 2 |
+
+- 태그: `license:<값>`, `license_src:provider`, `license_provider:<slug>`, `license_url:<근거 URL>`
+- DB 백업: `asset_hub.db.bak-provider-20261122T114446Z`
+
+### 남은 109개
+
+| 성격 | 대략 | 예시 |
+| --- | --- | --- |
+| 영문 novelty/display (개인용 배포) | 76 | `ButterFly`, `starthings`, `tender kittens`, `HARLEQUI`, `Isadoracaps` |
+| 국내 기관·기업 브랜드 폰트 | 12 | `12롯데마트드림`, `HJ한전서`, `배스킨라빈스`, `땅스부대찌개`, `경기천년제목` |
+| 국내 공공·기업 (영문 표기) | 21 | `BusanBada`, `GIMJE`, `KOTRA`, `KDB`, `NEXEN TIRE`, `Binggrae` |
+
+영문 novelty 폰트는 배포처마다 조건이 달라 개별 readme 확인이 필요하다.
+국내 기관·기업 폰트는 배포처 공식 페이지 확인 후 같은 방식으로 추가하면 된다.
+
 ## 미확인 폰트 추가 단서 (2026-11-22)
 
 폰트 안의 추가 필드(name ID 7~14, OS/2 vendor ID)와 URL을 조사했다.
