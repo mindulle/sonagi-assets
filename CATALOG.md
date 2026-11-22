@@ -85,6 +85,34 @@ sudo python3 scripts/tag_symbol_sheets.py \
 
 - DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-symboltags-20261122T110332Z`
 
+## 미확인 폰트 추가 단서 (2026-11-22)
+
+폰트 안의 추가 필드(name ID 7~14, OS/2 vendor ID)와 URL을 조사했다.
+
+| 단서 | 수량 |
+| --- | --- |
+| vendor ID 보유 | 989 / 989 |
+| URL 보유 | 648 |
+| designer 필드 | 734 |
+| "All rights reserved" | 774 |
+| 같은 폴더 문서 | 0 |
+
+도메인 기반 분류(상용 파운드리/무료 배포처):
+
+| 결과 | 파일 수 |
+| --- | --- |
+| commercial (fontfabric·yoon·sandoll 등) | 493 |
+| free (naver·cafe24·woodcutter 등) | 47 |
+| 도메인만 기록(license_site) | 108 |
+| 도메인 없음 | 356 |
+
+```bash
+sudo python3 scripts/deep_font_clues.py ... --out catalog/font-clues.json
+sudo python3 scripts/classify_font_sites.py ... --apply
+```
+
+DB 백업: `asset_hub.db.bak-fontsites-20261122T113432Z`
+
 ## 폰트 라이선스 실측 (2026-11-22)
 
 폰트 파일에 내장된 name table(ID 0·13·14)을 읽어 라이선스를 분류했다.
@@ -97,13 +125,14 @@ sudo python3 scripts/audit_font_licenses.py \
 
 | 라이선스 | 파일 수 |
 | --- | --- |
-| internal-only (미확인) | 4,483 |
-| OFL | 719 |
+| internal-only (미확인) | 3,947 |
+| OFL | 715 |
 | Apache | 46 |
-| **Commercial** | **24** |
-| GPL | 1 |
+| **Commercial** | **517** |
+| Free (사이트 기준) | 47 |
 | CC0 | 42 |
 | Personal-use | 2 |
+| GPL | 1 |
 
 - Commercial/Personal 폰트는 **D2C·외주 납품물에서 제외**해야 한다.
 - WOFF2 분석에는 `brotli` 파이썬 패키지가 필요하다.
