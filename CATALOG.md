@@ -43,23 +43,32 @@ sudo python3 scripts/build_asset_catalog.py \
 
 > `internal-only`는 불법이라는 뜻이 아니라 **증명이 없다**는 뜻이다. D2C·외주 납품물에는 allow-list로만 포함한다.
 
-## 현재 상태 (2026-11-22)
+## 현재 상태 (2026-11-22, `._` 정리 후)
 
 | 항목 | 값 |
 | --- | --- |
-| 전체 row | 8,768 |
-| 실제 에셋 | **5,317** |
-| macOS `._` 청소 대상 | **3,451** |
+| 전체 row | **5,317** |
+| macOS `._` 정리 | 3,451행 / 3,408파일 삭제 완료 |
 | 스타일 미분류 | 5,317 / 5,317 |
 | 라이선스 미확인 | 5,008 / 5,317 |
 | CC0 | 40 |
-| OFL 폰트 | 269 (매칭된 폰트 기준) |
-| SVG 그룹 없음 | **199** / 3,425 (실제 SVG) |
+| OFL 폰트 | 269 |
+| SVG 그룹 없음 | **199** / 3,425 |
 | 파일 경로 없음 | 77 |
+
+## macOS `._` 정리
+
+```bash
+sudo python3 scripts/clean_appledouble.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --library-root /srv/sonagi-assets/library --apply
+```
+
+- 아카이브: `/srv/archive/appledouble-20261122T102623Z.tar.gz`
+- DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-appledouble-20261122T102623Z`
 
 ## 다음 작업
 
-1. `._` 3,451개 정리 (라이브러리 용량·카탈로그 노이즈 감소)
-2. 스타일 태깅 (상위 500개부터)
+1. 스타일 태깅 (상위 500개부터)
 3. 폰트 2,075개 중 미매칭 1,806개 수동 확인 (상용 폰트 가능성)
 4. legacy 에셋 중 판매 대상만 개별 라이선스 확인
