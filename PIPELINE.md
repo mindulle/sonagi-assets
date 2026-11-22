@@ -108,6 +108,26 @@ render_recipe.py ... --embed-max-width 900
 
 한계: 블록 조합 자체(섹션 순서·개수)는 아직 레시피가 고정한다.
 
+## press CLI
+
+단일 진입점. 기존 스크립트를 감싸기만 하고 로직은 그대로 둔다.
+
+```bash
+press styles                                  # 축·스타일 목록
+press check content/atelier-landing.md        # 검증만
+press render content/atelier-landing.md --style etching --breakpoints desktop,mobile
+press package --src out/press/dist --out delivery/x --name atelier --title "Atelier"
+press preview --sheet --png
+```
+
+| 환경변수 | 기본 |
+| --- | --- |
+| `PRESS_CATALOG` | `/srv/sonagi-assets/catalog/catalog.json` |
+| `PRESS_TOKENS` | `tokens/semantic.json` |
+| `PRESS_FONTS_CSS` | `/home/ubuntu/brief/fonts/fonts.css` |
+
+`sonagi press ...`는 이 CLI에 인자를 그대로 넘긴다(`@sonagi/cli`, PRESS_BIN으로 경로 지정 가능).
+
 ## 레시피 형식
 
 ```json
