@@ -1,0 +1,10 @@
+{
+    "name": "lilac-editorial",
+    "theme": "editorial",
+    "palette": "lilac",
+    "type": "cormorant-serif",
+    "geometry": "r10b1",
+    "layout": "split-cards",
+    "ornament": "floral",
+    "density": 1.0
+}

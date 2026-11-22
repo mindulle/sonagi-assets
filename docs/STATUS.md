@@ -11,7 +11,7 @@
    │  catalog.json + license/scope/origin 태그
    ▼
 content.md ──import──▶ recipe.json ──render──▶ SVG (+manifest, CREDITS)
-   │                    │  style 21종
+   │                    │  style 27종
    │                    │  breakpoint 3종
    │                    └  light | dark
    ▼
@@ -55,7 +55,7 @@ scope 태그가 충돌하면 `bundle < output < blocked` 순으로 보수적으�
 | 축 | 값 |
 | --- | --- |
 | 블록 | 12종 (header·hero·stats·features·logos·quote·faq·cta·footer·table·pricing·gallery) |
-| 스타일 | 21종 — palette 14 × type 11 × geometry 9 × layout 7 × ornament 15 조합 |
+| 스타일 | 27종 — palette 20 × type 11 × geometry 9 × layout 7 × ornament 15 조합 |
 | 브레이크포인트 | desktop 1440 · tablet 768 · mobile 390 |
 | 테마 | light · dark (`dark: true`) |
 | 장식 | 축(`ornament`) 15종 + 배경 패턴(dots·hatch, 타일) — 템플릿은 JSON |
@@ -182,5 +182,5 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 | `CONTENT_FORMAT.md` · `PIPELINE.md` | 규격·계약 |
 | `docs/FIGMA_ROUNDTRIP.md` | Figma 재임포트 검증 |
 | `content/*.md` | 실제 콘텐츠 예시 5종 |
-| `styles/axes.json` · `styles/ornaments.json` · `styles/*.json` | 축 정의 + 장식 템플릿(2D·패턴) + 스킨 21종 |
+| `styles/axes.json` · `styles/ornaments.json` · `styles/*.json` | 축 정의 + 장식 템플릿(2D·패턴) + 스킨 27종 |
 | `tokens/` | 프리미티브·시맨틱·Figma 변수 |

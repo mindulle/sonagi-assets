@@ -1,0 +1,10 @@
+{
+    "name": "ocean-swiss",
+    "theme": "editorial",
+    "palette": "ocean",
+    "type": "archivo-caps-tight",
+    "geometry": "r0b2",
+    "layout": "split-columns",
+    "ornament": "wave",
+    "density": 1.0
+}

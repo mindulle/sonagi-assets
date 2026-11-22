@@ -1,0 +1,10 @@
+{
+    "name": "forest-paper",
+    "theme": "editorial",
+    "palette": "forest",
+    "type": "gowun-etching",
+    "geometry": "r4b1",
+    "layout": "split-list",
+    "ornament": "paper",
+    "density": 1.0
+}

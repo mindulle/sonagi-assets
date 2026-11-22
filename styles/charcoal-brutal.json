@@ -1,0 +1,10 @@
+{
+    "name": "charcoal-brutal",
+    "theme": "editorial",
+    "palette": "charcoal",
+    "type": "archivo-caps-loud",
+    "geometry": "r0b4",
+    "layout": "center-cards",
+    "ornament": "deco",
+    "density": 1.05
+}
