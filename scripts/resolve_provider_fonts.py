@@ -39,6 +39,27 @@ RULES = [
     (r"^SF(싸락눈|레몬빙수|망고빙수|함박눈)", "free", "nunseori", "https://blog.naver.com/snowfrost001", "상업 사용 가능, 파일 판매 금지"),
     (r"^utoimage|^123RF", "free", "bbtree", "https://www.utoimage.com/?m=service.license", "상업 사용 가능, 재배포·임베딩 별도 허가"),
     (r"^성신여대", "internal-only", "sungshin-restricted", "https://www.sungshin.ac.kr/main_kor/10930/subview.do", "성신 구성원 한정 배포"),
+    (r"^경기천년", "free", "gyeonggi", "https://www.gg.go.kr/contents/contents.do?ciIdx=679&menuId=2457", "상업 사용 가능, 판매 금지"),
+    (r"^(부산바다|BusanBada)", "free", "busanbada", "https://noonnu.cc/font_page/67", "상업 사용 가능, 수정·재배포 가능"),
+    (r"^GIMJE", "free", "gimje", "https://noonnu.cc/font_page/940", "상업 사용 가능, 임베딩·변형은 협의"),
+    (
+        r"^12롯데마트",
+        "free",
+        "lottemart",
+        "https://company.lottemart.com/bc/service/htmlView.do?menuCd=BM0307",
+        "상업 사용 가능, 수정·판매·CI/BI 금지",
+    ),
+    (r"^땅스부대찌개", "free", "ttangs", "https://tsbudae.com/brand/?c=72", "상업 사용 가능, 요식업 프랜차이즈 제한"),
+    (r"^배스킨라빈스", "free", "baskinrobbins", "https://www.baskinrobbins.co.kr/", "상업 사용 가능, 수정·재배포 금지"),
+    (r"^KDB", "free", "kdb", "https://www.kdb.co.kr/BZCOWS00N00.act?_mnuId=IHIHIR0006", "상업 사용 가능, 수정·판매·CI/BI 금지"),
+    (r"^KOTRA", "free", "kotra", "https://kotra.or.kr/subList/20000005965?tabid=20", "공공누리 1유형, 수정·재배포 금지"),
+    (r"^SB ?어그로", "free", "sandbox", "https://sandbox.co.kr/fonts/aggro", "상업 사용 가능, 수정·재배포 가능"),
+    (r"^검은고딕$", "ofl", "zesstype", "https://github.com/zesstype/Black-Han-Sans", "OFL"),
+    (r"^한글틀고딕$", "ofl", "hangeulmaeul", "https://www.sandollcloud.com/free-font/16277/HangultuelGothic-TTF", "OFL"),
+    (r"^DOS|^Sam3KR|^Miraero", "mit", "dos-fonts", "https://github.com/hurss/fonts", "MIT, 출처 표기 권장"),
+    (r"^Binggrae", "internal-only", "binggrae-overseas", "https://www.bingfont.co.kr/", "상업 사용 가능하나 해외 사용 불가"),
+    (r"^HJ한전서", "internal-only", "copyright-unknown", "https://cdn.kldp.org/fonts/Hanja/NextVision", "저작권자·사용범위 불명"),
+    (r"^[Kk]irsty", "free", "typodermic", "https://typodermicfonts.com/kirsty", "상업 사용 가능, 파일 재배포·임베딩 별도 라이선스"),
     (r"^DAONFONT", "commercial", "daonfont", "http://www.daonfont.com/guide/license2.php", "유료 폰트사(무료 일부만 상업 허용)"),
 ]
 
@@ -62,7 +83,7 @@ def main():
     rows = list(conn.execute("select id,name,ext,tags from items where ext in ('ttf','otf','woff','woff2')"))
     conn.close()
 
-    resolved = {"ofl", "apache", "gpl", "cc0", "commercial", "personal", "free", "internal-only"}
+    resolved = {"ofl", "apache", "gpl", "cc0", "commercial", "personal", "free", "internal-only", "mit"}
     updates = []
     stats = collections.Counter()
     providers = collections.Counter()

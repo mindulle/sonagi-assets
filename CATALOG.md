@@ -110,16 +110,37 @@ sudo python3 scripts/tag_symbol_sheets.py \
 - 태그: `license:<값>`, `license_src:provider`, `license_provider:<slug>`, `license_url:<근거 URL>`
 - DB 백업: `asset_hub.db.bak-provider-20261122T114446Z`
 
-### 남은 109개
+### 국내 기관·기업 폰트 확인 (2026-11-22)
 
-| 성격 | 대략 | 예시 |
+공공기관·지자체·기업 배포 서체 28개 파일을 공식 페이지로 확인해 추가했다.
+
+| 배포처 | 판정 | 조건 |
 | --- | --- | --- |
-| 영문 novelty/display (개인용 배포) | 76 | `ButterFly`, `starthings`, `tender kittens`, `HARLEQUI`, `Isadoracaps` |
-| 국내 기관·기업 브랜드 폰트 | 12 | `12롯데마트드림`, `HJ한전서`, `배스킨라빈스`, `땅스부대찌개`, `경기천년제목` |
-| 국내 공공·기업 (영문 표기) | 21 | `BusanBada`, `GIMJE`, `KOTRA`, `KDB`, `NEXEN TIRE`, `Binggrae` |
+| 경기도 (경기천년제목) | free | 판매 금지 |
+| 부산바다체 | free | 수정·재배포 가능 |
+| 김제시체 | free | 임베딩·변형은 협의 |
+| KOTRA | free | 공공누리 1유형, 재배포 금지 |
+| KDB고딕Pro | free | 수정·판매·CI/BI 금지 |
+| 롯데마트 드림체 | free | 수정·판매·CI/BI 금지 |
+| 배스킨라빈스체 | free | 수정·재배포 금지 |
+| 땅스부대찌개체 | free | 요식업 프랜차이즈 사용 제한 |
+| 샌드박스 어그로체 | free | 수정·재배포 가능 |
+| 검은고딕 · 한글틀고딕 | OFL | — |
+| DOS 계열 · 삼국지3 · 미래로 | MIT | 출처 표기 권장 |
+| Kirsty (Typodermic) | free | 파일 재배포·임베딩 불가 |
+| 빙그레체 | internal-only | 해외 사용 불가 |
+| HJ한전서 | internal-only | 저작권자·사용범위 불명 |
 
-영문 novelty 폰트는 배포처마다 조건이 달라 개별 readme 확인이 필요하다.
-국내 기관·기업 폰트는 배포처 공식 페이지 확인 후 같은 방식으로 추가하면 된다.
+- 백업: `asset_hub.db.bak-provider-20261122T1149*`
+- Kirsty·KOTRA·KDB·롯데마트·배스킨라빈스는 **결과물 사용은 가능하지만 폰트 파일 재배포는 불가**하다.
+  판매용 팩에 폰트 파일을 넣을 때는 OFL·MIT·Apache·CC0만 사용해야 한다.
+
+### 남은 65개
+
+| 성격 | 수 | 예시 |
+| --- | --- | --- |
+| 영문 novelty/display (개인용 배포) | 63 | `ButterFly`, `starthings`, `tender kittens`, `HARLEQUI` |
+| TRGothic 2종 | 2 | 배포처 불명 |
 
 ## 미확인 폰트 추가 단서 (2026-11-22)
 
