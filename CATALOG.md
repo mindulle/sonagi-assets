@@ -67,8 +67,23 @@ sudo python3 scripts/clean_appledouble.py \
 - 아카이브: `/srv/archive/appledouble-20261122T102623Z.tar.gz`
 - DB 백업: `/srv/sonagi-assets/asset_hub.db.bak-appledouble-20261122T102623Z`
 
+## 폰트 글리프 발견 (2026-11-22)
+
+스타일 클러스터링을 돌린 결과, SVG 3,425개 중 **2,954개가 `uniXXXX` 형태의 유니코드 글리프**였습니다.
+(폰트를 글리프 단위 SVG로 내보낸 것 — 디자인 에셋이 아님)
+
+- `kind: glyph`로 분리 (`^uni[0-9a-f]{4,6}` 또는 1~2글자 이름)
+- 실제 스타일 클러스터링 대상: 파일이 읽히는 벡터 에셋 **346개**
+- 6개 클러스터로 묶었지만, `colon`, `less`, `wakorean` 같은 기호 글리프가 섞여 라벨 신뢰도는 낮음
+
+```bash
+python3 scripts/style_cluster.py --catalog catalog.json --out-dir .
+# → style-clusters.json, style-assignments.json (검토용, DB 미반영)
+```
+
 ## 다음 작업
 
-1. 스타일 태깅 (상위 500개부터)
+1. `kind` 정교화 (glyph / icon / illustration / mockup) — 기호 글리프 추가 분리
+2. 남은 벡터 에셋(~350개) 스타일 태깅
 3. 폰트 2,075개 중 미매칭 1,806개 수동 확인 (상용 폰트 가능성)
 4. legacy 에셋 중 판매 대상만 개별 라이선스 확인
