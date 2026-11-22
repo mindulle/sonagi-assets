@@ -91,7 +91,7 @@ def sheet(data, width, accent, bg, weight):
             parts.append(
                 f'<g transform="translate({x} {top})">'
                 + label(name, 0, 16, size=11, color="#8a8a8a")
-                + f'<g transform="translate(0 26)">'
+                + '<g transform="translate(0 26)">'
                 + f'<rect x="0" y="0" width="{frame_box}" height="200" fill="none" stroke="#d9d4c8"/>'
                 + f'<svg x="0" y="0" width="{frame_box}" height="200">{sample}</svg>'
                 + "</g></g>"
