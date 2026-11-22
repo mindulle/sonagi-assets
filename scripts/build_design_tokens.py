@@ -173,9 +173,9 @@ def main():
     primitives = build_primitives(args.radix)
     semantic = build_semantic()
 
-    (out / "primitives.json").write_text(json.dumps(primitives, indent=1))
-    (out / "semantic.json").write_text(json.dumps(semantic, indent=1))
-    (out / "tokens.figma.json").write_text(json.dumps(figma_json(semantic), indent=1))
+    (out / "primitives.json").write_text(json.dumps(primitives, indent=2))
+    (out / "semantic.json").write_text(json.dumps(semantic, indent=2))
+    (out / "tokens.figma.json").write_text(json.dumps(figma_json(semantic), indent=2))
     write_css(out / "tokens.css", primitives, semantic)
 
     print(
