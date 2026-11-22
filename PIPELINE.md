@@ -115,6 +115,25 @@ python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
 
 납품 시 매니페스트를 함께 보내면 "이 결과물에 무엇이 들어갔는지"가 자동으로 증명된다.
 
+## 빌드업 타임랩스
+
+레이어 조립 과정을 프레임으로 남긴다. 사람의 붓질 기록(스피드 페인팅)과는 다르다.
+
+```bash
+python3 scripts/animate_recipe.py --recipe recipes/landing-hero.json \
+  --style styles/etching.json --catalog catalog/catalog.json \
+  --tokens tokens/semantic.json --out frames/ --height 1350
+```
+
+- 프레임: 배경 → 헤더 → 히어로 → 피처(1·2·3) → 푸터 (7장)
+- SVG를 PNG로 래스터화한 뒤 ffmpeg로 묶는다
+- 고정 높이(`--height`)를 주면 프레임마다 캔버스가 흔들리지 않는다
+
+```bash
+ffmpeg -f concat -safe 0 -i frames/list.txt -vf "fps=24,format=yuv420p" \
+  -c:v libx264 -crf 19 build-up.mp4
+```
+
 ## Figma 재임포트
 
 - 그룹 구조 유지: `<g id="hero">` → Frame/Group `hero`

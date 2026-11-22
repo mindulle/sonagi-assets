@@ -452,6 +452,7 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--style", default=None, help="styles/*.json")
     ap.add_argument("--allow-blocked", action="store_true")
+    ap.add_argument("--force-height", type=int, default=0, help="프레임 고정 높이(0이면 무시)")
     args = ap.parse_args()
 
     recipe = json.loads(Path(args.recipe).read_text())
@@ -465,7 +466,9 @@ def main():
 
     W = recipe["canvas"]["width"]
     H = recipe["canvas"]["height"]
-    auto_height = H == "auto" or bool(style.get("auto_height"))
+    auto_height = (H == "auto" or bool(style.get("auto_height"))) and args.force_height == 0
+    if args.force_height:
+        H = args.force_height
     theme = style.get("theme") or recipe["theme"]
     r = Renderer(catalog, tokens, theme, style, strict=not args.allow_blocked)
 
