@@ -193,7 +193,7 @@ render_recipe.py ... --breakpoint mobile                               # 390
 | 블록 | mobile 재배치 |
 | --- | --- |
 | header | 브랜드만, 내비 숨김 |
-| hero | 텍스트 → 일러스트(4:3) → 풀폭 CTA |
+| hero (mobile·tablet) | 텍스트 → 일러스트 → 풀폭 CTA (tablet은 더 큰 활자·가로형 이미지) |
 | stats | 세로 스택 |
 | features | 아이콘 + 제목 + 본문 리스트 |
 | logos | 2열 |

@@ -328,7 +328,8 @@ class Renderer:
         c = self.colors
         s = self.scale * self.K
         m = self.M
-        size = 40 * s
+        big = self.bp == "tablet"
+        size = (54 if big else 40) * s
         lines = block["title"].count("\n") + 1
         title_h = size * 1.16 * lines
         parts = [
@@ -338,8 +339,9 @@ class Renderer:
         body_y = y0 + 24 + 24 + title_h + 16
         parts.append(self.text(m, body_y, self.case(block["body"]), 14 * s, 400, c["text-secondary"], leading=1.6))
         illo_y = body_y + 34
-        parts.append(self.illustration(block["illustration"], m, illo_y, W - 2 * m, (W - 2 * m) * 0.72))
-        by = illo_y + (W - 2 * m) * 0.72 + 28
+        aspect = 0.58 if big else 0.72
+        parts.append(self.illustration(block["illustration"], m, illo_y, W - 2 * m, (W - 2 * m) * aspect))
+        by = illo_y + (W - 2 * m) * aspect + 28
         bw, bh = W - 2 * m, 52
         parts.append(
             f'<g id="cta">{self.card(m, by, bw, bh, c["accent"])}'
@@ -353,7 +355,7 @@ class Renderer:
     def hero(self, block, W, y0):
         c = self.colors
         s = self.scale
-        if self.bp == "mobile":
+        if self.bp in ("mobile", "tablet"):
             return self.hero_mobile(block, W, y0)
         if self.hero_layout == "asymmetric":
             return self.hero_asymmetric(block, W, y0)
