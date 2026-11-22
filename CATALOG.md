@@ -108,6 +108,8 @@ sudo python3 scripts/tag_symbol_sheets.py \
 | 다온폰트 | commercial | 2 |
 
 - 태그: `license:<값>`, `license_src:provider`, `license_provider:<slug>`, `license_url:<근거 URL>`
+- `license_src:copyright`(저작권 문구 휴리스틱)·`license_src:site`(도메인 추정)로 붙은 값은
+  배포처 근거가 있으면 덮어쓴다. 공공 폰트가 "All rights reserved"를 달고 있는 경우를 교정한다.
 - DB 백업: `asset_hub.db.bak-provider-20261122T114446Z`
 
 ### 국내 기관·기업 폰트 확인 (2026-11-22)
@@ -164,13 +166,40 @@ sudo python3 scripts/build_font_allowlist.py \
 
 | 구분 | 패밀리 | 파일 |
 | --- | --- | --- |
-| bundle | 301 | 781 |
-| output | 115 | 134 |
-| blocked | 504 | 870 |
+| bundle | 329 | 813 |
+| output | 133 | 162 |
+| blocked | 458 | 810 |
 
-- 폰트 파일을 포함한 판매 팩: `bundle` 781개만
-- 디자인 결과물(PNG·SVG·PDF) 제작: `bundle` + `output` 915개
-- DB 백업: `asset_hub.db.bak-scope-20261122T120707Z`
+- 폰트 파일을 포함한 판매 팩: `bundle` 813개만
+- 디자인 결과물(PNG·SVG·PDF) 제작: `bundle` + `output` 975개
+- DB 백업: `asset_hub.db.bak-scope-20261122T135802Z`
+
+### 앱 API
+
+```bash
+# 파일 재배포 가능한 폰트만
+curl "http://127.0.0.1:34920/api/fonts/allowlist?scope=bundle&limit=20"
+
+# 이름 검색 (scope=all 로 전체 대상)
+curl "http://127.0.0.1:34920/api/fonts/allowlist?scope=all&search=kotra"
+
+# 에셋 목록을 scope로 필터
+curl "http://127.0.0.1:34920/api/items?license_scope=bundle"
+```
+
+allow-list는 `/app/catalog/font-allowlist.json`(호스트 `/srv/sonagi-assets/catalog`)을
+읽고, 파일 mtime이 바뀌면 자동으로 다시 읽는다. 파일이 없으면 503.
+
+### 팩 검사 게이트
+
+```bash
+python3 scripts/check_pack.py \
+  --allowlist catalog/font-allowlist.json \
+  pack/fonts/*.ttf
+```
+
+`bundle`이 아닌 파일이나 목록에 없는 파일이 하나라도 있으면 **exit 1**.
+`--sha256`을 주면 파일 해시로 먼저 대조한다.
 
 **팩에 넣을 파일만 뽑기**
 

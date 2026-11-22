@@ -40,6 +40,24 @@ THUMBNAILS_PATH.mkdir(parents=True, exist_ok=True)
 
 THUMBNAIL_SIZE = (256, 256)
 
+# Font license allow-list (bundle / output / blocked). 생성: scripts/build_font_allowlist.py
+ALLOWLIST_PATH = os.environ.get("ASSET_ALLOWLIST_PATH", "/app/catalog/font-allowlist.json")
+_allowlist_cache = {"mtime": None, "data": None}
+
+
+def load_allowlist():
+    """allow-list JSON을 mtime 기준으로 캐시해 읽는다. 없으면 None."""
+    path = Path(ALLOWLIST_PATH)
+    if not path.is_file():
+        return None
+    mtime = path.stat().st_mtime
+    if _allowlist_cache["mtime"] != mtime:
+        with open(path) as f:
+            _allowlist_cache["data"] = json.load(f)
+        _allowlist_cache["mtime"] = mtime
+    return _allowlist_cache["data"]
+
+
 
 class ImportUrlRequest(BaseModel):
     imageUrl: str
@@ -138,6 +156,7 @@ def get_items(
     offset: int = Query(0, ge=0),
     search: str = "",
     include_glyphs: bool = False,
+    license_scope: str = "",
 ):
     conn = get_db()
     try:
@@ -148,6 +167,10 @@ def get_items(
         if not include_glyphs:
             conditions.append("tags NOT LIKE ?")
             params.append("%kind:glyph%")
+
+        if license_scope:
+            conditions.append("tags LIKE ?")
+            params.append(f"%scope:{license_scope}%")
 
         if search:
             conditions.append("(name LIKE ? OR tags LIKE ? OR ext LIKE ?)")
@@ -182,6 +205,43 @@ def get_items(
         return {"total": total_count, "items": items}
     finally:
         conn.close()
+
+
+@app.get("/api/fonts/allowlist")
+def get_font_allowlist(
+    scope: str = Query("bundle", pattern="^(bundle|output|blocked|all)$"),
+    search: str = "",
+    limit: int = Query(100, le=1000),
+    offset: int = Query(0, ge=0),
+):
+    """폰트 라이선스 allow-list. 기본값은 파일 재배포까지 가능한 bundle만."""
+    data = load_allowlist()
+    if not data:
+        raise HTTPException(status_code=503, detail=f"allow-list not found: {ALLOWLIST_PATH}")
+
+    entries = data.get("entries", [])
+    if scope != "all":
+        entries = [e for e in entries if e.get("scope") == scope]
+
+    if search:
+        needle = search.lower()
+
+        def hit(e):
+            if needle in (e.get("family") or "").lower():
+                return True
+            return any(needle in (f.get("name") or "").lower() for f in e.get("files", []))
+
+        entries = [e for e in entries if hit(e)]
+
+    return {
+        "generated_at": data.get("generated_at"),
+        "policy": data.get("policy", {}),
+        "counts": data.get("counts", {}),
+        "total": len(entries),
+        "limit": limit,
+        "offset": offset,
+        "items": entries[offset : offset + limit],
+    }
 
 
 @app.get("/api/items/{item_id}")

@@ -10,9 +10,11 @@ services:
     restart: unless-stopped
     environment:
       GALLERY_LIBRARY_PATH: /app/data/Design.library/images
+      ASSET_ALLOWLIST_PATH: /app/catalog/font-allowlist.json
     volumes:
       - ${ASSETS_LIBRARY_DIR:-/srv/sonagi-assets/library}:/app/data
       - ${ASSETS_DB_FILE:-/srv/sonagi-assets/asset_hub.db}:/app/asset_hub.db
+      - ${ASSETS_CATALOG_DIR:-/srv/sonagi-assets/catalog}:/app/catalog:ro
 
   # 기존 k8s CronJob(schedule 0 0 * * *) 대체. 필요할 때만:
   #   docker compose --profile jobs run --rm harvest
