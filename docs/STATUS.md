@@ -150,7 +150,27 @@ dist/
 4. **인쇄용 출력** — CMYK 변환·도련·재단선 (별도 경로)
 5. **레시피 v1 정리** — v2로 통일하고 v1은 읽기 전용으로 동결
 
-## 11. 재현 체크리스트
+## 11. 작업 순서 (Plane `sonagi-assets`)
+
+사이클은 쓰지 않는다. 모듈(범위)과 상태(Todo/Backlog)로만 관리한다.
+
+| 순서 | 이슈 | 모듈 | 이유 |
+| --- | --- | --- | --- |
+| 1 | ASSET-2 30px 오프셋 | 납품 품질 | 모든 문서 타입의 간격 기반 |
+| 2 | ASSET-3 이미지 중복 | 납품 품질 | 납품 용량(16.6MB → 5MB) |
+| 3 | ASSET-5 CI 결정론 | 납품 품질 | 이후 변경의 회귀 방지 |
+| 4 | ASSET-4 v1/v2 통일 | 납품 품질 | 문서 타입 추가 전 스키마 정리 |
+| 5 | ASSET-9 lockup | 아이덴티티 | SVG 블록으로 가장 빨리 결과 |
+| 6 | ASSET-10 spec-diagram | 아이덴티티 | lockup과 같은 규격 데이터 |
+| 7 | ASSET-11 brand-sheet | 아이덴티티 | 다페이지 PDF 조판 필요 |
+| 8 | ASSET-12 `.ai` 검증 | 아이덴티티 | 제출 직전 확인 |
+| 9 | ASSET-6 인쇄 CMYK | 인쇄 지원 | 별도 색 경로 |
+| 10 | ASSET-7 Figma pattern | Figma 왕복 | 재임포트 확인 |
+| 11 | ASSET-8 타입·레이아웃 축 | 스타일 시스템 | 표현력 확장 |
+
+1~3을 먼저 끝내는 이유: 인쇄·로고도 같은 export·용량·결정론 문제를 공유한다.
+
+## 12. 재현 체크리스트
 
 ```bash
 # 1. content 검증 (카탈로그는 devops의 /srv/sonagi-assets/catalog/catalog.json)
@@ -168,7 +188,7 @@ python3 scripts/export_recipe.py --src out/<name> --out dist --formats pdf,png,w
 python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제목>" --zip
 ```
 
-## 12. 파일 지도
+## 13. 파일 지도
 
 | 경로 | 역할 |
 | --- | --- |
