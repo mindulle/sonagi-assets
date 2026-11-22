@@ -166,10 +166,24 @@ sudo python3 scripts/import_icon_pack.py \
 - 카탈로그 **14,876**, `bundle` **10,413**
 - 임포터가 `--kind/--topic/--style/--palette`를 받도록 일반화됨
 
-**주의**: 원본 SVG에 자체 배경색과 제작자 크레딧 텍스트가 들어 있다.
-그대로 배치하면 카드 안에 카드가 생기고 크레딧이 노출된다.
-현재는 `object-fit: cover`로 크롭해 쓰고 있고, 제대로 쓰려면 배경 제거·크레딧 제거
-전처리 단계가 필요하다. 컬러 토큰이 없어 임시로 흑백 처리했다.
+### 정규화 (2026-11-22)
+
+원본은 1000×1000 캔버스 하단에 제작자 크레딧을 벡터로 넣고, 배경색을 캔버스 전체에 깐다.
+
+```bash
+sudo python3 scripts/normalize_illustration_pack.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --library-root /srv/sonagi-assets/library \
+  --set illlustrations --apply
+```
+
+- `viewBox`를 `0 0 1000 935`로 잘라 하단 크레딧 띠 제거 (124개 적용)
+- 배경은 유지: 일부 그림은 배경색이 그림의 일부라 제거하면 깨진다
+- 같은 경로에 덮어쓰고 썸네일 재생성
+
+**브랜드 로고 분리**: 같은 저장소에 섞여 있던 상표 로고 13개는
+`kind:logo` + `scope:blocked`로 재분류했다(상표권 별도 확인 필요).
+카탈로그 빌더는 이제 `scope:` 태그를 라이선스 계산보다 우선한다.
 
 ## 아이콘 팩 수급 (2026-11-22)
 
