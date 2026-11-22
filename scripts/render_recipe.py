@@ -1152,6 +1152,7 @@ def main():
         "theme": theme,
         "dark": dark,
         "canvas": {"width": W, "height": H},
+        "embed_max_width": args.embed_max_width,
         "output": svg_path.name,
         "sha256": hashlib.sha256(svg.encode()).hexdigest(),
         "layers": re.findall(r'<g id="([^"]+)"', svg),
