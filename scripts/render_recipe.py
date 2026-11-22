@@ -24,6 +24,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ornament_data  # noqa: E402
 from provenance import disclosure_for, origin_from_tags  # noqa: E402
 from style_axes import load_style  # noqa: E402
 
@@ -1025,157 +1026,40 @@ class Renderer:
         return "".join(parts), h + 30
 
     # --- 장식(ornament) ----------------------------------------------------
-    # 스타일의 `ornament`는 축이다: {motif, frame, weight, height}.
-    # (motif·frame 이름은 styles/axes.json의 ornament 항목에서 온다)
-
-    def _orn_weight(self, base):
-        weight = float(self.ornament.get("weight", 1.0))
-        return base if weight == 1.0 else round(base * weight, 2)
+    # 모티프는 데이터다: styles/ornaments.json의 SVG 템플릿을 그리고,
+    # 스타일의 `ornament` 축은 {motif, frame, weight, height}만 정한다.
 
     def ornament_divider(self, x1, x2, y):
         motif = self.ornament.get("motif", "none")
         if motif == "none":
             return "", 0
-        draw = getattr(self, f"_divider_{motif}", None)
-        if draw is None:
-            return "", 0
         height = int(self.ornament.get("height", 46))
-        return f'<g id="ornament">{draw(x1, x2, y)}</g>', height
-
-    def _divider_nouveau(self, x1, x2, y):
-        c = self.colors
-        cx = (x1 + x2) / 2
-        half = 70
-        left = f"M {x1} {y} C {x1 + (cx - x1) * 0.35:.1f} {y + 16}, {cx - half * 1.9:.1f} {y - 18}, {cx - 22} {y}"
-        right = f"M {x2} {y} C {x2 - (x2 - cx) * 0.35:.1f} {y + 16}, {cx + half * 1.9:.1f} {y - 18}, {cx + 22} {y}"
-        parts = []
-        for d in (left, right):
-            parts.append(f'<path d="{d}" fill="none" stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.3)}" stroke-linecap="round"/>')
-        for sx in (-1, 1):
-            bx = cx + sx * 10
-            parts.append(
-                f'<path d="M {cx} {y} C {bx} {y - 24}, {cx + sx * 34} {y - 20}, {cx + sx * 30} {y - 2} '
-                f'C {cx + sx * 26} {y + 12}, {cx + sx * 8} {y + 8}, {cx} {y}" '
-                f'fill="none" stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.3)}" stroke-linecap="round"/>'
-            )
-        parts.append(f'<circle cx="{cx}" cy="{y}" r="3.2" fill="{c["accent"]}"/>')
-        for sx in (-1, 1):
-            parts.append(f'<circle cx="{cx + sx * 30}" cy="{y - 6}" r="2.1" fill="{c["accent"]}"/>')
-        return "".join(parts)
-
-    def _divider_victorian(self, x1, x2, y):
-        c = self.colors
-        cx = (x1 + x2) / 2
-        parts = [
-            f'<line x1="{x1}" y1="{y - 3}" x2="{x2}" y2="{y - 3}" stroke="{c["accent"]}" stroke-width="{self._orn_weight(2)}"/>',
-            f'<line x1="{x1}" y1="{y + 4}" x2="{x2}" y2="{y + 4}" stroke="{c["accent"]}" stroke-width="{self._orn_weight(0.7)}"/>',
-            f'<circle cx="{cx}" cy="{y}" r="7" fill="none" stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.2)}"/>',
-            f'<circle cx="{cx}" cy="{y}" r="2.4" fill="{c["accent"]}"/>',
-        ]
-        for dx, dy in ((-7, 0), (7, 0), (0, -7), (0, 7)):
-            parts.append(f'<circle cx="{cx + dx}" cy="{y + dy}" r="1.1" fill="{c["accent"]}"/>')
-        return "".join(parts)
-
-    def _divider_deco(self, x1, x2, y):
-        c = self.colors
-        cx = (x1 + x2) / 2
-        return (
-            f'<line x1="{x1}" y1="{y}" x2="{cx - 60}" y2="{y}" stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.4)}"/>'
-            f'<line x1="{cx + 60}" y1="{y}" x2="{x2}" y2="{y}" stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.4)}"/>'
-            f'<path d="M {cx - 40} {y} L {cx} {y - 22} L {cx + 40} {y} L {cx} {y + 22} Z" fill="none" '
-            f'stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.6)}"/>'
-        )
-
-    def _divider_rule(self, x1, x2, y):
-        c = self.colors
-        return f'<line x1="{x1}" y1="{y}" x2="{x2}" y2="{y}" stroke="{c["accent"]}" stroke-width="{self._orn_weight(1)}" stroke-opacity="0.6"/>'
-
-    def _divider_floral(self, x1, x2, y):
-        c = self.colors
-        cx = (x1 + x2) / 2
-        parts = [
-            f'<line x1="{x1}" y1="{y}" x2="{cx - 70}" y2="{y}" stroke="{c["accent"]}" stroke-width="{self._orn_weight(0.9)}" stroke-opacity="0.7"/>',
-            f'<line x1="{cx + 70}" y1="{y}" x2="{x2}" y2="{y}" stroke="{c["accent"]}" stroke-width="{self._orn_weight(0.9)}" stroke-opacity="0.7"/>',
-        ]
-        for sx in (-1, 1):
-            # 잎 두 장과 줄기
-            parts.append(
-                f'<path d="M {cx} {y} C {cx + sx * 18} {y - 26}, {cx + sx * 44} {y - 26}, '
-                f'{cx + sx * 58} {y - 4}" fill="none" stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.1)}" stroke-linecap="round"/>'
-            )
-            parts.append(
-                f'<path d="M {cx + sx * 26} {y - 16} C {cx + sx * 32} {y - 34}, {cx + sx * 50} {y - 34}, '
-                f'{cx + sx * 54} {y - 18} C {cx + sx * 44} {y - 10}, {cx + sx * 32} {y - 10}, {cx + sx * 26} {y - 16} Z" '
-                f'fill="none" stroke="{c["accent"]}" stroke-width="{self._orn_weight(0.9)}"/>'
-            )
-        parts.append(f'<circle cx="{cx}" cy="{y}" r="3" fill="{c["accent"]}"/>')
-        return "".join(parts)
+        variables = {
+            "x1": x1,
+            "x2": x2,
+            "cx": (x1 + x2) / 2,
+            "y": y,
+            "weight": self.ornament.get("weight", 1),
+            "accent": self.colors["accent"],
+        }
+        body = ornament_data.draw("divider", motif, variables)
+        if not body:
+            return "", 0
+        return f'<g id="ornament">{body}</g>', height
 
     def ornament_frame(self, W, H):
         motif = self.ornament.get("frame", "none")
         if motif == "none":
             return ""
-        draw = getattr(self, f"_frame_{motif}", None)
-        if draw is None:
-            return ""
-        return f'<g id="ornament-frame">{draw(W, H)}</g>'
-
-    def _frame_inset(self):
-        return 8 if self.bp == "mobile" else 18
-
-    def _frame_nouveau(self, W, H):
-        c = self.colors
-        i = self._frame_inset()
-        rl = 46
-        parts = [
-            f'<rect x="{i}" y="{i}" width="{W - 2 * i}" height="{H - 2 * i}" fill="none" '
-            f'stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.1)}"/>',
-            f'<rect x="{i + 5}" y="{i + 5}" width="{W - 2 * (i + 5)}" height="{H - 2 * (i + 5)}" fill="none" '
-            f'stroke="{c["accent"]}" stroke-width="{self._orn_weight(0.6)}"/>',
-        ]
-        for x, y, sx, sy in ((i, i, 1, 1), (W - i, i, -1, 1), (i, H - i, 1, -1), (W - i, H - i, -1, -1)):
-            parts.append(
-                f'<path d="M {x + sx * rl} {y} C {x + sx * (rl * 0.42)} {y}, {x} {y + sy * (rl * 0.42)}, '
-                f'{x} {y + sy * rl}" fill="none" stroke="{c["accent"]}" stroke-width="{self._orn_weight(1.4)}"/>'
-            )
-            parts.append(f'<circle cx="{x + sx * (rl + 8)}" cy="{y + sy * 6}" r="2.4" fill="{c["accent"]}"/>')
-        return "".join(parts)
-
-    def _frame_victorian(self, W, H):
-        c = self.colors
-        i = self._frame_inset()
-        k = 12
-        parts = [
-            f'<rect x="{i}" y="{i}" width="{W - 2 * i}" height="{H - 2 * i}" fill="none" '
-            f'stroke="{c["accent"]}" stroke-width="{self._orn_weight(2)}"/>',
-            f'<rect x="{i + 7}" y="{i + 7}" width="{W - 2 * (i + 7)}" height="{H - 2 * (i + 7)}" fill="none" '
-            f'stroke="{c["accent"]}" stroke-width="{self._orn_weight(0.7)}"/>',
-        ]
-        for x, y, sx, sy in ((i, i, 1, 1), (W - i, i, -1, 1), (i, H - i, 1, -1), (W - i, H - i, -1, -1)):
-            parts.append(
-                f'<path d="M {x} {y + sy * (k * 3)} L {x} {y} L {x + sx * (k * 3)} {y}" '
-                f'fill="none" stroke="{c["accent"]}" stroke-width="{self._orn_weight(3)}"/>'
-            )
-            parts.append(f'<rect x="{x - 3}" y="{y - 3}" width="6" height="6" fill="{c["accent"]}"/>')
-        return "".join(parts)
-
-    def _frame_deco(self, W, H):
-        c = self.colors
-        i = self._frame_inset()
-        return (
-            f'<rect x="{i}" y="{i}" width="{W - 2 * i}" height="{H - 2 * i}" fill="none" '
-            f'stroke="{c["accent"]}" stroke-width="{self._orn_weight(2)}"/>'
-            f'<rect x="{i + 6}" y="{i + 6}" width="{W - 2 * (i + 6)}" height="{H - 2 * (i + 6)}" fill="none" '
-            f'stroke="{c["accent"]}" stroke-width="{self._orn_weight(0.8)}"/>'
-        )
-
-    def _frame_plain(self, W, H):
-        c = self.colors
-        i = self._frame_inset()
-        return (
-            f'<rect x="{i}" y="{i}" width="{W - 2 * i}" height="{H - 2 * i}" fill="none" '
-            f'stroke="{c["accent"]}" stroke-width="{self._orn_weight(0.8)}" stroke-opacity="0.7"/>'
-        )
+        variables = {
+            "W": W,
+            "H": H,
+            "i": 8 if self.bp == "mobile" else 18,
+            "weight": self.ornament.get("weight", 1),
+            "accent": self.colors["accent"],
+        }
+        body = ornament_data.draw("frame", motif, variables)
+        return f'<g id="ornament-frame">{body}</g>' if body else ""
 
     def footer(self, block, W, y):
         c = self.colors

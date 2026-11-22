@@ -370,32 +370,44 @@
     "ornament": {
         "none": {
             "motif": "none",
-            "frame": "none"
+            "frame": "none",
+            "weight": 1
         },
         "rule": {
             "motif": "rule",
             "frame": "plain",
-            "height": 40
+            "height": 40,
+            "weight": 1
         },
         "nouveau": {
             "motif": "nouveau",
             "frame": "nouveau",
-            "height": 46
+            "height": 46,
+            "weight": 1
         },
         "victorian": {
             "motif": "victorian",
             "frame": "victorian",
-            "height": 46
+            "height": 46,
+            "weight": 1
         },
         "deco": {
             "motif": "deco",
             "frame": "deco",
-            "height": 46
+            "height": 46,
+            "weight": 1
         },
         "floral": {
             "motif": "floral",
             "frame": "plain",
-            "height": 44
+            "height": 44,
+            "weight": 1
+        },
+        "star": {
+            "motif": "asterisk",
+            "frame": "inset",
+            "height": 44,
+            "weight": 1
         }
     }
 }

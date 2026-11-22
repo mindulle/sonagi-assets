@@ -1,0 +1,10 @@
+{
+    "name": "star-editorial",
+    "theme": "editorial",
+    "palette": "mint",
+    "type": "archivo-airy",
+    "geometry": "r4b1",
+    "layout": "split-cards",
+    "ornament": "star",
+    "density": 1.0
+}
