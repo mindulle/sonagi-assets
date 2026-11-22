@@ -1,0 +1,310 @@
+{
+    "global": {
+        "color": {
+            "background": {
+                "value": "#fbf9f5",
+                "type": "color"
+            },
+            "surface": {
+                "value": "#ffffff",
+                "type": "color"
+            },
+            "surface-sunken": {
+                "value": "#f4f1ea",
+                "type": "color"
+            },
+            "ink": {
+                "value": "#161616",
+                "type": "color"
+            },
+            "text": {
+                "value": "#161616",
+                "type": "color"
+            },
+            "text-secondary": {
+                "value": "#3a3a36",
+                "type": "color"
+            },
+            "text-muted": {
+                "value": "#63635e",
+                "type": "color"
+            },
+            "text-faint": {
+                "value": "#8d8d86",
+                "type": "color"
+            },
+            "accent": {
+                "value": "#d97706",
+                "type": "color"
+            },
+            "accent-strong": {
+                "value": "#f59e0b",
+                "type": "color"
+            },
+            "accent-ink": {
+                "value": "#161616",
+                "type": "color"
+            },
+            "border": {
+                "value": "#dcd7cc",
+                "type": "color"
+            },
+            "border-strong": {
+                "value": "#161616",
+                "type": "color"
+            },
+            "success": {
+                "value": "#2f7a4f",
+                "type": "color"
+            },
+            "warning": {
+                "value": "#b45309",
+                "type": "color"
+            },
+            "danger": {
+                "value": "#b42318",
+                "type": "color"
+            },
+            "info": {
+                "value": "#1d4ed8",
+                "type": "color"
+            }
+        },
+        "space": {
+            "1": {
+                "value": "4px",
+                "type": "spacing"
+            },
+            "2": {
+                "value": "8px",
+                "type": "spacing"
+            },
+            "3": {
+                "value": "12px",
+                "type": "spacing"
+            },
+            "4": {
+                "value": "16px",
+                "type": "spacing"
+            },
+            "5": {
+                "value": "24px",
+                "type": "spacing"
+            },
+            "6": {
+                "value": "32px",
+                "type": "spacing"
+            },
+            "7": {
+                "value": "48px",
+                "type": "spacing"
+            },
+            "8": {
+                "value": "64px",
+                "type": "spacing"
+            }
+        },
+        "radius": {
+            "1": {
+                "value": "4px",
+                "type": "borderRadius"
+            },
+            "2": {
+                "value": "6px",
+                "type": "borderRadius"
+            },
+            "3": {
+                "value": "8px",
+                "type": "borderRadius"
+            }
+        },
+        "font": {
+            "display": {
+                "value": "'Cormorant Garamond', Georgia, serif",
+                "type": "fontFamilies"
+            },
+            "sans": {
+                "value": "Pretendard, Inter, system-ui, sans-serif",
+                "type": "fontFamilies"
+            },
+            "mono": {
+                "value": "'JetBrains Mono', ui-monospace, monospace",
+                "type": "fontFamilies"
+            }
+        },
+        "text": {
+            "h1-size": {
+                "value": "64px",
+                "type": "fontSizes"
+            },
+            "h2-size": {
+                "value": "36px",
+                "type": "fontSizes"
+            },
+            "h3-size": {
+                "value": "24px",
+                "type": "fontSizes"
+            },
+            "body-size": {
+                "value": "16px",
+                "type": "fontSizes"
+            },
+            "caption-size": {
+                "value": "12px",
+                "type": "fontSizes"
+            },
+            "micro-size": {
+                "value": "10px",
+                "type": "fontSizes"
+            }
+        }
+    },
+    "editorial": {
+        "color": {
+            "background": {
+                "value": "#fbf9f5",
+                "type": "color"
+            },
+            "surface": {
+                "value": "#ffffff",
+                "type": "color"
+            },
+            "surface-sunken": {
+                "value": "#f4f1ea",
+                "type": "color"
+            },
+            "ink": {
+                "value": "#161616",
+                "type": "color"
+            },
+            "text": {
+                "value": "#161616",
+                "type": "color"
+            },
+            "text-secondary": {
+                "value": "#3a3a36",
+                "type": "color"
+            },
+            "text-muted": {
+                "value": "#63635e",
+                "type": "color"
+            },
+            "text-faint": {
+                "value": "#8d8d86",
+                "type": "color"
+            },
+            "accent": {
+                "value": "#d97706",
+                "type": "color"
+            },
+            "accent-strong": {
+                "value": "#f59e0b",
+                "type": "color"
+            },
+            "accent-ink": {
+                "value": "#161616",
+                "type": "color"
+            },
+            "border": {
+                "value": "#dcd7cc",
+                "type": "color"
+            },
+            "border-strong": {
+                "value": "#161616",
+                "type": "color"
+            },
+            "success": {
+                "value": "#2f7a4f",
+                "type": "color"
+            },
+            "warning": {
+                "value": "#b45309",
+                "type": "color"
+            },
+            "danger": {
+                "value": "#b42318",
+                "type": "color"
+            },
+            "info": {
+                "value": "#1d4ed8",
+                "type": "color"
+            }
+        }
+    },
+    "architecture": {
+        "color": {
+            "background": {
+                "value": "#060911",
+                "type": "color"
+            },
+            "surface": {
+                "value": "#090d16",
+                "type": "color"
+            },
+            "surface-sunken": {
+                "value": "#04060c",
+                "type": "color"
+            },
+            "ink": {
+                "value": "#ffffff",
+                "type": "color"
+            },
+            "text": {
+                "value": "#ffffff",
+                "type": "color"
+            },
+            "text-secondary": {
+                "value": "#c9d1d9",
+                "type": "color"
+            },
+            "text-muted": {
+                "value": "#9aa4b2",
+                "type": "color"
+            },
+            "text-faint": {
+                "value": "#6b7280",
+                "type": "color"
+            },
+            "accent": {
+                "value": "#4a90e2",
+                "type": "color"
+            },
+            "accent-strong": {
+                "value": "#ffd166",
+                "type": "color"
+            },
+            "accent-ink": {
+                "value": "#060911",
+                "type": "color"
+            },
+            "border": {
+                "value": "#30363d",
+                "type": "color"
+            },
+            "border-strong": {
+                "value": "#4a5260",
+                "type": "color"
+            },
+            "success": {
+                "value": "#3fb950",
+                "type": "color"
+            },
+            "warning": {
+                "value": "#ffd166",
+                "type": "color"
+            },
+            "danger": {
+                "value": "#f85149",
+                "type": "color"
+            },
+            "info": {
+                "value": "#4a90e2",
+                "type": "color"
+            },
+            "terminal": {
+                "value": "#00ffcc",
+                "type": "color"
+            }
+        }
+    }
+}
