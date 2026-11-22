@@ -142,6 +142,45 @@ sudo python3 scripts/tag_symbol_sheets.py \
 | 영문 novelty/display (개인용 배포) | 63 | `ButterFly`, `starthings`, `tender kittens`, `HARLEQUI` |
 | TRGothic 2종 | 2 | 배포처 불명 |
 
+## 라이선스 사용 범위 3단계 (2026-11-22)
+
+"무료"와 "파일을 줘도 됨"은 다르다. 결과물 사용과 파일 재배포를 분리했다.
+
+| scope | 의미 | 해당 라이선스 |
+| --- | --- | --- |
+| `bundle` | 결과물 + 폰트 파일 재배포 가능 | OFL, MIT, Apache, CC0 |
+| `output` | 결과물 제작만. 파일 재배포·임베딩 금지 | free (KOTRA·KDB·롯데마트·Kirsty 등) |
+| `blocked` | 사용 불가 | commercial, personal, GPL, internal-only |
+
+정책 단일 출처는 `scripts/license_policy.py`다. 카탈로그의 모든 항목에
+`license_scope`가 붙고, 폰트 allow-list는 별도 파일로 만든다.
+
+```bash
+sudo python3 scripts/build_font_allowlist.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --library-root /srv/sonagi-assets/library \
+  --out /srv/sonagi-assets/catalog/font-allowlist.json --apply
+```
+
+| 구분 | 패밀리 | 파일 |
+| --- | --- | --- |
+| bundle | 301 | 781 |
+| output | 115 | 134 |
+| blocked | 504 | 870 |
+
+- 폰트 파일을 포함한 판매 팩: `bundle` 781개만
+- 디자인 결과물(PNG·SVG·PDF) 제작: `bundle` + `output` 915개
+- DB 백업: `asset_hub.db.bak-scope-20261122T120707Z`
+
+**팩에 넣을 파일만 뽑기**
+
+```bash
+jq -r '.entries[] | select(.scope=="bundle") | .files[].path' \
+  catalog/font-allowlist.json
+```
+
+각 파일에는 `bytes`, `sha256`, `license`, `provider`, `license_url`이 함께 기록된다.
+
 ## 미확인 폰트 추가 단서 (2026-11-22)
 
 폰트 안의 추가 필드(name ID 7~14, OS/2 vendor ID)와 URL을 조사했다.

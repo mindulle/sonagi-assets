@@ -55,6 +55,9 @@ WEIGHT_TOKENS = (
     "wght",
     "width",
 )
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from license_policy import scope_for_license  # noqa: E402
+
 FONT_EXTS = {"ttf", "otf", "woff", "woff2"}
 
 
@@ -143,6 +146,7 @@ def main():
         "style_tagged": 0,
         "license_known": 0,
         "license": collections.Counter(),
+        "license_scope": collections.Counter(),
         "fonts_matched": 0,
         "with_svg_groups": 0,
         "missing_file": 0,
@@ -206,6 +210,7 @@ def main():
             "style": [],
             "license": license_value,
             "license_basis": license_basis,
+            "license_scope": scope_for_license(license_value),
             "junk": is_junk,
             "kind": "glyph" if is_glyph else "asset",
             "brand": None,
@@ -226,6 +231,7 @@ def main():
             stats["with_svg_groups"] += int(bool(item["svg_groups"]))
             stats["missing_file"] += int(bool(path) and not os.path.isfile(path))
         stats["license"][item["license"]] += 1
+        stats["license_scope"][item["license_scope"]] += 1
         for tag in tags:
             tag_usage[tag] += 1
 
