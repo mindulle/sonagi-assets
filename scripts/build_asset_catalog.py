@@ -190,6 +190,8 @@ def main():
                 stats["fonts_matched"] += 1
             else:
                 license_value, license_basis = "internal-only", "font-unverified"
+        elif embedded_license:
+            license_value, license_basis = embedded_license, "explicit-tag"
         elif source in ("the-met", "cma"):
             license_value, license_basis = "cc0", f"{source}-open-access"
         else:

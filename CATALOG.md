@@ -144,6 +144,35 @@ sudo python3 scripts/tag_symbol_sheets.py \
 | 영문 novelty/display (개인용 배포) | 63 | `ButterFly`, `starthings`, `tender kittens`, `HARLEQUI` |
 | TRGothic 2종 | 2 | 배포처 불명 |
 
+## 아이콘 팩 수급 (2026-11-22)
+
+브리프 테스트에서 아이콘 슬롯 17개 중 0개가 채워진 것이 확인되어, 라이선스가 명확한
+오픈 아이콘 팩 3종을 개별 SVG로 임포트했다.
+
+| 팩 | 라이선스 | 파일 | 형태 |
+| --- | --- | --- | --- |
+| Lucide | ISC | 2,410 | line |
+| Tabler (outline) | MIT | 5,491 | line |
+| Phosphor (regular) | MIT | 1,512 | line |
+| **합계** | | **9,413** | |
+
+```bash
+sudo python3 scripts/import_icon_pack.py \
+  --db /srv/sonagi-assets/asset_hub.db \
+  --library-root /srv/sonagi-assets/library \
+  --src /tmp/packs/lucide --set lucide --license isc \
+  --provider lucide --url https://lucide.dev/license --apply
+```
+
+- 160px PNG 썸네일 9,413개 생성 (`cairosvg`)
+- 태그: `kind:icon`, `topic:icon`, `set:<pack>`, `form:line`, `license:*`, `scope:bundle`
+- 카탈로그 5,317 → **14,730**, `bundle` 10,267
+- 검색: `GET /api/items?search=arrow-left`
+- DB 백업: `asset_hub.db.bak-icons-20261122T1427*`
+
+카탈로그 빌더는 이제 폰트 외 자산도 명시적 `license:` 태그를 우선한다
+(`explicit-tag`). 아이콘 9,413개가 internal-only로 떨어지던 문제를 고쳤다.
+
 ## 라이선스 사용 범위 3단계 (2026-11-22)
 
 "무료"와 "파일을 줘도 됨"은 다르다. 결과물 사용과 파일 재배포를 분리했다.
