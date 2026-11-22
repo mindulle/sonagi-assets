@@ -363,21 +363,26 @@ class Renderer:
             return self.hero_poster(block, W, y0)
         if self.hero_layout == "center":
             cx = W / 2
+            size = 86 * s
+            lines = block["title"].count("\n") + 1
+            title_y = y0 + 170
+            # 제목이 두 줄이면 본문·CTA를 그만큼 내린다(고정 좌표면 겹친다)
+            body_y = title_y + (lines - 1) * size * 1.08 + 70
             parts = [
                 self.text(cx, y0 + 70, self.case(block["eyebrow"]), 12, 600, c["accent"], family=self.f_mono, anchor="middle", tracking=4),
-                self.text(cx, y0 + 170, self.case(block["title"]), 86 * s, 700, family=self.f_display, anchor="middle"),
-                self.text(cx, y0 + 240, self.case(block["body"]), 20 * s, 400, c["text-secondary"], anchor="middle"),
+                self.text(cx, title_y, self.case(block["title"]), size, 700, family=self.f_display, anchor="middle"),
+                self.text(cx, body_y, self.case(block["body"]), 20 * s, 400, c["text-secondary"], anchor="middle"),
             ]
             bw, bh = 240, 64
             bx = cx - bw / 2
-            by = y0 + 300
+            by = body_y + 60
             parts.append(
                 f'<g id="cta">{self.card(bx, by, bw, bh, c["accent"])}'
                 + self.text(cx, by + 40, self.case(block["cta"]), 16, 700, c["accent-ink"], anchor="middle")
                 + "</g>"
             )
             parts.append(self.text(cx, by + 104, self.case(block.get("note", "")), 13, 400, c["text-muted"], anchor="middle"))
-            return f'<g id="hero">{"".join(parts)}</g>', 470 * self.density
+            return f'<g id="hero">{"".join(parts)}</g>', (by + bh + 106 - y0) * self.density
 
         size = 64 * s
         lines = block["title"].count("\n") + 1
