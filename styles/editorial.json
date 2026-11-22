@@ -1,7 +1,11 @@
 {
     "name": "editorial",
     "theme": "editorial",
-    "geometry": { "radius": 8, "borderWidth": 2, "shadow": "none" },
+    "geometry": {
+        "radius": 8,
+        "borderWidth": 2,
+        "shadow": "none"
+    },
     "type": {
         "display": "NanumSquare",
         "sans": "NanumSquare",
@@ -13,5 +17,6 @@
     "illustration": "color",
     "density": 1.0,
     "hero": "split",
-    "header": "rule"
+    "header": "rule",
+    "illustration_set": "illlustrations"
 }

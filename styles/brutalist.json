@@ -11,7 +11,11 @@
         "accent": "#000000",
         "accent-ink": "#ffffff"
     },
-    "geometry": { "radius": 0, "borderWidth": 4, "shadow": "none" },
+    "geometry": {
+        "radius": 0,
+        "borderWidth": 4,
+        "shadow": "none"
+    },
     "type": {
         "display": "Archivo",
         "sans": "Archivo",
@@ -23,5 +27,6 @@
     "illustration": "hidden",
     "density": 1.15,
     "hero": "center",
-    "header": "rule"
+    "header": "rule",
+    "illustration_set": "opendoodles"
 }

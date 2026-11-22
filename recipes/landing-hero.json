@@ -2,12 +2,19 @@
     "name": "landing-hero",
     "seed": 7,
     "theme": "editorial",
-    "canvas": { "width": 1440, "height": 1024 },
+    "canvas": {
+        "width": 1440,
+        "height": 1024
+    },
     "blocks": [
         {
             "type": "header",
             "brand": "ATELIER SONAGI",
-            "nav": ["아카이브", "프린트", "스토리"]
+            "nav": [
+                "아카이브",
+                "프린트",
+                "스토리"
+            ]
         },
         {
             "type": "hero",
@@ -17,7 +24,10 @@
             "cta": "컬렉션 보기",
             "ctaIcon": "arrow-right",
             "note": "CC0 원본 · 국내 제작 · 3–5일 배송",
-            "illustration": "open-vault"
+            "illustration": [
+                "open-vault",
+                "float"
+            ]
         },
         {
             "type": "features",

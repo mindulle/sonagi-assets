@@ -30,5 +30,6 @@
     "hero": "poster",
     "features_layout": "cards",
     "header": "rule",
-    "auto_height": true
+    "auto_height": true,
+    "illustration_set": "illlustrations"
 }

@@ -28,5 +28,6 @@
     "density": 1.0,
     "hero": "split",
     "features_layout": "columns",
-    "header": "rule"
+    "header": "rule",
+    "illustration_set": "opendoodles"
 }

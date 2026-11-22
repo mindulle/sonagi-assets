@@ -29,5 +29,6 @@
     "hero": "asymmetric",
     "features_layout": "list",
     "header": "rule",
-    "auto_height": true
+    "auto_height": true,
+    "illustration_set": "illlustrations"
 }
