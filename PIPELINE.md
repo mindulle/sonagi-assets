@@ -226,6 +226,25 @@ python3 scripts/export_recipe.py --src out/ --pattern '*.svg' --out dist/ \
 전제: Chromium, Pillow. snap Chromium은 `/tmp`과 숨김 폴더를 읽지 못하므로
 임시 HTML은 출력 폴더 아래에 만든다.
 
+## 납품 번들
+
+```bash
+python3 scripts/bundle_delivery.py --src dist --out delivery/landing-v2 \
+  --name "Atelier Landing v2" --zip
+```
+
+```
+delivery/landing-v2/
+├─ index.html      스크린별 미리보기 + 다운로드 링크
+├─ svg/ pdf/ png/ webp/
+├─ CREDITS.md      자산 출처·고지 통합
+├─ export.json     해시·게이트 결과
+└─ README.md
+```
+
+- 화면(SVG)이 있는 항목만 번들에 포함한다(중간 산출물 제외)
+- zip은 폴더 루트를 포함해 풀었을 때 구조가 유지된다
+
 ## 빌드업 타임랩스
 
 레이어 조립 과정을 프레임으로 남긴다. 사람의 붓질 기록(스피드 페인팅)과는 다르다.
