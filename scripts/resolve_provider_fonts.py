@@ -94,7 +94,9 @@ def main():
         except json.JSONDecodeError:
             tags = []
         lic = [t.split(":", 1)[1] for t in tags if t.startswith("license:")]
-        if lic and lic[0] in resolved:
+        # "All rights reserved" 휴리스틱으로 붙은 commercial은 배포처 근거로 덮어쓴다
+        weak = any(src in tags for src in ("license_src:copyright", "license_src:site"))
+        if lic and lic[0] in resolved and not weak:
             continue
         hit = match(name)
         if not hit:
