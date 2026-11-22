@@ -180,6 +180,28 @@ python3 scripts/compose_sections.py --recipe recipes/landing-hero-v2.json \
 
 고른 1종은 `blocks` 레시피로 동결하면 이후 결정론적으로 재생된다.
 
+## 반응형
+
+같은 레시피를 `--breakpoint`로 3개 캔버스에 렌더한다.
+
+```bash
+render_recipe.py --recipe recipes/resp-v2.json --breakpoint desktop   # 1440
+render_recipe.py ... --breakpoint tablet                               # 768
+render_recipe.py ... --breakpoint mobile                               # 390
+```
+
+| 블록 | mobile 재배치 |
+| --- | --- |
+| header | 브랜드만, 내비 숨김 |
+| hero | 텍스트 → 일러스트(4:3) → 풀폭 CTA |
+| stats | 세로 스택 |
+| features | 아이콘 + 제목 + 본문 리스트 |
+| logos | 2열 |
+| cta | 카드 안 세로 배치 |
+| footer | 2줄 스택 |
+
+여백은 breakpoint별로 56/32/20, 본문 스케일은 1.0/0.88/0.72를 쓴다.
+
 ## 빌드업 타임랩스
 
 레이어 조립 과정을 프레임으로 남긴다. 사람의 붓질 기록(스피드 페인팅)과는 다르다.

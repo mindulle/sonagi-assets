@@ -170,6 +170,9 @@ class Renderer:
         for item in sorted(catalog["items"], key=lambda i: (rank(i), i["name"])):
             self.items.setdefault(item["name"], item)
         self.used = []
+        self.bp = "desktop"
+        self.M = 56
+        self.K = 1.0
 
     def case(self, text):
         return text.upper() if self.upper else text
@@ -306,6 +309,12 @@ class Renderer:
     # --- blocks ------------------------------------------------------------
     def header(self, block, W):
         rule_w = 1 if self.border_w <= 2 else self.border_w
+        if self.bp == "mobile":
+            m = self.M
+            return (
+                f'<g id="header">{self.text(m, 44, self.case(block["brand"]), 15, 700, family=self.f_display)}'
+                f'<line x1="0" y1="70" x2="{W}" y2="70" stroke="{self.colors["border"]}" stroke-width="1"/></g>'
+            )
         parts = [self.text(56, 52, self.case(block["brand"]), 20, 700, family=self.f_display)]
         x = W - 56
         for label in reversed(block.get("nav", [])):
@@ -315,9 +324,37 @@ class Renderer:
             parts.append(f'<line x1="0" y1="88" x2="{W}" y2="88" stroke="{self.colors["border"]}" stroke-width="{rule_w}"/>')
         return f'<g id="header">{"".join(parts)}</g>'
 
+    def hero_mobile(self, block, W, y0):
+        c = self.colors
+        s = self.scale * self.K
+        m = self.M
+        size = 40 * s
+        lines = block["title"].count("\n") + 1
+        title_h = size * 1.16 * lines
+        parts = [
+            self.text(m, y0 + 24, self.case(block["eyebrow"]), 10, 600, c["accent"], family=self.f_mono, tracking=2),
+            self.text(m, y0 + 24 + size, self.case(block["title"]), size, 700, family=self.f_display, leading=1.16),
+        ]
+        body_y = y0 + 24 + 24 + title_h + 16
+        parts.append(self.text(m, body_y, self.case(block["body"]), 14 * s, 400, c["text-secondary"], leading=1.6))
+        illo_y = body_y + 34
+        parts.append(self.illustration(block["illustration"], m, illo_y, W - 2 * m, (W - 2 * m) * 0.72))
+        by = illo_y + (W - 2 * m) * 0.72 + 28
+        bw, bh = W - 2 * m, 52
+        parts.append(
+            f'<g id="cta">{self.card(m, by, bw, bh, c["accent"])}'
+            + self.text(m + 20, by + 34, self.case(block["cta"]), 15, 700, c["accent-ink"])
+            + self.icon(block["ctaIcon"], m + bw - 40, by + 16, 18, c["accent-ink"])
+            + "</g>"
+        )
+        parts.append(self.text(m, by + bh + 22, self.case(block.get("note", "")), 11, 400, c["text-muted"]))
+        return f'<g id="hero">{"".join(parts)}</g>', (by + bh + 60 - 88)
+
     def hero(self, block, W, y0):
         c = self.colors
         s = self.scale
+        if self.bp == "mobile":
+            return self.hero_mobile(block, W, y0)
         if self.hero_layout == "asymmetric":
             return self.hero_asymmetric(block, W, y0)
         if self.hero_layout == "poster":
@@ -412,6 +449,8 @@ class Renderer:
         return f'<g id="hero">{"".join(parts)}</g>', h + 40
 
     def features(self, block, W, y0):
+        if self.bp == "mobile":
+            return self.features_mobile(block, W, y0)
         if self.features_layout == "list":
             return self.features_list(block, W, y0)
         if self.features_layout == "columns":
@@ -479,12 +518,13 @@ class Renderer:
 
     def quote(self, block, W, y0):
         c = self.colors
-        size = 36 * self.scale
+        m = self.M
+        size = 36 * self.scale * self.K
         parts = [
             '<g id="quote">',
-            f'<line x1="56" y1="{y0}" x2="56" y2="{y0 + 150}" stroke="{c["accent"]}" stroke-width="{self.border_w * 2}"/>',
-            self.text(96, y0 + 44, self.case(block["text"]), size, 400, family=self.f_display, leading=1.3),
-            self.text(96, y0 + 116, self.case(block.get("author", "")), 13, 600, c["text-muted"], family=self.f_mono, tracking=1.6),
+            f'<line x1="{m}" y1="{y0}" x2="{m}" y2="{y0 + 150}" stroke="{c["accent"]}" stroke-width="{self.border_w * 2}"/>',
+            self.text(m + 24, y0 + 44, self.case(block["text"]), size, 400, family=self.f_display, leading=1.35),
+            self.text(m + 24, y0 + 116, self.case(block.get("author", "")), 12, 600, c["text-muted"], family=self.f_mono, tracking=1.6),
         ]
         parts.append("</g>")
         return f"{''.join(parts)}", 210 * self.density
@@ -502,13 +542,14 @@ class Renderer:
 
     def faq(self, block, W, y0):
         c = self.colors
-        parts = [self.text(56, y0, self.case(block.get("title", "자주 묻는 질문")), 30 * self.scale, 700, family=self.f_display)]
+        m = self.M
+        parts = [self.text(m, y0, self.case(block.get("title", "자주 묻는 질문")), 30 * self.scale * self.K, 700, family=self.f_display)]
         for i, item in enumerate(block["items"][:3]):
             y = y0 + 56 + i * 92
             parts.append(f'<g id="faq-{i + 1}">')
-            parts.append(self.text(56, y + 24, self.case(item["q"]), 17, 700, family=self.f_display))
-            parts.append(self.text(56, y + 54, self.case(item["a"]), 14, 400, c["text-secondary"]))
-            parts.append(f'<line x1="56" y1="{y + 76}" x2="{W - 56}" y2="{y + 76}" stroke="{c["border"]}" stroke-width="1"/>')
+            parts.append(self.text(m, y + 24, self.case(item["q"]), 16 * self.K, 700, family=self.f_display))
+            parts.append(self.text(m, y + 52, self.case(item["a"]), 13 * self.K, 400, c["text-secondary"], leading=1.5))
+            parts.append(f'<line x1="{m}" y1="{y + 76}" x2="{W - m}" y2="{y + 76}" stroke="{c["border"]}" stroke-width="1"/>')
             parts.append("</g>")
         return f'<g id="faq">{"".join(parts)}</g>', 340 * self.density
 
@@ -531,8 +572,73 @@ class Renderer:
         parts.append("</g></g>")
         return "".join(parts), h + 40
 
+    def features_mobile(self, block, W, y0):
+        c = self.colors
+        m = self.M
+        parts = [self.text(m, y0, self.case(block["title"]), 24 * self.scale, 700, family=self.f_display)]
+        for i, item in enumerate(block["items"][:3]):
+            y = y0 + 40 + i * 96
+            parts.append(f'<g id="feature-{i + 1}">')
+            parts.append(self.icon(item["icon"], m, y + 6, 20, c["text"]))
+            parts.append(self.text(m + 32, y + 22, self.case(item["title"]), 17, 700, family=self.f_display))
+            parts.append(self.text(m + 32, y + 48, self.case(item["body"]), 12.5, 400, c["text-secondary"], leading=1.5))
+            parts.append(f'<line x1="{m}" y1="{y + 74}" x2="{W - m}" y2="{y + 74}" stroke="{c["border"]}" stroke-width="1"/>')
+            parts.append("</g>")
+        return f'<g id="features">{"".join(parts)}</g>', 360 * self.density
+
+    def stats_mobile(self, block, W, y0):
+        c = self.colors
+        m = self.M
+        parts = []
+        for i, item in enumerate(block["items"][:3]):
+            y = y0 + i * 92
+            parts.append(f'<g id="stat-{i + 1}">')
+            parts.append(self.text(m, y + 42, self.case(item["value"]), 38 * self.scale, 700, family=self.f_display))
+            parts.append(self.text(m, y + 66, self.case(item["label"]), 12, 400, c["text-muted"]))
+            parts.append(f'<line x1="{m}" y1="{y + 84}" x2="{W - m}" y2="{y + 84}" stroke="{c["border"]}" stroke-width="1"/>')
+            parts.append("</g>")
+        return f'<g id="stats">{"".join(parts)}</g>', 300 * self.density
+
+    def logos_mobile(self, block, W, y0):
+        c = self.colors
+        m = self.M
+        names = block.get("items", [])[:4]
+        parts = []
+        for i, name in enumerate(names):
+            row, col = divmod(i, 2)
+            x = m + col * ((W - 2 * m) / 2)
+            parts.append(self.text(x, y0 + 24 + row * 34, self.case(name), 13, 700, c["text-faint"], family=self.f_display, tracking=1))
+        return f'<g id="logos">{"".join(parts)}</g>', (60 + 34 * ((len(names) - 1) // 2)) * self.density
+
+    def cta_band_mobile(self, block, W, y0):
+        c = self.colors
+        m = self.M
+        h = 260
+        parts = [
+            '<g id="cta-band">',
+            self.card(m, y0, W - 2 * m, h, c["surface"]),
+            self.text(m + 24, y0 + 48, self.case(block.get("eyebrow", "")), 10, 600, c["accent"], family=self.f_mono, tracking=2),
+            self.text(m + 24, y0 + 82, self.case(block["title"]), 24 * self.scale, 700, family=self.f_display),
+            self.text(m + 24, y0 + 110, self.case(block.get("body", "")), 12.5, 400, c["text-secondary"]),
+        ]
+        bw, bh = W - 2 * m - 48, 48
+        by = y0 + 140
+        parts.append(f'<g id="cta">{self.card(m + 24, by, bw, bh, c["accent"])}')
+        parts.append(self.text(m + 44, by + 31, self.case(block["cta"]), 15, 700, c["accent-ink"]))
+        parts.append(self.icon(block.get("ctaIcon", "arrow-right"), m + 24 + bw - 40, by + 14, 18, c["accent-ink"]))
+        parts.append("</g></g>")
+        return "".join(parts), h + 30
+
     def footer(self, block, W, y):
         c = self.colors
+        if self.bp == "mobile":
+            m = self.M
+            return (
+                f'<g id="footer"><line x1="{m}" y1="{y}" x2="{W - m}" y2="{y}" stroke="{c["border"]}" stroke-width="1"/>'
+                + self.text(m, y + 32, self.case(block.get("left", "")), 11, 400, c["text-muted"], family=self.f_mono)
+                + self.text(m, y + 54, self.case(block.get("right", "")), 11, 400, c["text-muted"], family=self.f_mono)
+                + "</g>"
+            )
         parts = [
             f'<line x1="56" y1="{y}" x2="{W - 56}" y2="{y}" stroke="{c["border"]}" stroke-width="{1 if self.border_w <= 2 else self.border_w}"/>',
             self.text(56, y + 40, self.case(block.get("left", "")), 12, 400, c["text-muted"], family=self.f_mono),
@@ -565,6 +671,7 @@ def main():
     ap.add_argument("--allow-blocked", action="store_true")
     ap.add_argument("--force-height", type=int, default=0, help="프레임 고정 높이(0이면 무시)")
     ap.add_argument("--embed-max-width", type=int, default=1200, help="래스터 임베드 최대 폭(0=원본)")
+    ap.add_argument("--breakpoint", default="desktop", choices=("desktop", "tablet", "mobile"))
     args = ap.parse_args()
 
     recipe = json.loads(Path(args.recipe).read_text())
@@ -577,6 +684,10 @@ def main():
         style = deep_merge(DEFAULT_STYLE, json.loads(Path(style_path).read_text()))
 
     W = recipe["canvas"]["width"]
+    if args.breakpoint == "tablet":
+        W = 768
+    elif args.breakpoint == "mobile":
+        W = 390
     H = recipe["canvas"]["height"]
     auto_height = (H == "auto" or bool(style.get("auto_height"))) and args.force_height == 0
     if args.force_height:
@@ -584,6 +695,9 @@ def main():
     theme = style.get("theme") or recipe["theme"]
     r = Renderer(catalog, tokens, theme, style, strict=not args.allow_blocked)
     r.embed_max_width = args.embed_max_width
+    r.bp = args.breakpoint
+    r.M = 56 if args.breakpoint == "desktop" else (32 if args.breakpoint == "tablet" else 20)
+    r.K = 1.0 if args.breakpoint == "desktop" else (0.88 if args.breakpoint == "tablet" else 0.72)
 
     body = [f'<rect id="background" width="{W}" height="{H}" fill="{r.colors["background"]}"/>']
     body.append('<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter></defs>')
@@ -601,11 +715,11 @@ def main():
             body.append(svg)
             y += adv
         elif kind == "cta":
-            svg, adv = r.cta_band(block, W, y + 30)
+            svg, adv = (r.cta_band_mobile if r.bp == "mobile" else r.cta_band)(block, W, y + 30)
             body.append(svg)
             y += adv
         elif kind == "stats":
-            svg, adv = r.stats(block, W, y + 30)
+            svg, adv = (r.stats_mobile if r.bp == "mobile" else r.stats)(block, W, y + 30)
             body.append(svg)
             y += adv
         elif kind == "quote":
@@ -613,7 +727,7 @@ def main():
             body.append(svg)
             y += adv
         elif kind == "logos":
-            svg, adv = r.logos(block, W, y + 30)
+            svg, adv = (r.logos_mobile if r.bp == "mobile" else r.logos)(block, W, y + 30)
             body.append(svg)
             y += adv
         elif kind == "faq":
