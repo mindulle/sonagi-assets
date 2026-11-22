@@ -63,8 +63,19 @@ python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
 
 레시피: `"illustration": ["open-vault", "float", "<etching 이름>"]` → 스타일에 맞는 후보를 선택.
 
-래스터(jpg/png)는 SVG에 base64로 임베드한다. 외부 참조가 없어 파일 단독으로 열리지만
-파일이 커진다(1600px 동판화 1장 ≈ 2.5MB). Figma 임포트 전에는 폭을 줄이는 편이 좋다.
+래스터(jpg/png)는 SVG에 base64로 임베드한다. 외부 참조가 없어 파일 단독으로 열린다.
+
+| 임베드 폭 | SVG 크기(동판화 1장) | 용도 |
+| --- | --- | --- |
+| 1600px (원본) | 2.5MB | 인쇄 원본 보관 |
+| 1200px (기본) | 1.3MB | Figma 임포트 권장 상한 |
+| 900px | 636KB | 화면 시안·클라이언트 전달 |
+
+```bash
+render_recipe.py ... --embed-max-width 900
+```
+
+`--embed-max-width 0`이면 원본 그대로 넣는다.
 
 ### 레이아웃 문법
 
