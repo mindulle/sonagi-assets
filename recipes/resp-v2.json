@@ -1,0 +1,72 @@
+{
+    "name": "resp-v2",
+    "seed": 7,
+    "theme": "editorial",
+    "canvas": { "width": 1440, "height": "auto" },
+    "blocks": [
+        { "type": "header", "brand": "ATELIER SONAGI", "nav": ["아카이브", "프린트", "스토리"] },
+        {
+            "type": "hero",
+            "eyebrow": "ARCHIVE PRINT · NO. 018",
+            "title": "종이 위에 남는\n풍경",
+            "body": "19세기 풍경화 아카이브를 무광 아카이브 페이퍼에 옮겼습니다.",
+            "cta": "컬렉션 보기",
+            "ctaIcon": "arrow-right",
+            "note": "CC0 원본 · 국내 제작",
+            "illustration": ["open-vault", "float"]
+        },
+        {
+            "type": "stats",
+            "items": [
+                { "value": "1,842", "label": "아카이브 작품" },
+                { "value": "4.8", "label": "평균 만족도" },
+                { "value": "3–5일", "label": "제작 기간" }
+            ]
+        },
+        {
+            "type": "features",
+            "title": "고르는 기준",
+            "items": [
+                {
+                    "icon": "package",
+                    "title": "원본 그대로",
+                    "body": "박물관 공개 스캔을 색보정 없이 인쇄합니다."
+                },
+                {
+                    "icon": "eye",
+                    "title": "실물 확인",
+                    "body": "주문 전 샘플 컷으로 질감을 확인할 수 있습니다."
+                },
+                {
+                    "icon": "lock",
+                    "title": "라이선스 명시",
+                    "body": "모든 프린트에 원본 출처와 라이선스를 함께 보냅니다."
+                }
+            ]
+        },
+        { "type": "logos", "items": ["MET", "CMA", "RIJKSMUSEUM", "WIKIMEDIA", "SMITHSONIAN"] },
+        {
+            "type": "faq",
+            "title": "자주 묻는 질문",
+            "items": [
+                {
+                    "q": "원본은 어디에서 오나요?",
+                    "a": "메트로폴리탄·클리블랜드 등 CC0 공개 컬렉션에서만 가져옵니다."
+                },
+                { "q": "상업적으로 사용할 수 있나요?", "a": "CC0 원본이라 가능합니다." },
+                { "q": "교환·반품이 되나요?", "a": "제작물 특성상 7일 내 파손에 한해 교환합니다." }
+            ]
+        },
+        {
+            "type": "cta",
+            "eyebrow": "READY",
+            "title": "지금 시작하기",
+            "body": "컬렉션에서 원하는 작품을 고르세요.",
+            "cta": "컬렉션 보기",
+            "ctaIcon": "arrow-right",
+            "note": "무료 배송",
+            "illustration": ["open-vault", "float"]
+        },
+        { "type": "footer", "left": "© 2026 Atelier Sonagi", "right": "CC0 · Public domain" }
+    ]
+}
