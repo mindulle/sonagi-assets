@@ -18,11 +18,12 @@
     },
     "type": {
         "display": "Gowun Batang",
-        "sans": "NanumSquare",
+        "sans": "Pretendard",
         "mono": "JetBrains Mono",
         "scale": 1.05,
         "uppercase": false,
-        "tracking": -0.4
+        "tracking": -0.4,
+        "korean": "Gowun Batang"
     },
     "illustration": "color",
     "illustration_set": "etchings",

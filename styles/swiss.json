@@ -18,11 +18,12 @@
     },
     "type": {
         "display": "Archivo",
-        "sans": "NanumSquare",
+        "sans": "Pretendard",
         "mono": "JetBrains Mono",
         "scale": 0.95,
         "uppercase": true,
-        "tracking": -0.4
+        "tracking": -0.4,
+        "korean": "Pretendard"
     },
     "illustration": "mono",
     "density": 1.0,
