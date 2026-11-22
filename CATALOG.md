@@ -1,6 +1,6 @@
 # Asset Catalog
 
-`asset_hub.db`(8,768 items)를 읽기 전용으로 스캔해 정규화된 카탈로그를 만든다.
+`asset_hub.db`(8,768 rows)를 읽기 전용으로 스캔해 정규화된 카탈로그를 만든다.
 
 ## 생성
 
@@ -9,18 +9,19 @@
 sudo python3 scripts/build_asset_catalog.py \
   --db /srv/sonagi-assets/asset_hub.db \
   --library-root /srv/sonagi-assets/library \
-  --out-dir /srv/sonagi-assets/catalog
+  --out-dir /srv/sonagi-assets/catalog \
+  --google-fonts /tmp/google-fonts.json   # 선택: OFL 판별
 ```
 
-산출물(저장소에 커밋하지 않음, 서버에만 둠):
+산출물(서버에만 두고 저장소에는 커밋하지 않음):
 
 | 파일 | 내용 |
 | --- | --- |
-| `catalog.json` | 8,768개 항목. id·이름·확장자·category·topics·source·format·style·license·path·sha256·svg_groups |
-| `summary.json` | 집계와 결손(style/license/그룹 없는 SVG) |
-| `tag-map.json` | 정규화 규칙 (DB에는 아직 미적용) |
+| `catalog.json` | 항목별 id·이름·확장자·category·topics·source·format·style·license·license_basis·junk·path·sha256·svg_groups |
+| `summary.json` | 집계와 결손 |
+| `tag-map.json` | 태그 정규화 규칙 (DB에는 미적용) |
 
-## 정규화 규칙 (2026-11-22)
+## 태그 정규화
 
 | 기존 | 변경 |
 | --- | --- |
@@ -31,10 +32,34 @@ sudo python3 scripts/build_asset_catalog.py \
 | `Auto-Ingested` | `src:auto-ingested` |
 | `topic:landscapes` | `topic:landscape` |
 
-## 현재 결손
+## 라이선스 기본값
 
-- `style`: 8,768 / 8,768 미분류
-- `license`: 8,768 / 8,768 미확인
-- SVG 그룹 없음: 3,360 / 6,586 (Figma에서 그룹 보존 불가)
-- 파일 경로 없음: 120
-- category 2개 이상: 다수 (우선순위 규칙 필요)
+| 조건 | license | 근거 |
+| --- | --- | --- |
+| 이름이 `._` 로 시작 | `n/a` | macOS AppleDouble 메타데이터 (에셋 아님) |
+| 폰트 + Google Fonts 패밀리 일치 | `ofl` | `--google-fonts` 목록 대조 |
+| `src:the-met`, `src:cma` | `cc0` | 박물관 Open Access |
+| 그 외 | `internal-only` | 출처 미확인 — 판매/배포 제외 |
+
+> `internal-only`는 불법이라는 뜻이 아니라 **증명이 없다**는 뜻이다. D2C·외주 납품물에는 allow-list로만 포함한다.
+
+## 현재 상태 (2026-11-22)
+
+| 항목 | 값 |
+| --- | --- |
+| 전체 row | 8,768 |
+| 실제 에셋 | **5,317** |
+| macOS `._` 청소 대상 | **3,451** |
+| 스타일 미분류 | 5,317 / 5,317 |
+| 라이선스 미확인 | 5,008 / 5,317 |
+| CC0 | 40 |
+| OFL 폰트 | 269 (매칭된 폰트 기준) |
+| SVG 그룹 없음 | **199** / 3,425 (실제 SVG) |
+| 파일 경로 없음 | 77 |
+
+## 다음 작업
+
+1. `._` 3,451개 정리 (라이브러리 용량·카탈로그 노이즈 감소)
+2. 스타일 태깅 (상위 500개부터)
+3. 폰트 2,075개 중 미매칭 1,806개 수동 확인 (상용 폰트 가능성)
+4. legacy 에셋 중 판매 대상만 개별 라이선스 확인
