@@ -281,6 +281,7 @@ class Renderer:
                 "license": item.get("license"),
                 "scope": item.get("license_scope"),
                 "origin": origin,
+                "annotation": item.get("annotation"),
             }
         )
         return item
@@ -721,10 +722,11 @@ class Renderer:
             )
             y += 58
         header_h = 44
-        grid_h = header_h + len(rows) * 54 + (30 if block.get("note") else 0)
+        body_h = header_h + len(rows) * 54
+        note_h = 56 if block.get("note") else 0
         if featured and 1 <= featured <= n:
             fx = m + (featured - 1) * col_w
-            parts.append(f'<rect id="table-featured" x="{fx}" y="{y}" width="{col_w}" height="{grid_h}" fill="{c["surface"]}"/>')
+            parts.append(f'<rect id="table-featured" x="{fx}" y="{y}" width="{col_w}" height="{body_h}" fill="{c["surface"]}"/>')
         for i, col in enumerate(cols):
             on = featured == i + 1
             parts.append(
@@ -771,7 +773,8 @@ class Renderer:
                 )
             )
         parts.append("</g>")
-        return "".join(parts), (y - y0) + grid_h + 24
+        # 블록은 main에서 y+30으로 호출되므로 그만큼 되돌려 보정한다(표 아래 여백)
+        return "".join(parts), (y - y0) + body_h + note_h + 26
 
     def table_mobile(self, block, W, y0):
         c = self.colors
@@ -989,6 +992,27 @@ def write_credits(path, manifest):
             continue
         seen.add(key)
         lines.append(f"| {a['name']} | {a['kind']} | {a['license']} | {a['origin']} | {a['scope']} |")
+    generated = []
+    for a in manifest["assets"]:
+        meta = a.get("annotation")
+        if a["origin"] != "generated" or not meta:
+            continue
+        try:
+            info = json.loads(meta).get("generator", {})
+        except (TypeError, ValueError):
+            continue
+        if info and (a["name"], info) not in generated:
+            generated.append((a["name"], info))
+    if generated:
+        lines += ["", "## 생성 정보", ""]
+        for name, info in generated:
+            parts = [f"`{name}`", f"모델 `{info.get('model')}`"]
+            if info.get("generated_at"):
+                parts.append(f"생성 {info['generated_at']}")
+            lines.append("- " + " · ".join(parts))
+            if info.get("prompt"):
+                lines.append(f"  - 프롬프트: {info['prompt']}")
+
     output_only = manifest.get("output_only") or []
     if output_only:
         lines += ["", "## 재배포 제한", ""]
