@@ -107,6 +107,42 @@ render_recipe.py ... --embed-max-width 900
 }
 ```
 
+## 콘텐츠 임포터
+
+화면의 문장과 배치를 분리한다. 규격은 `CONTENT_FORMAT.md`.
+
+```markdown
+## hero
+title: 종이 위에 남는
+  풍경
+cta: 컬렉션 보기
+```
+
+```bash
+python3 scripts/import_content.py content/atelier-landing.md \
+  --catalog catalog/catalog.json --out recipes/atelier-landing.json
+```
+
+| 검사 | 결과 |
+| --- | --- |
+| 없는 타입·필드(오타) | 오류 + 유사 이름 제안 |
+| 필수 필드 누락 | 오류 |
+| 목록 수 초과 | 오류 |
+| 카탈로그에 없는 아이콘·일러스트 | 오류 + 유사 이름 제안 |
+| `scope`가 `bundle` 아님 | 오류 |
+| 문장 길이 초과 | 경고 |
+
+렌더 단계에서 터지던 `asset not found`·`asset blocked`를 **임포트 단계로 앞당긴다**.
+생성된 레시피는 `content.source`·`content.sha256`으로 원본을 추적한다.
+
+같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
+
+```bash
+for s in editorial brutalist minimal magazine swiss poster sketch etching; do
+  render_recipe.py --recipe recipes/atelier-landing.json --style styles/$s.json ...
+done
+```
+
 ## 자산 삽입 규칙
 
 - 아이콘: 원본 SVG의 `stroke="currentColor"`를 현재 텍스트 색으로 치환, 24 그리드 기준 스케일
