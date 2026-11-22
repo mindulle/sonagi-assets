@@ -754,13 +754,24 @@ def main():
     svg_path = out / f"{name}.svg"
     svg_path.write_text(svg)
 
+    def file_hash(path):
+        from pathlib import Path as _P
+
+        return hashlib.sha256(_P(path).read_bytes()).hexdigest() if path and _P(path).is_file() else ""
+
     manifest = {
         "recipe": recipe.get("name"),
+        "inputs": {
+            "recipe": file_hash(args.recipe),
+            "style": file_hash(args.style),
+            "tokens": file_hash(args.tokens),
+            "catalog": file_hash(args.catalog),
+        },
         "style": style.get("name"),
         "seed": recipe.get("seed"),
         "theme": theme,
         "canvas": {"width": W, "height": H},
-        "output": str(svg_path),
+        "output": svg_path.name,
         "sha256": hashlib.sha256(svg.encode()).hexdigest(),
         "layers": re.findall(r'<g id="([^"]+)"', svg),
         "assets": r.used,

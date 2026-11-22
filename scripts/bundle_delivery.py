@@ -141,10 +141,15 @@ def main():
 
     if args.zip:
         archive = out.with_suffix(".zip")
+        # 고정 타임스탬프 + 정렬된 순서 → 같은 내용이면 같은 zip 바이트
         with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as z:
             for p in sorted(out.rglob("*")):
-                if p.is_file():
-                    z.write(p, p.relative_to(out.parent))
+                if not p.is_file():
+                    continue
+                info = zipfile.ZipInfo(str(p.relative_to(out.parent)), date_time=(1980, 1, 1, 0, 0, 0))
+                info.compress_type = zipfile.ZIP_DEFLATED
+                info.external_attr = 0o644 << 16
+                z.writestr(info, p.read_bytes())
         print(json.dumps({"bundle": str(out), "zip": str(archive), "screens": len(screens)}, ensure_ascii=False))
     else:
         print(json.dumps({"bundle": str(out), "screens": len(screens)}, ensure_ascii=False))

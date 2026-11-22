@@ -120,6 +120,39 @@ def export_pdf(chrome, svgs, fonts_css, out_pdf):
         )
 
 
+def normalize_pdf(path, title="delivery", fixed="D:20000101000000Z"):
+    """Chromium이 넣는 생성 시각·랜덤 ID를 고정값으로 바꿔 바이트 재현성을 만든다."""
+    try:
+        import hashlib
+
+        from pypdf import PdfReader, PdfWriter
+        from pypdf.generic import ArrayObject, ByteStringObject
+    except ImportError:
+        return False
+
+    reader = PdfReader(str(path))
+    writer = PdfWriter()
+    for page in reader.pages:
+        writer.add_page(page)
+    writer.add_metadata(
+        {
+            "/Title": title,
+            "/Producer": "sonagi-assets",
+            "/Creator": "sonagi-assets",
+            "/CreationDate": fixed,
+            "/ModDate": fixed,
+        }
+    )
+    digest = hashlib.md5(title.encode())
+    for page in writer.pages:
+        digest.update(page.get_contents().get_data())
+    value = digest.digest()
+    writer._ID = ArrayObject([ByteStringObject(value), ByteStringObject(value)])
+    with open(path, "wb") as f:
+        writer.write(f)
+    return True
+
+
 def export_png(chrome, svg, fonts_css, out_png, scale):
     w, h = svg_size(svg)
     html = f"""<!doctype html><html><head><meta charset="utf-8"><style>
@@ -189,6 +222,7 @@ def main():
         for (text, size), f in zip(svgs, files):
             pdf = out / f"{f.stem}.pdf"
             export_pdf(chrome, [(text, size)], fonts_css, pdf)
+            normalize_pdf(pdf, title=f.stem)
             produced.append(pdf)
 
     for f in files:
@@ -208,7 +242,6 @@ def main():
             shutil.copy2(manifest, out / manifest.name)
 
     summary = {
-        "source": str(src),
         "formats": sorted(formats),
         "scale": args.scale,
         "pages": [{"file": f.name, "width": s[0], "height": s[1]} for f, s in zip(files, [s for _, s in svgs])],
