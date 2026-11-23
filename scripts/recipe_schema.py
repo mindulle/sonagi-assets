@@ -23,6 +23,9 @@ import json
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from contract import FIELDS as CONTRACT_FIELDS  # noqa: E402
+
 BLOCK_TYPES = (
     "header",
     "hero",
@@ -84,7 +87,15 @@ def load(path):
         raw = json.loads(path.read_text())
     except json.JSONDecodeError as exc:
         raise RecipeError(f"{path}: JSON이 아닙니다 ({exc})") from exc
-    return normalize(raw, name=str(path))
+    recipe, schema = normalize(raw, name=str(path))
+    contract = recipe.get("contract")
+    if contract is not None:
+        if not isinstance(contract, dict):
+            raise RecipeError(f"{path}: contract는 객체여야 합니다")
+        unknown = set(contract) - set(CONTRACT_FIELDS)
+        if unknown:
+            raise RecipeError(f"{path}: contract에 알 수 없는 키 {sorted(unknown)}")
+    return recipe, schema
 
 
 def main():

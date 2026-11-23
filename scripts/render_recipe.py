@@ -24,6 +24,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import contract  # noqa: E402
 import ornament_data  # noqa: E402
 from provenance import disclosure_for, origin_from_tags  # noqa: E402
 from recipe_schema import RecipeError, normalize  # noqa: E402
@@ -1290,6 +1291,10 @@ def main():
         raise SystemExit(str(exc)) from exc
     if schema != "blocks":
         print(f"참고: 레거시 레시피를 blocks로 변환했습니다 ({args.recipe})", file=sys.stderr)
+    try:
+        contract.validate(recipe.get("contract"), name=f"{args.recipe}: contract")
+    except ValueError as exc:
+        raise SystemExit(str(exc)) from exc
     catalog = json.loads(Path(args.catalog).read_text())
     tokens = json.loads(Path(args.tokens).read_text())
 
@@ -1383,6 +1388,7 @@ def main():
         return hashlib.sha256(_P(path).read_bytes()).hexdigest() if path and _P(path).is_file() else ""
 
     manifest = {
+        "contract": contract.stamp(style, args.tokens),
         "recipe": recipe.get("name"),
         "inputs": {
             "recipe": file_hash(args.recipe),

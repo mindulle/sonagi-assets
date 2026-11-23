@@ -75,3 +75,22 @@ python3 scripts/check_gaps.py out/sweep --recursive --max-gap 60
 - PDF·PNG·WebP는 대상이 아니다. SVG와 매니페스트만 비교한다(export 회귀는 별도).
 - 기준선은 "지금 동작"의 스냅샷이지 "옳음"의 증명이 아니다. `--update`는 왜 바뀌었는지
   커밋 메시지에 남긴다.
+
+## 6. 계약 헤더와 판정 골든
+
+2026-11-23에 매니페스트에 `contract` 4칸(`schema_version`·`tokens_version`·
+`style_id`·`ruleset_version`)이 들어갔다. 이때 기준선 42렌더가 전부 `manifest`만
+바뀌고 `0px`였다. SVG 해시가 그대로라 **시각 변경 없이 추적 정보만 늘었다**는
+증거다. 앞으로 토큰이나 룰셋을 고치면 이 값이 먼저 달라진다.
+
+"이 렌더가 좋은가"는 별도 기준선을 쓴다 — `test_data/judgment/baseline.json`.
+
+```bash
+python3 scripts/judgment_golden.py            # 판정 기준선과 비교
+python3 scripts/judgment_golden.py --update   # 룰을 의도적으로 바꿨을 때
+python3 scripts/lint_render.py --dir out/golden --recursive --quiet
+```
+
+룰을 고치면 `rules/ruleset.json`의 `version`을 올린다. 그래야 산출물의
+`contract.ruleset_version`과 비교해 "재판정이 필요한 산출물"이 드러난다
+(`contract.stale` WARN).

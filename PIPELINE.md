@@ -389,6 +389,12 @@ done
 
 ```json
 {
+    "contract": {
+        "schema_version": 1,
+        "tokens_version": "e6f5ad880d19",
+        "style_id": "editorial@6b6b1bac5733",
+        "ruleset_version": "1.0.0"
+    },
     "recipe": "landing-hero",
     "seed": 7,
     "theme": "editorial",
@@ -403,7 +409,75 @@ done
 
 납품 시 매니페스트를 함께 보내면 "이 결과물에 무엇이 들어갔는지"가 자동으로 증명된다.
 
+## 계약 헤더
+
+골든 기준선은 SVG 바이트만 본다. 그래서 토큰을 고치거나 판정 룰셋을 바꿔도
+산출물은 조용히 지나간다. 계약 헤더가 그 변화를 이름으로 남긴다(4칸).
+
+| 칸                | 값                                  | 왜                   |
+| ----------------- | ----------------------------------- | -------------------- |
+| `schema_version`  | 헤더 형식 판(현재 1)                | 헤더 개정 추적       |
+| `tokens_version`  | `tokens/semantic.json` sha256 앞 12 | 팔레트 개정 추적     |
+| `style_id`        | `<이름>@<해석된 스타일 해시 12>`    | 축 조합 동일성       |
+| `ruleset_version` | `rules/ruleset.json`의 version      | 어떤 룰로 판정했나   |
+
+`style_id`는 파일 해시가 아니라 **축 병합이 끝난 스타일**의 해시다. 같은 축
+조합이면 파일이 달라도 같은 id가 나오고, 1px만 달라도 다른 id가 나온다.
+
+```bash
+python3 scripts/contract.py --style styles/editorial.json
+```
+
+레시피는 `contract.schema_version`만 선언할 수 있다(값은 렌더 시점에 다시 계산).
+`--update`로 골든을 갱신할 때 42렌더 전부가 `manifest`만 바뀌고 `0px`면,
+헤더 추가가 시각을 건드리지 않았다는 증거다.
+
+## 판정 린트와 판정 골든
+
+`visual_consistency_graph`는 LLM에게 점수를 묻는다. 점수는 흔들리고, 룰을 바꿨을 때
+개선인지 표류인지 구분하지 못한다. 그 앞단에 **결정론 게이트**를 둔다.
+
+```
+SVG + manifest ──▶ lint_render.py ──▶ {verdict, findings, ruleset_version}
+                        │
+        rules/ruleset.json (판 1.0.0)
+        canvas.size · canvas.squash · block.overlap · layer.required
+        text.contrast(floor 3.0 fail / AA 4.5 warn) · text.overflow
+        license.scope · contract.present · contract.stale
+```
+
+```bash
+python3 scripts/lint_render.py --svg out/x.svg --manifest out/x.manifest.json \
+  --tokens tokens/semantic.json            # PASS/WARN/FAIL + 룰 id
+python3 scripts/lint_render.py --dir out/golden --recursive --quiet
+python3 scripts/judgment_golden.py          # 판정 기준선과 비교 (CI)
+python3 scripts/judgment_golden.py --update # 룰을 의도적으로 바꿨을 때
+```
+
+`test_data/judgment/cases.json`은 16케이스다.
+
+| 종류    | 수 | 뜻                                                              |
+| ------- | -: | --------------------------------------------------------------- |
+| `clean` |  2 | 짧은 문장으로 만든 통과 기준선 — 린터가 PASS를 낼 수 있음을 증명 |
+| `good`  |  6 | 실제 스타일 6종. 알려진 WARN은 baseline에 고정(FAIL이면 회귀)   |
+| `bad`   |  8 | 겹침·저대비·찌그러짐·레이어·라이선스·계약 누락·룰셋 노후         |
+
+`bad-*`는 좋은 렌더를 코드로 망쳐서 만든다(mutation). 픽스처를 손으로 그리지
+않으므로 "나쁜 예"가 왜 나쁜지 diff로 읽힌다.
+
+### 이 린터가 처음 찾아낸 것
+
+`good-*` 6장 중 5장이 WARN이고, 원인은 두 가지다. 둘 다 렌더러가 아니라
+**디자인 결정의 부채**다(baseline에 고정해 두고, 고치면 `--update`).
+
+| 증상                                       | 위치                          | 값          |
+| ------------------------------------------ | ----------------------------- | ----------- |
+| 12px accent eyebrow가 AA 미달              | hero·cta eyebrow              | 3.03:1      |
+| 390px에서 hero 제목이 줄바꿈되지 않고 넘침 | brutalist·etching 모바일 제목 | +18~51px    |
+| 로고 워드마크가 cream 위에서 AA 미달       | logos (poster·etching)        | 3.34~4.12:1 |
+
 ## 출처(origin)와 사용 범위
+
 
 라이선스는 "무엇을 해도 되는가", 출처는 "어디서 왔는가"다. 둘을 분리해 태그한다.
 

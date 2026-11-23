@@ -116,3 +116,20 @@ jobs:
                     exit 1
                   fi
                   ls out/link-check/assets/*.jpg >/dev/null
+
+    judgment:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+            - name: Install render deps
+              run: python3 -m pip install --quiet pyyaml
+            - name: 계약 헤더
+              run: python3 scripts/contract.py --style styles/editorial.json
+            - name: 판정 골든셋
+              run: python3 scripts/judgment_golden.py
+            - name: 기준선 렌더 L1 린트
+              run: python3 scripts/lint_render.py --dir out/judgment/_base --recursive --quiet
