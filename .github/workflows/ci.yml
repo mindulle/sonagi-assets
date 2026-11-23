@@ -40,6 +40,20 @@ jobs:
                   diff -u /tmp/golden-a.json /tmp/golden-b.json
             - name: 블록 겹침 검수
               run: python3 scripts/check_gaps.py out/golden --recursive
+            - name: 락업 시트
+              run: |
+                  python3 scripts/render_lockup.py --spec test_data/identity/lockup.json \
+                    --out out/lockup --name sonagi-lockup --json
+                  python3 scripts/render_lockup.py --spec test_data/identity/lockup.json \
+                    --out out/lockup-2 --name sonagi-lockup >/dev/null
+                  a=$(sha256sum out/lockup/sonagi-lockup.svg | cut -d' ' -f1)
+                  b=$(sha256sum out/lockup-2/sonagi-lockup.svg | cut -d' ' -f1)
+                  test "$a" = "$b"
+                  if python3 scripts/render_lockup.py \
+                    --spec test_data/identity/lockup-low-contrast.json --check >/dev/null 2>&1; then
+                    echo "저대비 스펙이 통과했습니다"
+                    exit 1
+                  fi
             - name: 래스터 링크 모드
               run: |
                   python3 scripts/render_recipe.py --recipe out/golden/recipe.json \

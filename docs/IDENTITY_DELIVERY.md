@@ -152,11 +152,49 @@ brand-sheet.pdf
 | 타입 | 내용 | 현재 |
 | --- | --- | --- |
 | `page` | 웹·랜딩 | ✅ 구현 |
-| `lockup` | 락업·변형 시트 | ❌ |
+| `lockup` | 락업·변형 시트 | ✅ 구현 (`press lockup`) |
 | `brand-sheet` | 8페이지 가이드 | ❌ |
 | `spec-diagram` | 클리어 스페이스·작도 | ❌ |
 
 `lockup`·`spec-diagram`은 SVG 블록으로 비교적 쉽게 만들 수 있다. `brand-sheet`는 A4 다페이지 PDF 조판이 필요해 별도 작업이다.
+
+### lockup 시트 (구현됨)
+
+스펙 JSON 하나로 락업 × 변형 매트릭스를 전개한다. press는 로고를 만들지 않고,
+받은 심볼 벡터를 다시 칠해 배치하고 **실제 배경 대비를 계산**한다.
+
+```json
+{
+    "brand": "SONAGI",
+    "version": "v1.0",
+    "symbol": "assets/logo/symbol.svg",
+    "wordmark": "SONAGI",
+    "type": { "family": "Archivo", "weight": 700, "tracking": 0.14 },
+    "colors": {
+        "primary": "#1f4536",
+        "ink": "#161616",
+        "paper": "#fbf9f5",
+        "accent": "#b4551f"
+    },
+    "backgrounds": { "light": "#fbf9f5", "dark": "#12100e" },
+    "lockups": ["horizontal", "stacked", "symbol"],
+    "variants": ["color", "mono", "inverse", "one-color"],
+    "clearspace": 0.5,
+    "minimum": { "print_mm": 15, "screen_px": 24 }
+}
+```
+
+```bash
+press lockup --spec brand/lockup.json --out out/lockup --name sonagi-lockup
+press lockup --spec brand/lockup.json --check      # 파일 없이 검사만
+```
+
+- 셀마다 전경·배경·대비를 매니페스트에 남긴다. 4.5:1 미만이면 exit 1
+  (`--allow-low-contrast`로 강제 진행)
+- 심볼은 `stroke`/`fill`의 hex만 다시 칠한다. `none`·그라디언트 정의는 건드리지 않는다
+- 워드마크는 텍스트로 그린다. **제출용은 벡터 아웃라인을 권장** — `wordmark` 대신
+  별도 SVG를 쓰는 경로는 아직 없다
+- 파일명은 브랜드명을 소문자·하이픈으로 바꿔 만든다(8절 규칙)
 
 ## 11. 남은 구멍
 

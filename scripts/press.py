@@ -203,6 +203,26 @@ def cmd_preview(args) -> int:
     return run(cmd)
 
 
+def cmd_lockup(args) -> int:
+    cmd = [
+        sys.executable,
+        SCRIPTS / "render_lockup.py",
+        "--spec",
+        args.spec,
+        "--out",
+        args.out,
+    ]
+    if args.name:
+        cmd += ["--name", args.name]
+    if args.check:
+        cmd.append("--check")
+    if args.allow_low_contrast:
+        cmd.append("--allow-low-contrast")
+    if args.json:
+        cmd.append("--json")
+    return run(cmd)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="press", description="소나기 렌더·납품 엔진")
     parser.add_argument("--version", action="version", version=f"press {VERSION}")
@@ -245,6 +265,15 @@ def build_parser() -> argparse.ArgumentParser:
     preview.add_argument("--frame")
     preview.add_argument("--png", action="store_true")
     preview.set_defaults(func=cmd_preview)
+
+    lockup = sub.add_parser("lockup", help="락업·변형 시트 (로고 규격)")
+    lockup.add_argument("--spec", required=True)
+    lockup.add_argument("--out", default="out/lockup")
+    lockup.add_argument("--name")
+    lockup.add_argument("--check", action="store_true", help="검사만")
+    lockup.add_argument("--allow-low-contrast", action="store_true")
+    lockup.add_argument("--json", action="store_true")
+    lockup.set_defaults(func=cmd_lockup)
 
     return parser
 
