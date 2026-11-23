@@ -37,11 +37,9 @@
             }
         },
         "good-brutalist-mobile-dark": {
-            "expect": "warn",
-            "verdict": "warn",
-            "rules": [
-                "text.overflow"
-            ],
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
             "contract": {
                 "schema_version": 1,
                 "tokens_version": "d73bbac048e2",
@@ -50,11 +48,9 @@
             }
         },
         "good-poster-tablet-light": {
-            "expect": "warn",
-            "verdict": "warn",
-            "rules": [
-                "text.overflow"
-            ],
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
             "contract": {
                 "schema_version": 1,
                 "tokens_version": "d73bbac048e2",
@@ -74,11 +70,9 @@
             }
         },
         "good-etching-mobile-light": {
-            "expect": "warn",
-            "verdict": "warn",
-            "rules": [
-                "text.overflow"
-            ],
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
             "contract": {
                 "schema_version": 1,
                 "tokens_version": "d73bbac048e2",
@@ -87,11 +81,9 @@
             }
         },
         "good-artnouveau-tablet-dark": {
-            "expect": "warn",
-            "verdict": "warn",
-            "rules": [
-                "text.overflow"
-            ],
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
             "contract": {
                 "schema_version": 1,
                 "tokens_version": "d73bbac048e2",

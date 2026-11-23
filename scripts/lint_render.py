@@ -143,17 +143,36 @@ def collect_text(root):
                 rect_fills(child, group_fills)
         current = el.get("fill") or fill
         if tag == "text" and not skip:
-            out.append(
-                (
-                    "".join(el.itertext()).strip(),
-                    num(el, "font-size", 16.0),
-                    num(el, "x", 0.0),
-                    el.get("text-anchor", "start"),
-                    current,
-                    num(el, "letter-spacing", 0.0),
-                    list(group_fills or []),
+            size = num(el, "font-size", 16.0)
+            anchor = el.get("text-anchor", "start")
+            spacing = num(el, "letter-spacing", 0.0)
+            spans = [child for child in el if local(child.tag) == "tspan"]
+            if spans:
+                # 여러 줄은 tspan마다 따로 잰다. 이어 붙이면 한 줄로 오판한다.
+                for span in spans:
+                    out.append(
+                        (
+                            "".join(span.itertext()).strip(),
+                            size,
+                            num(span, "x", num(el, "x", 0.0)),
+                            anchor,
+                            current,
+                            spacing,
+                            list(group_fills or []),
+                        )
+                    )
+            else:
+                out.append(
+                    (
+                        "".join(el.itertext()).strip(),
+                        size,
+                        num(el, "x", 0.0),
+                        anchor,
+                        current,
+                        spacing,
+                        list(group_fills or []),
+                    )
                 )
-            )
         for child in el:
             walk(child, current, skip, group_fills)
 

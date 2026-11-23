@@ -433,6 +433,10 @@ class Renderer:
             lines.append(current)
         return "\n".join(lines) or str(text)
 
+    def wrap_title(self, text, size, max_width):
+        """작가가 넣은 줄바꿈은 유지하고, 넘치는 줄만 접는다."""
+        return "\n".join(self.wrap(line, size, max_width) for line in str(text).split("\n"))
+
     def text(self, x, y, content, size, weight, color=None, family=None, anchor="start", tracking=None, leading=1.18):
         color = color or self.colors["text"]
         family = family or self.f_sans
@@ -515,11 +519,12 @@ class Renderer:
         m = self.M
         big = self.bp == "tablet"
         size = (54 if big else 40) * s
-        lines = block["title"].count("\n") + 1
+        title = self.wrap_title(self.case(block["title"]), size, W - 2 * m)
+        lines = title.count("\n") + 1
         title_h = size * 1.16 * lines
         parts = [
             self.text(m, y0 + 24, self.case(block["eyebrow"]), 10, 600, c["accent"], family=self.f_mono, tracking=2),
-            self.text(m, y0 + 24 + size, self.case(block["title"]), size, 700, family=self.f_display, leading=1.16),
+            self.text(m, y0 + 24 + size, title, size, 700, family=self.f_display, leading=1.16),
         ]
         body_y = y0 + 24 + 24 + title_h + 16
         parts.append(self.text(m, body_y, self.case(block["body"]), 14 * s, 400, c["text-secondary"], leading=1.6))
@@ -739,8 +744,23 @@ class Renderer:
                 f'<g id="feature-{i + 1}">'
                 + self.card(x, y, card_w, 212)
                 + self.icon(item["icon"], x + 28, y + 28, 26, c["text"])
-                + self.text(x + 28, y + 108, self.case(item["title"]), 22, 700, family=self.f_display)
-                + self.text(x + 28, y + 146, self.case(item["body"]), 15, 400, c["text-secondary"])
+                + self.text(
+                    x + 28,
+                    y + 108,
+                    self.wrap(self.case(item["title"]), 22, card_w - 56),
+                    22,
+                    700,
+                    family=self.f_display,
+                )
+                + self.text(
+                    x + 28,
+                    y + 146,
+                    self.wrap(self.case(item["body"]), 15, card_w - 56),
+                    15,
+                    400,
+                    c["text-secondary"],
+                    leading=1.45,
+                )
                 + "</g>"
             )
         return f'<g id="features">{"".join(parts)}</g>', 252
@@ -771,7 +791,17 @@ class Renderer:
             parts.append(f'<line x1="{x}" y1="{y}" x2="{x + col_w}" y2="{y}" stroke="{c["border"]}" stroke-width="{self.border_w}"/>')
             parts.append(self.text(x, y + 34, f"0{i + 1} /", 11, 600, c["accent"], family=self.f_mono, tracking=2))
             parts.append(self.text(x, y + 78, self.case(item["title"]), 19, 700, family=self.f_display))
-            parts.append(self.text(x, y + 112, self.case(item["body"]), 14, 400, c["text-secondary"], leading=1.5))
+            parts.append(
+                self.text(
+                    x,
+                    y + 112,
+                    self.wrap(self.case(item["body"]), 14, col_w),
+                    14,
+                    400,
+                    c["text-secondary"],
+                    leading=1.5,
+                )
+            )
             parts.append("</g>")
         return f'<g id="features">{"".join(parts)}</g>', 194
 

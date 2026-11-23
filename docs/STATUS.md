@@ -143,6 +143,8 @@ dist/
   골든 42렌더 갱신이 `manifest`만 바꾸고 `0px`(시각 무변)임을 확인
 - 판정 골든 16케이스(clean 2·good 6·bad 8) 기준선 고정. bad는 mutation으로 생성
 - 토큰 정본 단일화: MDS light/dark → editorial/architecture 투영. `tokens_version` d73bbac048e2
+- 판정 골든 good 6케이스 전부 PASS — 제목·본문 줄바꿈과 MDS 대비로 WARN 3건 해소
+- 린트 tspan 수정: 여러 줄 텍스트를 한 줄로 이어 재던 오탐 제거
 - MDS 적용으로 editorial 판정이 WARN→PASS (eyebrow 3.03:1 → 5.18:1)
 - 명부 정합성: 29스타일 × 12블록 × 룰 1.0.0, 중복 `style_id` 0, 레시피 참조 오류 0
 - 결정 원장: contract·style_id·references 삼중 대조 통과, 자동 3건 + 사람 결정
@@ -154,11 +156,10 @@ dist/
 | 항목              | 내용                                                                          | 영향                                      |
 | ----------------- | ----------------------------------------------------------------------------- | ----------------------------------------- |
 | 갤러리 4개 배치   | 3열 그리드라 4번째가 빈 칸과 함께 남음                                        | 미관                                      |
+| 다크 + 벡터 도판  | swiss·art-nouveau 다크에서 선화 도판이 배경에 묻힘(토큰 변경 전부터)          | 갤러리 공백                               |
+| minimal 대비      | 스타일 팩 muted가 2.85:1 (판정 골든 미포함 스타일)                            | 접근성                                    |
 | 다크 + 래스터     | 동판화가 밝은 종이색으로 남음                                                 | 갤러리 눈부심                             |
 | devops 폰트 없음  | export는 호스트에서만 가능                                                    | 도구가 두 단계로 나뉨                     |
-| eyebrow 대비      | 12px accent eyebrow가 3.03:1 (AA 4.5 미달). 판정 골든에 WARN으로 고정          | 접근성                                    |
-| 모바일 제목 넘침  | brutalist·etching 390px에서 hero 제목이 줄바꿈 없이 +18~51px 넘침              | 모바일 가독성                             |
-| 로고 대비         | poster·etching 로고 워드마크 3.34~4.12:1                                       | 접근성                                    |
 | 토큰 이중 소스    | 해소 — MDS `packages/tokens`가 정본, `tokens/`는 생성물. 다크 accent가 블루→골드로 바뀜(ΔE 124.8) | `docs/TOKEN_SSOT.md` |
 | 보존 밖 자산      | 이전 `assets/` 업로드분은 lifecycle 미적용                                    | 수동 정리 필요                            |
 
