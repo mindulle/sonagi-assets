@@ -195,6 +195,9 @@ press lockup --spec brand/lockup.json --check      # 파일 없이 검사만
 - 워드마크는 텍스트로 그린다. **제출용은 벡터 아웃라인을 권장** — `wordmark` 대신
   별도 SVG를 쓰는 경로는 아직 없다
 - 파일명은 브랜드명을 소문자·하이픈으로 바꿔 만든다(8절 규칙)
+- `--lockup-dir`로 **제출용 단일 락업**을 함께 뽑는다: `primary-horizontal` ·
+  `primary-stacked` · `symbol` · `mono-black` · `mono-white` · `one-color`.
+  배경 없는 투명 SVG이고, 파일명은 2절 폴더 규칙과 같다
 
 ### 규격 도해 (구현됨)
 
