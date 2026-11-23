@@ -29,6 +29,8 @@ jobs:
             - name: Install render deps
               # SVG 렌더 경로는 PyYAML만 쓴다(Pillow·Chromium은 export 전용)
               run: python3 -m pip install --quiet pyyaml
+            - name: 레시피 스키마
+              run: python3 scripts/recipe_schema.py recipes/*.json
             - name: 골든 기준선과 비교
               run: python3 scripts/golden_render.py
             - name: 같은 입력 2회 → 해시 동일

@@ -176,6 +176,15 @@ press preview --sheet --png
 }
 ```
 
+`blocks`가 정본이다. 파일은 손으로 쓰지 않고 `content.md` → `import_content.py`로 만든다.
+레거시 파일 중 `content`가 블록 타입 맵인 형태는 로더가 **순서를 유지한 채** `blocks`로
+변환해 읽는다(읽기 전용, 신규 작성 금지). `content`가 `{source, sha256}` 추적 정보뿐이면
+"블록이 없습니다" 오류로 멈춘다.
+
+```bash
+python3 scripts/recipe_schema.py recipes/*.json        # 스키마·블록 요약
+```
+
 ## 스타일 축
 
 스타일은 **손으로 쓴 덩어리**가 아니라 축의 조합이다. 축 정의는 `styles/axes.json`.
@@ -288,6 +297,8 @@ python3 scripts/import_content.py content/atelier-landing.md \
 | 카탈로그에 없는 아이콘·일러스트 | 오류 + 유사 이름 제안 |
 | `scope`가 `bundle` 아님         | 오류                  |
 | 문장 길이 초과                  | 경고                  |
+| 들여쓴 필드(`  cta: ...`)       | 경고 + 필드로 처리    |
+| `hero.illustration` 한 줄 표기  | 경고 + 목록으로 변환  |
 
 지원 블록 12종: header · hero · stats · features · logos · quote · faq · cta · footer ·
 table · pricing · gallery.

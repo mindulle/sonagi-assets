@@ -26,6 +26,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ornament_data  # noqa: E402
 from provenance import disclosure_for, origin_from_tags  # noqa: E402
+from recipe_schema import RecipeError, normalize  # noqa: E402
 from style_axes import load_style  # noqa: E402
 
 SVG_OPEN = re.compile(r"<svg\b[^>]*>", re.S)
@@ -1215,7 +1216,12 @@ def main():
     ap.add_argument("--raster-dir", default="assets", help="link 모드에서 이미지를 둘 하위 폴더")
     args = ap.parse_args()
 
-    recipe = json.loads(Path(args.recipe).read_text())
+    try:
+        recipe, schema = normalize(json.loads(Path(args.recipe).read_text()), name=args.recipe)
+    except RecipeError as exc:
+        raise SystemExit(str(exc)) from exc
+    if schema != "blocks":
+        print(f"참고: 레거시 레시피를 blocks로 변환했습니다 ({args.recipe})", file=sys.stderr)
     catalog = json.loads(Path(args.catalog).read_text())
     tokens = json.loads(Path(args.tokens).read_text())
 

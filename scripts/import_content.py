@@ -127,6 +127,19 @@ def tokenize(section, report):
 
         if raw.startswith(" "):
             text = stripped
+            # 들여쓴 `key: value`는 이어쓰기가 아니라 필드 실수일 가능성이 높다
+            indented = FIELD_RE.match(text)
+            known = FIELDS.get(section["type"], (set(), set()))
+            known_keys = set(known[0]) | set(known[1])
+            if indented and indented.group(1) in known_keys:
+                key, value = indented.group(1), indented.group(2).strip()
+                report.warn(line, f"들여쓴 필드로 보입니다: '{text[:30]}' — 필드는 왼쪽 정렬하세요")
+                if last and last[0] == "group":
+                    groups[last[1]]["fields"][key] = value
+                else:
+                    fields[key] = value
+                    last = ("field", key)
+                continue
             if last and last[0] == "field":
                 key = last[1]
                 fields[key] = (fields.get(key, "") + "\n" + text).strip("\n")
@@ -161,6 +174,10 @@ def build_header(sec, fields, lists, groups, report):
 
 def build_hero(sec, fields, lists, groups, report):
     illustration = lists.get("illustration", [])
+    single = fields.get("illustration", "").strip()
+    if single and not illustration:
+        report.warn(sec["line"], "hero.illustration은 목록으로 적는 것이 규격입니다 (한 줄 표기를 목록으로 바꿈)")
+        illustration = [single]
     if len(illustration) > 2:
         report.error(sec["line"], f"hero.illustration은 2개까지입니다 (지금 {len(illustration)}개)")
     block = {
