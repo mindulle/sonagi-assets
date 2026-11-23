@@ -37,8 +37,8 @@
             "breakpoint": "mobile",
             "theme": "dark",
             "mutations": [],
-            "expect": "warn",
-            "note": "390px에서 64px 제목이 줄바꿈되지 않아 넘침 — 알려진 부채"
+            "expect": "pass",
+            "note": "제목·본문 줄바꿈 적용으로 해소"
         },
         {
             "id": "good-poster-tablet-light",
@@ -46,8 +46,8 @@
             "breakpoint": "tablet",
             "theme": "light",
             "mutations": [],
-            "expect": "warn",
-            "note": "로고 대비는 MDS 토큰으로 해소. 제목 넘침만 남음"
+            "expect": "pass",
+            "note": "제목·본문 줄바꿈 적용으로 해소"
         },
         {
             "id": "good-swiss-desktop-dark",
@@ -64,8 +64,8 @@
             "breakpoint": "mobile",
             "theme": "light",
             "mutations": [],
-            "expect": "warn",
-            "note": "로고 대비는 MDS 토큰으로 해소. 모바일 제목 넘침만 남음"
+            "expect": "pass",
+            "note": "제목·본문 줄바꿈 적용으로 해소"
         },
         {
             "id": "good-artnouveau-tablet-dark",
@@ -73,8 +73,8 @@
             "breakpoint": "tablet",
             "theme": "dark",
             "mutations": [],
-            "expect": "warn",
-            "note": "eyebrow 대비는 해소. 제목 넘침만 남음"
+            "expect": "pass",
+            "note": "제목·본문 줄바꿈 적용으로 해소"
         },
         {
             "id": "bad-squash",
