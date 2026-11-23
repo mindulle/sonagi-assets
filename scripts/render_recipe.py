@@ -925,16 +925,20 @@ class Renderer:
         c = self.colors
         m = self.M
         parts = [self.text(m, y0, self.case(block.get("title", "자주 묻는 질문")), 30 * self.scale * self.K, 700, family=self.f_display)]
+        y = y0 + 56
         for i, item in enumerate(block["items"][:3]):
-            y = y0 + 56 + i * 92
+            question = self.wrap(self.case(item["q"]), 16 * self.K, W - 2 * m)
+            answer = self.wrap(self.case(item["a"]), 13 * self.K, W - 2 * m)
+            answer_h = (answer.count("\n") + 1) * 13 * self.K * 1.5
             parts.append(f'<g id="faq-{i + 1}">')
-            parts.append(self.text(m, y + 24, self.case(item["q"]), 16 * self.K, 700, family=self.f_display))
-            parts.append(self.text(m, y + 52, self.case(item["a"]), 13 * self.K, 400, c["text-secondary"], leading=1.5))
-            parts.append(f'<line x1="{m}" y1="{y + 76}" x2="{W - m}" y2="{y + 76}" stroke="{c["border"]}" stroke-width="1"/>')
+            parts.append(self.text(m, y + 24, question, 16 * self.K, 700, family=self.f_display))
+            parts.append(self.text(m, y + 52, answer, 13 * self.K, 400, c["text-secondary"], leading=1.5))
+            sep = max(y + 76, y + 52 + answer_h)
+            parts.append(f'<line x1="{m}" y1="{sep}" x2="{W - m}" y2="{sep}" stroke="{c["border"]}" stroke-width="1"/>')
             parts.append("</g>")
+            y = sep + 16
         # 항목 수에 맞춰 높이를 잡는다(2개일 때 빈 공간이 남던 문제)
-        count = min(len(block["items"]), 3)
-        return f'<g id="faq">{"".join(parts)}</g>', count * 92 + 42
+        return f'<g id="faq">{"".join(parts)}</g>', (y - 16) - y0 + 2
 
     def cta_band(self, block, W, y0):
         c = self.colors
@@ -1167,15 +1171,19 @@ class Renderer:
         c = self.colors
         m = self.M
         parts = [self.text(m, y0, self.case(block["title"]), 24 * self.scale, 700, family=self.f_display)]
+        y = y0 + 40
         for i, item in enumerate(block["items"][:3]):
-            y = y0 + 40 + i * 96
+            body = self.wrap(self.case(item["body"]), 12.5, W - 2 * m - 32)
+            body_h = (body.count("\n") + 1) * 12.5 * 1.5
             parts.append(f'<g id="feature-{i + 1}">')
             parts.append(self.icon(item["icon"], m, y + 6, 20, c["text"]))
             parts.append(self.text(m + 32, y + 22, self.case(item["title"]), 17, 700, family=self.f_display))
-            parts.append(self.text(m + 32, y + 48, self.case(item["body"]), 12.5, 400, c["text-secondary"], leading=1.5))
-            parts.append(f'<line x1="{m}" y1="{y + 74}" x2="{W - m}" y2="{y + 74}" stroke="{c["border"]}" stroke-width="1"/>')
+            parts.append(self.text(m + 32, y + 48, body, 12.5, 400, c["text-secondary"], leading=1.5))
+            sep = y + 48 + body_h + 7
+            parts.append(f'<line x1="{m}" y1="{sep}" x2="{W - m}" y2="{sep}" stroke="{c["border"]}" stroke-width="1"/>')
             parts.append("</g>")
-        return f'<g id="features">{"".join(parts)}</g>', 40 + 96 * (min(len(block["items"]), 3) - 1) + 74
+            y = sep + 22
+        return f'<g id="features">{"".join(parts)}</g>', (y - 22) - y0
 
     def stats_mobile(self, block, W, y0):
         c = self.colors
@@ -1210,7 +1218,14 @@ class Renderer:
             self.card(m, y0, W - 2 * m, h, c["surface"]),
             self.text(m + 24, y0 + 48, self.case(block.get("eyebrow", "")), 10, 600, c["accent"], family=self.f_mono, tracking=2),
             self.text(m + 24, y0 + 82, self.case(block["title"]), 24 * self.scale, 700, family=self.f_display),
-            self.text(m + 24, y0 + 110, self.case(block.get("body", "")), 12.5, 400, c["text-secondary"]),
+            self.text(
+                m + 24,
+                y0 + 110,
+                self.wrap(self.case(block.get("body", "")), 12.5, W - 2 * m - 48),
+                12.5,
+                400,
+                c["text-secondary"],
+            ),
         ]
         bw, bh = W - 2 * m - 48, 48
         by = y0 + 140

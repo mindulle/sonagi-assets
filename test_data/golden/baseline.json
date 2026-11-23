@@ -209,12 +209,12 @@
             ]
         },
         "editorial|mobile|light": {
-            "svg_sha256": "23bc93bcd72d5534b2ddf85a547f34b1398102f0392443f3c656a0df98a5d2aa",
-            "svg_bytes": 161240,
-            "manifest_sha256": "dd19c3862f04689baa10051cf0e157198b02f42079effdba2f3da1380eb5c015",
+            "svg_sha256": "4f67cf9100cf2e216da2ab780e1ba49fa260d8185c7450fba94b94fb4085a4a7",
+            "svg_bytes": 161554,
+            "manifest_sha256": "d8556fd06d9b5d65633154cd2b80ca13c88761fc6ccda464d2a6a9ac4c9c5b60",
             "canvas": {
                 "width": 390,
-                "height": 3752
+                "height": 3793
             },
             "layers": [
                 "header",
@@ -255,12 +255,12 @@
             ]
         },
         "editorial|mobile|dark": {
-            "svg_sha256": "1b28b0de50f7df202a8f3e9076417a542fa76c059b017880912cb06d65c35c4f",
-            "svg_bytes": 164080,
-            "manifest_sha256": "ce84baa64e45cdac75de8a29f4cd72d8a884b30a6fe27e7bb6ef22f950cee441",
+            "svg_sha256": "8707d1c70d7fc84dc6f4e695892c8147b10b442897a4e8ff91a4c0a018326c82",
+            "svg_bytes": 164394,
+            "manifest_sha256": "653873c3058e81f363413f4a9c2ece85760784d489c5958df52df190e4095991",
             "canvas": {
                 "width": 390,
-                "height": 3752
+                "height": 3793
             },
             "layers": [
                 "header",
@@ -481,12 +481,12 @@
             ]
         },
         "brutalist|mobile|light": {
-            "svg_sha256": "30910cd9d86733acbb8409bcf203aa6cc607f25f57e085c4bf9b64f941f2d48a",
-            "svg_bytes": 15545,
-            "manifest_sha256": "3cbc9f4aba6f34d0057a4b89d5cb25fa1063417d7b648c7e413169cb3eb70ba5",
+            "svg_sha256": "1ad7b49e41464ab09abe8e51ee963512dbaa72a353c74b6a79720a84218b6411",
+            "svg_bytes": 15781,
+            "manifest_sha256": "4527068c46f6cfcbac5bd8216a77d391b4a3b249292752c3c17db4c27330e141",
             "canvas": {
                 "width": 390,
-                "height": 3772
+                "height": 3813
             },
             "layers": [
                 "header",
@@ -527,12 +527,12 @@
             ]
         },
         "brutalist|mobile|dark": {
-            "svg_sha256": "208d6c7b3ba48c8c986d225e3225aff92ee404de67d20d5b241671510e131841",
-            "svg_bytes": 15545,
-            "manifest_sha256": "3cecbab3d839cd5de0ed6fcbfce22ef367dbbc5128a7eb0fac553197dfa7ee58",
+            "svg_sha256": "f3fc7aca19c15109af759c6fbf31c8996888f10974d08693c3b7957e2efff87c",
+            "svg_bytes": 15781,
+            "manifest_sha256": "2922c0144a9de01505e90d70fc8cea20906f17c7d538a38c45ce48c7c3f9a9ea",
             "canvas": {
                 "width": 390,
-                "height": 3772
+                "height": 3813
             },
             "layers": [
                 "header",
@@ -757,12 +757,12 @@
             ]
         },
         "etching|mobile|light": {
-            "svg_sha256": "273f6a2aaa14c6026e0f7a5b66acfbfc656d06a8a2840458ad1f15a6616d689d",
-            "svg_bytes": 161930,
-            "manifest_sha256": "d12608b5e0dfd1537b793e5bb6c5a69413ab4cee4226f1630eb2ed11b8e0e9c2",
+            "svg_sha256": "ef41ad8021425265405ef306aea310ab1bbb32edb469c42277f043dc24697bbd",
+            "svg_bytes": 162246,
+            "manifest_sha256": "d17adbaafae08def702b65cc2d21f7011b81adfcdcbca01e84ba085098c998ea",
             "canvas": {
                 "width": 390,
-                "height": 3760
+                "height": 3801
             },
             "layers": [
                 "header",
@@ -803,12 +803,12 @@
             ]
         },
         "etching|mobile|dark": {
-            "svg_sha256": "3b0f0826eda64a62ac9fb57742adbdca06e6529380bb44103960e4793e1c3217",
-            "svg_bytes": 164770,
-            "manifest_sha256": "c0aa5c4dc8cb4d0dd32c1003466f2e5c3c11a4a0c0599fb2af2783dca6434a66",
+            "svg_sha256": "a2a55d1ce4d7c7da2e2b14a2a56ea2195d20594459f48d61ce5e8737a39cba91",
+            "svg_bytes": 165086,
+            "manifest_sha256": "3d6c81af10ae2977b518c25a73b8ddc3d702359afa4b08dfaaec18fe4edf509d",
             "canvas": {
                 "width": 390,
-                "height": 3760
+                "height": 3801
             },
             "layers": [
                 "header",
@@ -1033,12 +1033,12 @@
             ]
         },
         "poster|mobile|light": {
-            "svg_sha256": "76e6407cb01699eb3a11c1c424fa8bd002cc02830f7b3a61ff8c854f723f2b98",
-            "svg_bytes": 161568,
-            "manifest_sha256": "ed212f479de68e02b0fd4da493bb6e3d4a4eaf47cde57bcc871c9af5557c195c",
+            "svg_sha256": "ffc89739292a00f37a44492e53f0ecdbca1470b36290c38e9a3fc1f9a9bb1f37",
+            "svg_bytes": 161866,
+            "manifest_sha256": "99d813fa48a4a554996fad4ce986b19effea65baa04ee863c7b8250cabac95ca",
             "canvas": {
                 "width": 390,
-                "height": 3769
+                "height": 3810
             },
             "layers": [
                 "header",
@@ -1079,12 +1079,12 @@
             ]
         },
         "poster|mobile|dark": {
-            "svg_sha256": "5fbfee81fedb412a492c4266021f663af4b4533a9c5304d1b26d22956613913a",
-            "svg_bytes": 164408,
-            "manifest_sha256": "a9eda8f54e16bac619c7038970f202de74d65e7265b58c01a9044a52b104487f",
+            "svg_sha256": "93e22ea656ce9394872cbb84d7685898450b617f2281ab43c41493d9ade81f2e",
+            "svg_bytes": 164706,
+            "manifest_sha256": "361718c95dfbc416506d066b07bf913df55c85bffa7912f3d2370809083be7a9",
             "canvas": {
                 "width": 390,
-                "height": 3769
+                "height": 3810
             },
             "layers": [
                 "header",
@@ -1297,12 +1297,12 @@
             ]
         },
         "swiss|mobile|light": {
-            "svg_sha256": "416768d69e9015731e926091a8c2c90afe79e3764b1c3e3d19f19d10eebc2d93",
-            "svg_bytes": 161721,
-            "manifest_sha256": "56fa8291fcce71985e73a9ea6a0c8d299e9e9a484ec1fa7268167c49ba2666eb",
+            "svg_sha256": "eb869aedf4f298c2daa865c4de50eab50c22aa9e5f7086612ecd93ea9aae88d6",
+            "svg_bytes": 162019,
+            "manifest_sha256": "958d7bad377333bdb202b9c5f37bd996f40a57825ffb98c9c54aaa22a6c148a7",
             "canvas": {
                 "width": 390,
-                "height": 3743
+                "height": 3784
             },
             "layers": [
                 "header",
@@ -1343,12 +1343,12 @@
             ]
         },
         "swiss|mobile|dark": {
-            "svg_sha256": "d40abfd360e534cdbebfc92b5fb82b3108df6b791928d499b9c75ed9e0524b6b",
-            "svg_bytes": 164561,
-            "manifest_sha256": "7e69c9b22bd8b7cc8f27e8e246653a53540e935aebcd1ace8ea2dcfb0a9a5606",
+            "svg_sha256": "97af8074780bbad7790c126066adb499100ad2c649fac294ed61b63c079c290b",
+            "svg_bytes": 164859,
+            "manifest_sha256": "1584aa5476af58ed45c85af0ffb051f7a9ea28122a4586d7f5d03739f2bea209",
             "canvas": {
                 "width": 390,
-                "height": 3743
+                "height": 3784
             },
             "layers": [
                 "header",
@@ -1609,12 +1609,12 @@
             ]
         },
         "art-nouveau|mobile|light": {
-            "svg_sha256": "e04260b33aec6c5b79f44db9a8312406da62401160bd19af1957faccd6fcb761",
-            "svg_bytes": 170138,
-            "manifest_sha256": "33f946288985cb9c175dce3c885e24e53a572f87eac3e1550b0d3d0a2fd5484f",
+            "svg_sha256": "68e6916aef43b880f80adfcf9ae5d3834e5e98dcb3e71813ac0d9c04af1e63db",
+            "svg_bytes": 170392,
+            "manifest_sha256": "8ec0beb106f05d477d0bea69c8b235c031c58f9a8ded7d1f044a287b3a5b9482",
             "canvas": {
                 "width": 390,
-                "height": 4562
+                "height": 4603
             },
             "layers": [
                 "header",
@@ -1665,12 +1665,12 @@
             ]
         },
         "art-nouveau|mobile|dark": {
-            "svg_sha256": "2df5f3ad52412fa661e5dae720b4eb699443d6abd4c9b68ea3c7565aa7a66be1",
-            "svg_bytes": 172978,
-            "manifest_sha256": "01be2071f686e5e7bc23893af99877468c512dcf4d0700b7d9b1598a72aac3aa",
+            "svg_sha256": "9c53f7f7ac43d215e9c4c75fedb72b062a2a5092fc535b791eebd565fc18b5a9",
+            "svg_bytes": 173232,
+            "manifest_sha256": "e88691d4d595e15ff534043b395dac4355d1fdddd749a4dc04ce3aac49373f07",
             "canvas": {
                 "width": 390,
-                "height": 4562
+                "height": 4603
             },
             "layers": [
                 "header",
@@ -1721,9 +1721,9 @@
             ]
         },
         "minimal|desktop|light": {
-            "svg_sha256": "7347c7c09cefc87b7bd6ec1b7ceb78bdd254a15893aba939da9c6f038408d015",
+            "svg_sha256": "1ccc77011a36701427fe41694f3c81dde3b901406c9d3c7e02dc68724751d1fb",
             "svg_bytes": 163002,
-            "manifest_sha256": "f6895c6495674137276b2d18978aa33ee410af327c513f5a105cb7b905b82667",
+            "manifest_sha256": "088afe006f5fcea99a330bb14c217549eae913d2d92e9926ca98659d18f15518",
             "canvas": {
                 "width": 1440,
                 "height": 3129
@@ -1769,7 +1769,7 @@
         "minimal|desktop|dark": {
             "svg_sha256": "94df51388d9ffc9bec16fb117b997e04912f03af2b3b4aeefcc068109b0f4ef0",
             "svg_bytes": 165842,
-            "manifest_sha256": "ae70452e46408b4f154d719504ee781d1ab84d0fb2a45b11ef391d19ea301193",
+            "manifest_sha256": "dc65f5e12413f858ba61e6b86c658fefbcedb24c49ea804ba075bbf0b3be926e",
             "canvas": {
                 "width": 1440,
                 "height": 3129
@@ -1813,9 +1813,9 @@
             ]
         },
         "minimal|tablet|light": {
-            "svg_sha256": "2e6dcfad59f3092de5e9fcfb2f599500fa04fbe15c041c403b99c7ecdd5b2648",
+            "svg_sha256": "6ff3534696d33bc5f0c95af2ff9d75b95531d8a8a018a0a5a5813090e76122d7",
             "svg_bytes": 163812,
-            "manifest_sha256": "a1ebe33bfba9f1cb5224b1d6670c7ac846b6fca2e1487b0bf017975cf9724eb2",
+            "manifest_sha256": "4a9f02d6021e2f17ddf30fec655ce40720ac4f0ea82d060956581f6198fa0cdc",
             "canvas": {
                 "width": 768,
                 "height": 3248
@@ -1861,7 +1861,7 @@
         "minimal|tablet|dark": {
             "svg_sha256": "745a8adc9f9256bbcae4214bb841240bddd071337dad298075209263ece071a5",
             "svg_bytes": 166652,
-            "manifest_sha256": "ed5ab44cd3c635a1b14fff6fcb21c53d48e6af8ab341db86addc6120a39fc1c5",
+            "manifest_sha256": "5382a4e42272e20d16c0f06d62b5aae009044fb8405c9bdb9cff049060384629",
             "canvas": {
                 "width": 768,
                 "height": 3248
@@ -1905,12 +1905,12 @@
             ]
         },
         "minimal|mobile|light": {
-            "svg_sha256": "e5305e9bd5ad5b13cc169256d3a52bd7450930c097a2875e0283af9e491fdeb8",
-            "svg_bytes": 161351,
-            "manifest_sha256": "e14cb8ce0f7332cd8c5374f2d6b6191d5fb59b80d3574fef4ff9b5dbcd55bb85",
+            "svg_sha256": "7fe6b4d8b546efcf44460116b94774b5f1d1a32bf0fd1fbd2c42aa178f1e9db3",
+            "svg_bytes": 161694,
+            "manifest_sha256": "5aa274e30e44045449da4f73228d439af14cc2f371bb861b145d404123dc55aa",
             "canvas": {
                 "width": 390,
-                "height": 3673
+                "height": 3714
             },
             "layers": [
                 "header",
@@ -1951,12 +1951,12 @@
             ]
         },
         "minimal|mobile|dark": {
-            "svg_sha256": "6a4c2f64a243a6026150506f7fa9e45b7653573768f392daf970f1bf8639d73b",
-            "svg_bytes": 164191,
-            "manifest_sha256": "77d3ca2415db0be5691d3eab6614cfc29cc6e9bc0171a8b2ba41f31bbc88dd27",
+            "svg_sha256": "0b0a127f973955ec0416c0c62d2522c355c4b786be80f6dead3ae8c21cc39041",
+            "svg_bytes": 164534,
+            "manifest_sha256": "99ba890b049114ce0125db0b466bbd7573ce3e9999c02a73796c5a55c9d727cd",
             "canvas": {
                 "width": 390,
-                "height": 3673
+                "height": 3714
             },
             "layers": [
                 "header",

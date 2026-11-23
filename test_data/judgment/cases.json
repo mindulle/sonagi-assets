@@ -50,6 +50,24 @@
             "note": "제목·본문 줄바꿈 적용으로 해소"
         },
         {
+            "id": "good-minimal-desktop-light",
+            "style": "minimal",
+            "breakpoint": "desktop",
+            "theme": "light",
+            "mutations": [],
+            "expect": "pass",
+            "note": "muted를 MDS neutral.500(#71717a)로 올려 AA 통과"
+        },
+        {
+            "id": "good-minimal-mobile-light",
+            "style": "minimal",
+            "breakpoint": "mobile",
+            "theme": "light",
+            "mutations": [],
+            "expect": "pass",
+            "note": "모바일 라벨까지 같은 muted를 쓴다"
+        },
+        {
             "id": "good-swiss-desktop-dark",
             "style": "swiss",
             "breakpoint": "desktop",

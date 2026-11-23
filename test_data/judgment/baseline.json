@@ -58,6 +58,28 @@
                 "ruleset_version": "1.0.0"
             }
         },
+        "good-minimal-desktop-light": {
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "d73bbac048e2",
+                "style_id": "minimal@002d9d4fdb3c",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "good-minimal-mobile-light": {
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "d73bbac048e2",
+                "style_id": "minimal@002d9d4fdb3c",
+                "ruleset_version": "1.0.0"
+            }
+        },
         "good-swiss-desktop-dark": {
             "expect": "pass",
             "verdict": "pass",
