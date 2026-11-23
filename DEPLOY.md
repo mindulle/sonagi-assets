@@ -23,12 +23,32 @@ sudo install -m 644 docker-compose.yml /opt/sonagi-assets/docker-compose.yml
 sudo test -f /srv/sonagi-assets/asset_hub.db || echo "asset_hub.db 를 먼저 배치하세요"
 ```
 
+## 릴리즈와 배포
+
+CI는 **이미지만 발행**한다. 배포는 이 문서의 수동 절차를 따른다.
+
+| 트리거 | 산출물 |
+| --- | --- |
+| `main` push | 이미지 `:latest`, `:sha-<7>` |
+| `fix·feat` 커밋 포함 | 위 + semantic-release 태그/노트, 이미지 `:<version>` |
+
+2026-11-23 이전에는 릴리즈 워크플로가 `k8s/deployment.yaml`을 갱신하는 잡을
+가지고 있었다. k3s를 내리면서(PR #55) 매니페스트가 사라졌지만 잡이 남아 매
+릴리즈가 실패했다. 해당 잡은 제거했다.
+
 ## 배포 / 갱신
 
 ```bash
 cd /opt/sonagi-assets
-sudo ASSET_IMAGE_TAG=1.16.5 docker compose up -d
+sudo docker compose pull            # :latest
+sudo docker compose up -d
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:34920/   # 200
+```
+
+버전을 고정하려면 `ASSET_IMAGE_TAG`를 준다(롤백에도 같은 방법을 쓴다).
+
+```bash
+sudo ASSET_IMAGE_TAG=1.69.0 docker compose up -d
 ```
 
 ## 수집 잡 (구 CronJob 대체)

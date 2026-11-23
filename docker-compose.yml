@@ -4,7 +4,7 @@
 # Private Network Access 프리플라이트가 같은 호스트 포트를 그대로 기대한다.
 services:
   web:
-    image: ghcr.io/mindulle/sonagi-assets:${ASSET_IMAGE_TAG:-1.16.5}
+    image: ghcr.io/mindulle/sonagi-assets:${ASSET_IMAGE_TAG:-latest}
     container_name: sonagi-assets-web
     network_mode: host
     restart: unless-stopped
@@ -20,7 +20,7 @@ services:
   #   docker compose --profile jobs run --rm harvest
   harvest:
     profiles: ["jobs"]
-    image: ghcr.io/mindulle/sonagi-assets:${ASSET_IMAGE_TAG:-1.16.5}
+    image: ghcr.io/mindulle/sonagi-assets:${ASSET_IMAGE_TAG:-latest}
     network_mode: host
     environment:
       AI_ASSETS_PATH: /app/data/ai-assets/images
