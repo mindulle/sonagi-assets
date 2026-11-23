@@ -28,7 +28,7 @@ jobs:
                   python-version: "3.12"
             - name: Install render deps
               # SVG 렌더 경로는 PyYAML만 쓴다(Pillow·Chromium은 export 전용)
-              run: python3 -m pip install --quiet pyyaml
+              run: python3 -m pip install --quiet pyyaml pillow==12.2.0
             - name: 레시피 스키마
               run: python3 scripts/recipe_schema.py recipes/*.json
             - name: 골든 기준선과 비교
@@ -126,7 +126,7 @@ jobs:
               with:
                   python-version: "3.12"
             - name: Install render deps
-              run: python3 -m pip install --quiet pyyaml
+              run: python3 -m pip install --quiet pyyaml pillow==12.2.0
             - name: 계약 헤더
               run: python3 scripts/contract.py --style styles/editorial.json
             - name: 명부 정합성
