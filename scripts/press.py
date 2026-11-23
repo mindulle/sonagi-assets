@@ -20,7 +20,34 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = ROOT / "scripts"
-VERSION = "0.1.0"
+
+
+def resolve_version():
+    """press 버전을 릴리즈 태그와 맞춘다.
+
+    우선순위: PRESS_VERSION(이미지 빌드에서 주입) -> git describe 태그 -> dev.
+    .dockerignore가 .git을 제외하므로 이미지에서는 PRESS_VERSION이 필수다.
+    """
+    env = os.environ.get("PRESS_VERSION", "").strip()
+    if env:
+        return env[1:] if env.startswith("v") else env
+    try:
+        done = subprocess.run(
+            ["git", "describe", "--tags", "--abbrev=0"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=3,
+        )
+        tag = done.stdout.strip()
+        if done.returncode == 0 and tag:
+            return tag[1:] if tag.startswith("v") else tag
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return "dev"
+
+
+VERSION = resolve_version()
 
 DEFAULT_CATALOG = os.environ.get("PRESS_CATALOG", "/srv/sonagi-assets/catalog/catalog.json")
 DEFAULT_TOKENS = os.environ.get("PRESS_TOKENS", str(ROOT / "tokens" / "semantic.json"))

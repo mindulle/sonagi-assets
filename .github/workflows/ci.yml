@@ -127,6 +127,10 @@ jobs:
                   python-version: "3.12"
             - name: Install render deps
               run: python3 -m pip install --quiet pyyaml pillow==12.2.0
+            - name: press 버전
+              run: |
+                  test "$(PRESS_VERSION=v9.9.9 ./press --version)" = "press 9.9.9"
+                  ./press --version >/dev/null
             - name: 계약 헤더
               run: python3 scripts/contract.py --style styles/editorial.json
             - name: 명부 정합성
