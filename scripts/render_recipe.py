@@ -1253,8 +1253,7 @@ def main():
             style["ornament"] = ornament
         elif args.pattern_mode == "tile" and background in ("dots", "hatch"):
             print(
-                "참고: 배경 패턴을 <pattern> 타일로 그립니다. Figma는 이 채우기를 버립니다 — "
-                "피그마 왕복이면 --pattern-mode line",
+                "참고: 배경 패턴을 <pattern> 타일로 그립니다. Figma는 이 채우기를 버립니다 — 피그마 왕복이면 --pattern-mode line",
                 file=sys.stderr,
             )
 
