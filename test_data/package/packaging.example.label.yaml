@@ -1,0 +1,53 @@
+# 사본 — 원본: sonagi-work/docs/press/schema/packaging.example.label.yaml (CI 검사용)
+version: 1
+
+product:
+  brand: "SONAGI"
+  name: "비 오는 날의 차"
+  net: "50g · 10 티백"
+  ingredients: "녹차 100% (국산) · 보관: 직사광선을 피해 서늘한 곳"
+  origin: "MADE IN KOREA"
+  barcode: "8801234567890"
+
+package:
+  type: label
+  size_mm: [90, 60]
+  panels: [front]
+  material: "무광 아트지 250g"
+  finish: [none]
+
+dieline:
+  source: template
+  file: null
+  size_mm: [90, 60]
+
+copy_source:
+  brief: text
+  files: []
+
+sides: front
+visibility: public
+
+print:
+  method: offset
+  colors: 4
+  spot: []
+  bleed_mm: 3
+  safe_mm: 3
+  tac_limit: 320
+
+typography:
+  min_pt: 6
+
+deliverables:
+  contest: [mockup_front, mockup_side]
+  production: [pdf_cmyk, svg, dieline_pdf]
+
+audit:
+  checks: [P001, P002, P003, P004, P005, P006, P007]
+
+colors:
+  ink: "#161616"
+  paper: "#fbf9f5"
+  accent: "#b4551f"
+  calm: "#1f4536"

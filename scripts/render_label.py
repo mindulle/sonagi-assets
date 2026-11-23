@@ -21,6 +21,8 @@ import re
 import sys
 from pathlib import Path
 
+import yaml
+
 MM = 96 / 25.4  # 1mm = 3.7795px
 
 
@@ -29,8 +31,19 @@ class SpecError(Exception):
 
 
 def load_spec(path):
+    """JSON(평평한 스펙) 또는 패키지 계약 YAML(packaging.schema.yaml)을 받는다."""
+    path = str(path)
+    text = Path(path).read_text()
+    if path.endswith((".yaml", ".yml")):
+        from packaging_spec import to_label_spec, validate
+
+        data = yaml.safe_load(text) or {}
+        errors, _ = validate(data)
+        if errors:
+            raise SpecError("계약 위반: " + "; ".join(errors))
+        return to_label_spec(data)
     try:
-        spec = json.loads(Path(path).read_text())
+        spec = json.loads(text)
     except FileNotFoundError as exc:
         raise SpecError(f"스펙이 없습니다: {path}") from exc
     except json.JSONDecodeError as exc:

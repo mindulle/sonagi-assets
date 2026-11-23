@@ -63,6 +63,12 @@ jobs:
                     n=$(basename "$f")
                     test "$(sha256sum "$f" | cut -d' ' -f1)" = "$(sha256sum "out/bs-2/$n" | cut -d' ' -f1)"
                   done
+            - name: 패키지 계약
+              run: |
+                  python3 scripts/packaging_spec.py test_data/package/packaging.example.label.yaml
+                  python3 scripts/render_label.py --spec test_data/package/packaging.example.label.yaml \
+                    --out out/pkg-schema --name schema-label
+                  python3 scripts/export_print.py --src out/pkg-schema/schema-label.svg --trim 90x60 --check
             - name: 패키지 라벨 audit
               run: |
                   python3 scripts/render_label.py --spec test_data/package/label.json \
