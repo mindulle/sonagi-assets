@@ -157,7 +157,7 @@ def main():
 
     if args.update:
         baseline_path.parent.mkdir(parents=True, exist_ok=True)
-        baseline_path.write_text(json.dumps(new, indent=2, ensure_ascii=False) + "\n")
+        baseline_path.write_text(json.dumps(new, indent=4, ensure_ascii=False) + "\n")
         print(f"기준선 저장: {baseline_path} ({len(new['renders'])} 렌더)")
         return 0
 
