@@ -170,6 +170,7 @@ dist/
 1. **갤러리 4개 배치** — 3열 그리드에서 한 칸이 남는다
 2. **PDF/X·별색** — 인쇄소 요구가 있으면 ICC·Pantone 경로 추가
 3. **Figma 왕복 자동 검증** — 프로젝트에 figma-console MCP를 켜면 임포트·Fill 검사를 자동화
+4. **톤 태그** — 스카우트 오매칭의 근본 해결. 계획·합격 기준은 `docs/TONE_TAGGING.md`, 실행은 llmops 접근 후
 
 ## 11. 작업 순서 (Plane `sonagi-assets`)
 
