@@ -32,6 +32,11 @@ SVG_OPEN = re.compile(r"<svg\b[^>]*>", re.S)
 SVG_CLOSE = re.compile(r"</svg>\s*$")
 VIEWBOX = re.compile(r'viewBox="([^"]+)"')
 
+# 블록 사이 세로 여백(px). 블록 메서드는 자기 내용 높이만 돌려주고,
+# 호출부가 이 여백을 더해 다음 블록의 시작 y를 정한다(ASSET-2).
+# 30이면 작은 라벨로 끝나는 블록(통계·인용)이 붙어 보여 44로 둔다.
+BLOCK_GAP = 44
+
 DEFAULT_STYLE = {
     "name": "default",
     "colors": {},
@@ -448,6 +453,35 @@ class Renderer:
             parts.append(f'<line x1="0" y1="88" x2="{W}" y2="88" stroke="{self.colors["border"]}" stroke-width="{rule_w}"/>')
         return f'<g id="header">{"".join(parts)}</g>'
 
+    def header_height(self):
+        """헤더는 페이지 최상단 고정 좌표를 쓴다. 아래 기준선을 돌려준다."""
+        return 70 if self.bp == "mobile" else 88
+
+    def footer_height(self):
+        return 58 if self.bp == "mobile" else 46
+
+    def render_block(self, kind, block, W, top):
+        """블록 하나를 `top`에서 그리고 (svg, 내용 높이)를 돌려준다.
+
+        반환하는 높이는 `top`부터 자기 내용이 끝나는 지점까지다. 블록 사이
+        여백은 호출부가 BLOCK_GAP으로 더한다 — 블록이 여백을 직접 만들지 않는다.
+        """
+        renderers = {
+            "hero": self.hero,
+            "stats": self.stats_mobile if self.bp == "mobile" else self.stats,
+            "features": self.features_mobile if self.bp == "mobile" else self.features,
+            "logos": self.logos_mobile if self.bp == "mobile" else self.logos,
+            "quote": self.quote,
+            "faq": self.faq,
+            "table": self.table_mobile if self.bp == "mobile" else self.table,
+            "pricing": self.pricing_mobile if self.bp == "mobile" else self.pricing,
+            "gallery": self.gallery,
+            "cta": self.cta_band_mobile if self.bp == "mobile" else self.cta_band,
+        }
+        if kind not in renderers:
+            raise SystemExit(f"unknown block: {kind}")
+        return renderers[kind](block, W, top)
+
     def hero_mobile(self, block, W, y0):
         c = self.colors
         s = self.scale * self.K
@@ -477,7 +511,7 @@ class Renderer:
             + "</g>"
         )
         parts.append(self.text(m, by + bh + 22, self.case(block.get("note", "")), 11, 400, c["text-muted"]))
-        return f'<g id="hero">{"".join(parts)}</g>', (by + bh + 60 - 88)
+        return f'<g id="hero">{"".join(parts)}</g>', by + bh + 26 - y0
 
     def hero(self, block, W, y0):
         c = self.colors
@@ -511,7 +545,7 @@ class Renderer:
                 + "</g>"
             )
             parts.append(self.text(cx, by + 104, self.case(block.get("note", "")), 13, 400, c["text-muted"], anchor="middle"))
-            return f'<g id="hero">{"".join(parts)}</g>', (by + bh + 106 - y0) * self.density
+            return f'<g id="hero">{"".join(parts)}</g>', by + 110 - y0
 
         size = 64 * s
         lines = block["title"].count("\n") + 1
@@ -532,7 +566,7 @@ class Renderer:
         )
         parts.append(self.text(288, by + 36, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
         parts.append(self.illustration(block["illustration"], W - 56 - 520, y0 + 30, 520, 380))
-        return f'<g id="hero">{"".join(parts)}</g>', max(500, by + 160) * self.density
+        return f'<g id="hero">{"".join(parts)}</g>', max(by + btn_h, y0 + 410) + 4 - y0
 
     def hero_plain(self, block, W, y0):
         c = self.colors
@@ -557,7 +591,7 @@ class Renderer:
                 self.text(cx, by + bh + 32, self.case(block.get("note", "")), 11, 400, c["text-muted"], anchor="middle"),
                 "</g>",
             ]
-            return "".join(parts), (by + bh + 110) - y0
+            return "".join(parts), by + bh + 38 - y0
         size = 84 * s
         lines = block["title"].count("\n") + 1
         body_y = y0 + 140 + size + (lines - 1) * size * 1.12 + 40
@@ -577,7 +611,7 @@ class Renderer:
         )
         parts.append(self.text(m + bw + 24, by + 37, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
         parts.append("</g>")
-        return "".join(parts), (by + bh + 70) - y0
+        return "".join(parts), by + bh + 4 - y0
 
     def hero_asymmetric(self, block, W, y0):
         c = self.colors
@@ -601,7 +635,7 @@ class Renderer:
             + "</g>"
         )
         parts.append(self.text(288, by + 36, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
-        return f'<g id="hero">{"".join(parts)}</g>', max(520, body_y + 120) * self.density
+        return f'<g id="hero">{"".join(parts)}</g>', max(y0 + 450, by + bh + 4) - y0
 
     def hero_poster(self, block, W, y0):
         c = self.colors
@@ -612,8 +646,8 @@ class Renderer:
         lines = block["title"].count("\n") + 1
         title_h = size * 1.06 * lines
         parts = [
-            self.illustration(block["illustration"], panel_w, 88, W - panel_w, h),
-            f'<rect id="panel" x="0" y="88" width="{panel_w}" height="{h}" fill="{c["background"]}"/>',
+            self.illustration(block["illustration"], panel_w, y0, W - panel_w, h),
+            f'<rect id="panel" x="0" y="{y0}" width="{panel_w}" height="{h}" fill="{c["background"]}"/>',
             self.text(56, y0 + 90, self.case(block["eyebrow"]), 12, 600, c["accent"], family=self.f_mono, tracking=4),
             self.text(56, y0 + 90 + size, self.case(block["title"]), size, 700, family=self.f_display, leading=1.06),
             self.text(56, y0 + 90 + size + title_h + 34, self.case(block["body"]), 18 * s, 400, c["text-secondary"]),
@@ -627,7 +661,7 @@ class Renderer:
             + "</g>"
         )
         parts.append(self.text(56, by + 100, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
-        return f'<g id="hero">{"".join(parts)}</g>', h + 40
+        return f'<g id="hero">{"".join(parts)}</g>', max(h, by + 106 - y0)
 
     def features(self, block, W, y0):
         if self.bp == "mobile":
@@ -651,7 +685,7 @@ class Renderer:
                 + self.text(x + 28, y + 146, self.case(item["body"]), 15, 400, c["text-secondary"])
                 + "</g>"
             )
-        return f'<g id="features">{"".join(parts)}</g>', 300 * self.density
+        return f'<g id="features">{"".join(parts)}</g>', 252
 
     def features_list(self, block, W, y0):
         c = self.colors
@@ -665,7 +699,7 @@ class Renderer:
             parts.append(f'<line x1="56" y1="{y + 84}" x2="{W - 56}" y2="{y + 84}" stroke="{c["border"]}" stroke-width="1"/>')
             parts.append(self.icon(item["icon"], W - 88, y + 8, 22, c["text"]))
             parts.append("</g>")
-        return f'<g id="features">{"".join(parts)}</g>', 400 * self.density
+        return f'<g id="features">{"".join(parts)}</g>', 56 + 108 * min(len(block["items"]), 3) - 108 + 84
 
     def features_columns(self, block, W, y0):
         c = self.colors
@@ -681,7 +715,7 @@ class Renderer:
             parts.append(self.text(x, y + 78, self.case(item["title"]), 19, 700, family=self.f_display))
             parts.append(self.text(x, y + 112, self.case(item["body"]), 14, 400, c["text-secondary"], leading=1.5))
             parts.append("</g>")
-        return f'<g id="features">{"".join(parts)}</g>', 320 * self.density
+        return f'<g id="features">{"".join(parts)}</g>', 194
 
     def stats(self, block, W, y0):
         c = self.colors
@@ -695,7 +729,7 @@ class Renderer:
             parts.append(self.text(x, y0 + 78 * self.scale, self.case(item["value"]), 56 * self.scale, 700, family=self.f_display))
             parts.append(self.text(x, y0 + 112 * self.scale, self.case(item["label"]), 13, 400, c["text-muted"]))
             parts.append("</g>")
-        return f'<g id="stats">{"".join(parts)}</g>', 200 * self.density
+        return f'<g id="stats">{"".join(parts)}</g>', 112 * self.scale + 10
 
     def quote(self, block, W, y0):
         c = self.colors
@@ -712,7 +746,7 @@ class Renderer:
             self.text(m + 24, author_y, self.case(block.get("author", "")), 12, 600, c["text-muted"], family=self.f_mono, tracking=1.6),
         ]
         parts.append("</g>")
-        return f"{''.join(parts)}", (author_y + 54 - y0) * self.density
+        return f"{''.join(parts)}", author_y + 6 - y0
 
     def logos(self, block, W, y0):
         c = self.colors
@@ -723,7 +757,7 @@ class Renderer:
         for i, name in enumerate(names):
             x = 56 + i * (col_w + gap) + col_w / 2
             parts.append(self.text(x, y0 + 40, self.case(name), 18, 700, c["text-faint"], family=self.f_display, anchor="middle", tracking=1.2))
-        return f'<g id="logos">{"".join(parts)}</g>', 110 * self.density
+        return f'<g id="logos">{"".join(parts)}</g>', 46
 
     def faq(self, block, W, y0):
         c = self.colors
@@ -738,7 +772,7 @@ class Renderer:
             parts.append("</g>")
         # 항목 수에 맞춰 높이를 잡는다(2개일 때 빈 공간이 남던 문제)
         count = min(len(block["items"]), 3)
-        return f'<g id="faq">{"".join(parts)}</g>', (count * 92 + 84) * self.density
+        return f'<g id="faq">{"".join(parts)}</g>', count * 92 + 42
 
     def cta_band(self, block, W, y0):
         c = self.colors
@@ -757,7 +791,7 @@ class Renderer:
         parts.append(self.text(bx + 28, by + 36, self.case(block["cta"]), 16, 700, c["accent-ink"]))
         parts.append(self.icon(block.get("ctaIcon", "arrow-right"), bx + bw - 46, by + 19, 18, c["accent-ink"]))
         parts.append("</g></g>")
-        return "".join(parts), h + 40
+        return "".join(parts), h
 
     def table(self, block, W, y0):
         c = self.colors
@@ -785,7 +819,6 @@ class Renderer:
             y += 58
         header_h = 44
         body_h = header_h + len(rows) * 54
-        note_h = 56 if block.get("note") else 0
         if featured and 1 <= featured <= n:
             fx = m + (featured - 1) * col_w
             parts.append(f'<rect id="table-featured" x="{fx}" y="{y}" width="{col_w}" height="{body_h}" fill="{c["surface"]}"/>')
@@ -835,8 +868,8 @@ class Renderer:
                 )
             )
         parts.append("</g>")
-        # 블록은 main에서 y+30으로 호출되므로 그만큼 되돌려 보정한다(표 아래 여백)
-        return "".join(parts), (y - y0) + body_h + note_h + 26
+        # 표 아래 여백은 남기고 블록 사이 여백은 호출부가 더한다
+        return "".join(parts), (y - y0) + body_h + (26 if block.get("note") else 4)
 
     def table_mobile(self, block, W, y0):
         c = self.colors
@@ -858,7 +891,7 @@ class Renderer:
                 parts.append(self.text(m, ry + 18 + i * 21, f"{col}  {value}", 11 * k, 400, c["text-muted"]))
             parts.append(f'<line x1="{m}" y1="{ry + step - 12}" x2="{W - m}" y2="{ry + step - 12}" stroke="{c["border"]}" stroke-width="1"/>')
         parts.append("</g>")
-        return "".join(parts), len(rows) * step + 66
+        return "".join(parts), (y - y0) + len(rows) * step + 2
 
     def price_card(self, item, x, y, w, h):
         c = self.colors
@@ -919,7 +952,7 @@ class Renderer:
         if block.get("note"):
             parts.append(self.text(m, y + h + 26, self.case(block["note"]), 11, 400, self.colors["text-muted"]))
         parts.append("</g>")
-        return "".join(parts), (y - y0) + h + (42 if block.get("note") else 24)
+        return "".join(parts), (y - y0) + h + (30 if block.get("note") else 0)
 
     def pricing_mobile(self, block, W, y0):
         m = self.M
@@ -938,7 +971,7 @@ class Renderer:
             parts.append(self.text(m, y + 6, self.case(block["note"]), 11, 400, self.colors["text-muted"]))
             y += 26
         parts.append("</g>")
-        return "".join(parts), (y - y0) + 22
+        return "".join(parts), (y - y0) - 16 + (26 if block.get("note") else 0)
 
     def gallery(self, block, W, y0):
         c = self.colors
@@ -966,7 +999,7 @@ class Renderer:
         if block.get("note"):
             parts.append(self.text(m, y + height + 26, self.case(block["note"]), 11, 400, c["text-muted"]))
         parts.append("</g>")
-        return "".join(parts), (y - y0) + height + (96 if block.get("note") else 56)
+        return "".join(parts), (y - y0) + height + (30 if block.get("note") else 0)
 
     def features_mobile(self, block, W, y0):
         c = self.colors
@@ -980,7 +1013,7 @@ class Renderer:
             parts.append(self.text(m + 32, y + 48, self.case(item["body"]), 12.5, 400, c["text-secondary"], leading=1.5))
             parts.append(f'<line x1="{m}" y1="{y + 74}" x2="{W - m}" y2="{y + 74}" stroke="{c["border"]}" stroke-width="1"/>')
             parts.append("</g>")
-        return f'<g id="features">{"".join(parts)}</g>', 360 * self.density
+        return f'<g id="features">{"".join(parts)}</g>', 40 + 96 * (min(len(block["items"]), 3) - 1) + 74
 
     def stats_mobile(self, block, W, y0):
         c = self.colors
@@ -993,7 +1026,7 @@ class Renderer:
             parts.append(self.text(m, y + 66, self.case(item["label"]), 12, 400, c["text-muted"]))
             parts.append(f'<line x1="{m}" y1="{y + 84}" x2="{W - m}" y2="{y + 84}" stroke="{c["border"]}" stroke-width="1"/>')
             parts.append("</g>")
-        return f'<g id="stats">{"".join(parts)}</g>', 300 * self.density
+        return f'<g id="stats">{"".join(parts)}</g>', 92 * (min(len(block["items"]), 3) - 1) + 84
 
     def logos_mobile(self, block, W, y0):
         c = self.colors
@@ -1004,7 +1037,7 @@ class Renderer:
             row, col = divmod(i, 2)
             x = m + col * ((W - 2 * m) / 2)
             parts.append(self.text(x, y0 + 24 + row * 34, self.case(name), 13, 700, c["text-faint"], family=self.f_display, tracking=1))
-        return f'<g id="logos">{"".join(parts)}</g>', (60 + 34 * ((len(names) - 1) // 2)) * self.density
+        return f'<g id="logos">{"".join(parts)}</g>', 24 + 34 * ((len(names) - 1) // 2) + 20
 
     def cta_band_mobile(self, block, W, y0):
         c = self.colors
@@ -1023,7 +1056,7 @@ class Renderer:
         parts.append(self.text(m + 44, by + 31, self.case(block["cta"]), 15, 700, c["accent-ink"]))
         parts.append(self.icon(block.get("ctaIcon", "arrow-right"), m + 24 + bw - 40, by + 14, 18, c["accent-ink"]))
         parts.append("</g></g>")
-        return "".join(parts), h + 30
+        return "".join(parts), h
 
     # --- 장식(ornament) ----------------------------------------------------
     # 모티프는 데이터다: styles/ornaments.json의 SVG 템플릿을 그리고,
@@ -1185,60 +1218,28 @@ def main():
 
     body = []
     body.append('<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter></defs>')
-    y = 88
+    y = 0
     ornament_types = {"stats", "features", "quote", "faq", "table", "pricing", "gallery", "logos", "cta"}
     for index, block in enumerate(recipe["blocks"]):
         kind = block["type"]
-        if r.ornament.get("motif", "none") != "none" and index > 0 and kind in ornament_types:
-            divider, adv = r.ornament_divider(56, W - 56, y + 8)
-            body.append(divider)
-            y += adv
         if kind == "header":
             body.append(r.header(block, W))
-        elif kind == "hero":
-            svg, adv = r.hero(block, W, y + 30)
-            body.append(svg)
+            y = r.header_height()
+            continue
+        if r.ornament.get("motif", "none") != "none" and index > 0 and kind in ornament_types:
+            # 장식은 블록 사이에 자기 자리를 차지한다(앞뒤로 BLOCK_GAP)
+            y += BLOCK_GAP
+            divider, adv = r.ornament_divider(56, W - 56, y)
+            body.append(divider)
             y += adv
-        elif kind == "features":
-            svg, adv = r.features(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "cta":
-            svg, adv = (r.cta_band_mobile if r.bp == "mobile" else r.cta_band)(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "stats":
-            svg, adv = (r.stats_mobile if r.bp == "mobile" else r.stats)(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "quote":
-            svg, adv = r.quote(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "logos":
-            svg, adv = (r.logos_mobile if r.bp == "mobile" else r.logos)(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "table":
-            svg, adv = (r.table_mobile if r.bp == "mobile" else r.table)(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "pricing":
-            svg, adv = (r.pricing_mobile if r.bp == "mobile" else r.pricing)(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "gallery":
-            svg, adv = r.gallery(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "faq":
-            svg, adv = r.faq(block, W, y + 30)
-            body.append(svg)
-            y += adv
-        elif kind == "footer":
-            body.append(r.footer(block, W, y + 20))
-        else:
-            raise SystemExit(f"unknown block: {kind}")
+        top = y + BLOCK_GAP
+        if kind == "footer":
+            body.append(r.footer(block, W, top))
+            y = top + r.footer_height()
+            continue
+        svg, adv = r.render_block(kind, block, W, top)
+        body.append(svg)
+        y = top + adv
 
     if auto_height:
         H = int(y + 110)

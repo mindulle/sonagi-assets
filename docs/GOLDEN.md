@@ -1,13 +1,21 @@
 # 골든 기준선
 
 전체 SVG 바이트를 바꾸는 수정(30px 오프셋, 축 확장 등)에서 **회귀**와 **의도된 변경**을
-구분하기 위한 스냅샷. 12블록 픽스처를 3스타일 × 3브레이크포인트 × 2테마 = 18렌더로 돌려
+구분하기 위한 스냅샷. 12블록 픽스처를 7스타일 × 3브레이크포인트 × 2테마 = 42렌더로 돌려
 해시·높이·레이어 순서를 저장한다.
 
 ```bash
 python3 scripts/golden_render.py             # 비교: 0=동일, 1=다름, 2=비교 범위 다름
 python3 scripts/golden_render.py --update    # 의도된 변경일 때 기준선 갱신
 python3 scripts/golden_render.py --styles editorial --breakpoints desktop
+```
+
+간격 자체는 `scripts/check_gaps.py`가 본다. 렌더 결과의 블록 상·하단을 좌표에서
+되살려 겹침을 찾고, `--max-gap`으로 리듬 상한을 건다.
+
+```bash
+python3 scripts/check_gaps.py out/golden --recursive            # 겹침만
+python3 scripts/check_gaps.py out/sweep --recursive --max-gap 60
 ```
 
 ## 1. 구성
@@ -22,7 +30,17 @@ python3 scripts/golden_render.py --styles editorial --breakpoints desktop
 | `out/golden/`                                | 렌더 산출물(커밋하지 않음)                                                     |
 
 픽스처 카탈로그만 쓰므로 devops의 7.2GB 라이브러리 없이 호스트에서 돌고,
-CI에도 그대로 넣을 수 있다(ASSET-5).
+CI에도 그대로 넣을 수 있다(ASSET-5). 스타일 7종은 렌더 경로를 갈라 놓는다.
+
+| 스타일 | hero | features | 비고 |
+| --- | --- | --- | --- |
+| `editorial` | split | cards | 기준 |
+| `brutalist` | center | cards | density 1.15 |
+| `etching` | asymmetric | list | density 1.05 |
+| `poster` | poster | cards | density 0.95 |
+| `swiss` | split | columns | |
+| `art-nouveau` | center | cards | 장식 축 |
+| `minimal` | split | cards | density 0.92 |
 
 ## 2. 결과 읽는 법
 

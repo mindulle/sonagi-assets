@@ -1,4 +1,4 @@
-# 현재 상태 (2026-11-22)
+# 현재 상태 (2026-11-23)
 
 자산 라이브러리 → 결정론 렌더 → 납품 번들까지 한 줄로 이어진 상태.
 이 문서는 "무엇이 되고, 무엇이 안 되는가"만 적는다. 사용법은 `PIPELINE.md`,
@@ -127,12 +127,12 @@ dist/
 - 폰트 4종 설치 후 Figma에서 대체 없이 렌더 (Pretendard Bold는 과중 → 한글 제목은 NanumSquare/Gowun)
 - 다크 대비: 본문 17.2~17.7, 보조 11.4~11.7, 흐린 글자 7.1~7.4
 - 게이트웨이 도구로 3브레이크포인트 랜딩 생성 → zip 16.6MB (embed 900)
+- 블록 간격: 27스타일 × 3브레이크포인트 81렌더에서 겹침 0, 간격은 `BLOCK_GAP`(44) 기준
 
 ## 9. 알려진 부채
 
 | 항목              | 내용                                                                          | 영향                                      |
 | ----------------- | ----------------------------------------------------------------------------- | ----------------------------------------- |
-| 블록 30px 오프셋  | 모든 블록이 `y+30`으로 호출되는데 advance가 보정하지 않음. 표만 여백으로 우회 | 섹션 간 리듬이 스타일마다 미세하게 어긋남 |
 | SVG 이미지 중복   | 같은 래스터가 브레이크포인트마다 base64로 들어감. zip의 약 60%                | 납품 용량 (900에서 16.6MB)                |
 | 레시피 v1/v2 공존 | `blocks`(v1)와 `content`(v2) 스키마가 함께 존재                               | 신규 작성자는 v2만 쓰면 됨                |
 | CI 결정론 미검증  | 2회 실행 비교를 수동으로만 함                                                 | 회귀 시 사람이 발견                       |
@@ -144,11 +144,10 @@ dist/
 
 ## 10. 다음 후보
 
-1. **30px 오프셋 근본 수정** — 블록 호출 규약을 정리하고 12블록 × 3bp 재검수
-2. **이미지 외부 참조** — zip 25MB → 5MB (단일 파일 성질 포기)
-3. **CI 결정론 검증** — 골든 SVG 해시 비교를 GitHub Actions에 추가
-4. **인쇄용 출력** — CMYK 변환·도련·재단선 (별도 경로)
-5. **레시피 v1 정리** — v2로 통일하고 v1은 읽기 전용으로 동결
+1. **이미지 외부 참조** — zip 25MB → 5MB (단일 파일 성질 포기)
+2. **CI 결정론 검증** — 골든 SVG 해시 비교를 GitHub Actions에 추가
+3. **인쇄용 출력** — CMYK 변환·도련·재단선 (별도 경로)
+4. **레시피 v1 정리** — v2로 통일하고 v1은 읽기 전용으로 동결
 
 ## 11. 작업 순서 (Plane `sonagi-assets`)
 
@@ -156,19 +155,19 @@ dist/
 
 | 순서 | 이슈                     | 모듈          | 이유                          |
 | ---- | ------------------------ | ------------- | ----------------------------- |
-| 1    | ASSET-2 30px 오프셋      | 납품 품질     | 모든 문서 타입의 간격 기반    |
-| 2    | ASSET-3 이미지 중복      | 납품 품질     | 납품 용량(16.6MB → 5MB)       |
-| 3    | ASSET-5 CI 결정론        | 납품 품질     | 이후 변경의 회귀 방지         |
-| 4    | ASSET-4 v1/v2 통일       | 납품 품질     | 문서 타입 추가 전 스키마 정리 |
-| 5    | ASSET-9 lockup           | 아이덴티티    | SVG 블록으로 가장 빨리 결과   |
-| 6    | ASSET-10 spec-diagram    | 아이덴티티    | lockup과 같은 규격 데이터     |
-| 7    | ASSET-11 brand-sheet     | 아이덴티티    | 다페이지 PDF 조판 필요        |
-| 8    | ASSET-12 `.ai` 검증      | 아이덴티티    | 제출 직전 확인                |
-| 9    | ASSET-6 인쇄 CMYK        | 인쇄 지원     | 별도 색 경로                  |
-| 10   | ASSET-7 Figma pattern    | Figma 왕복    | 재임포트 확인                 |
-| 11   | ASSET-8 타입·레이아웃 축 | 스타일 시스템 | 표현력 확장                   |
+| 1    | ASSET-3 이미지 중복      | 납품 품질     | 납품 용량(16.6MB → 5MB)       |
+| 2    | ASSET-5 CI 결정론        | 납품 품질     | 이후 변경의 회귀 방지         |
+| 3    | ASSET-4 v1/v2 통일       | 납품 품질     | 문서 타입 추가 전 스키마 정리 |
+| 4    | ASSET-9 lockup           | 아이덴티티    | SVG 블록으로 가장 빨리 결과   |
+| 5    | ASSET-10 spec-diagram    | 아이덴티티    | lockup과 같은 규격 데이터     |
+| 6    | ASSET-11 brand-sheet     | 아이덴티티    | 다페이지 PDF 조판 필요        |
+| 7    | ASSET-12 `.ai` 검증      | 아이덴티티    | 제출 직전 확인                |
+| 8    | ASSET-6 인쇄 CMYK        | 인쇄 지원     | 별도 색 경로                  |
+| 9    | ASSET-7 Figma pattern    | Figma 왕복    | 재임포트 확인                 |
+| 10   | ASSET-8 타입·레이아웃 축 | 스타일 시스템 | 표현력 확장                   |
 
-1~3을 먼저 끝내는 이유: 인쇄·로고도 같은 export·용량·결정론 문제를 공유한다.
+ASSET-2(30px 오프셋)는 완료. 남은 1~2를 먼저 끝내는 이유: 인쇄·로고도 같은
+export·용량·결정론 문제를 공유한다.
 
 ## 12. 재현 체크리스트
 
@@ -177,16 +176,19 @@ dist/
 python3 scripts/golden_render.py            # 기준선과 비교
 python3 scripts/golden_render.py --update   # 의도된 변경일 때만
 
-# 1. content 검증 (카탈로그는 devops의 /srv/sonagi-assets/catalog/catalog.json)
+# 1. 블록 간격 검수 (겹침·리듬 — 수정 후 전 스타일)
+python3 scripts/check_gaps.py out/sweep --recursive --max-gap 60
+
+# 2. content 검증 (카탈로그는 devops의 /srv/sonagi-assets/catalog/catalog.json)
 python3 scripts/import_content.py content/studio-plan.md \
   --catalog /srv/sonagi-assets/catalog/catalog.json --check
 
-# 2. 렌더 (devops, 자산이 있는 곳)
+# 3. 렌더 (devops, 자산이 있는 곳)
 sudo python3 scripts/render_recipe.py --recipe recipes/<name>.json --style styles/etching.json \
   --catalog /srv/sonagi-assets/catalog/catalog.json --tokens tokens/semantic.json \
   --out out/<name> --breakpoint mobile --embed-max-width 900
 
-# 3. 납품 (호스트, 폰트가 있는 곳)
+# 4. 납품 (호스트, 폰트가 있는 곳)
 python3 scripts/export_recipe.py --src out/<name> --out dist --formats pdf,png,webp \
   --scale 2 --fonts-css /home/ubuntu/brief/fonts/fonts.css
 python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제목>" --zip

@@ -7,13 +7,13 @@
 
 ## 계약
 
-| 항목 | 내용 |
-| --- | --- |
-| 입력 | `recipes/*.json` (블록·카피·자산 이름), `tokens/semantic.json`, `catalog.json` |
-| 출력 | `<name>.svg`, `<name>.manifest.json` |
-| 결정성 | 동일 입력 → 동일 sha256 (세트 우선순위 lucide > tabler > phosphor 로 고정) |
-| 라이선스 | 참조 자산이 `scope:bundle`이 아니면 렌더 중단 |
-| 레이어 | 최상위 `<g id>`: header·hero·cta·features·feature-N·footer·icon-*·illo-* |
+| 항목     | 내용                                                                           |
+| -------- | ------------------------------------------------------------------------------ |
+| 입력     | `recipes/*.json` (블록·카피·자산 이름), `tokens/semantic.json`, `catalog.json` |
+| 출력     | `<name>.svg`, `<name>.manifest.json`                                           |
+| 결정성   | 동일 입력 → 동일 sha256 (세트 우선순위 lucide > tabler > phosphor 로 고정)     |
+| 라이선스 | 참조 자산이 `scope:bundle`이 아니면 렌더 중단                                  |
+| 레이어   | 최상위 `<g id>`: header·hero·cta·features·feature-N·footer·`icon-*`·`illo-*`       |
 
 ## 실행
 
@@ -29,35 +29,35 @@ python3 scripts/render_recipe.py \
 
 스킨은 레시피가 아니라 `styles/*.json`이 결정한다. 같은 레시피로 다른 스타일을 뽑는다.
 
-| 스타일 팩 | 색 | 기하 | 서체 | 히어로 | 피처 |
-| --- | --- | --- | --- | --- | --- |
-| `editorial` | 크림·잉크·앰버 | 2px, r8 | 나눔스퀘어 | split | cards |
-| `brutalist` | 순흑백 | 4px, r0 | Archivo·대문자 | center | cards |
-| `minimal` | 화이트·블루 | 1px, r4 | Archivo+나눔 | split | cards |
-| `magazine` | 크림·황토 | 1px, r0 | Gowun Batang | **asymmetric** | **list** |
-| `swiss` | 화이트·레드 | 2px, r0 | Archivo·대문자 | split | **columns** |
-| `poster` | 다크·앰버 | 2px, r0 | Archivo | **poster** | cards |
-| `sketch` | 화이트·블랙 | 2px, r2 | Archivo | split | list |
-| `etching` | 아이보리·황토 | 1px, r0 | Gowun Batang | asymmetric | list |
-| `sonagi-blog` | 웨더드 페이퍼·브론즈 | 1px, r10 | Cormorant·Noto Serif KR | split | cards |
-| `art-nouveau` | 파치먼트·올리브·금 | 1px, r26 | Cormorant·Gowun Batang | center | cards |
-| `victorian` | 크림·적갈·금 | 2px, r2 | Cormorant·Gowun Batang | center | cards |
-| `terracotta-editorial` | 테라코타·크림 | 2px, r8 | Cormorant·Gowun Batang | asymmetric | list |
-| `newsprint-victorian` | 뉴스프린트·먹 | 1px, r0 | Cormorant·Noto Serif KR | split | list |
-| `mint-swiss` | 민트·딥그린 | 2px, r0 | Archivo·대문자 | split | columns |
-| `floral-editorial` | 테라코타·크림 | 2px, r8 | Gowun Batang | asymmetric | list |
-| `deco-noir` | 뉴스프린트·먹 | 4px, r0 | Archivo·대문자 | center | cards |
-| `star-editorial` | 민트·딥그린 | 1px, r4 | Archivo | split | cards |
-| `arch-classic` | 테라코타·크림 | 2px, r8 | Cormorant·Gowun Batang | split | cards |
-| `paper-editorial` | 뉴스프린트·먹 | 1px, r0 | Cormorant·Noto Serif KR | split | list |
-| `bead-editorial` | 테라코타·크림 | 2px, r8 | Gowun Batang | asymmetric | list |
-| `hatch-editorial` | 뉴스프린트·먹 | 1px, r0 | Archivo | split | list |
-| `burgundy-victorian` | 버건디·크림 | 2px, r2 | Cormorant·Gowun Batang | split | cards |
-| `ocean-swiss` | 오션·스틸 | 2px, r0 | Archivo·대문자 | split | columns |
-| `sand-editorial` | 샌드·토프 | 2px, r8 | Gowun Batang | asymmetric | list |
-| `charcoal-brutal` | 차콜·오프화이트 | 4px, r0 | Archivo·대문자 | center | cards |
-| `lilac-editorial` | 라일락·플럼 | 1px, r10 | Cormorant·Noto Serif KR | split | cards |
-| `forest-paper` | 포레스트·크림 | 1px, r4 | Gowun Batang | split | list |
+| 스타일 팩              | 색                   | 기하     | 서체                    | 히어로         | 피처        |
+| ---------------------- | -------------------- | -------- | ----------------------- | -------------- | ----------- |
+| `editorial`            | 크림·잉크·앰버       | 2px, r8  | 나눔스퀘어              | split          | cards       |
+| `brutalist`            | 순흑백               | 4px, r0  | Archivo·대문자          | center         | cards       |
+| `minimal`              | 화이트·블루          | 1px, r4  | Archivo+나눔            | split          | cards       |
+| `magazine`             | 크림·황토            | 1px, r0  | Gowun Batang            | **asymmetric** | **list**    |
+| `swiss`                | 화이트·레드          | 2px, r0  | Archivo·대문자          | split          | **columns** |
+| `poster`               | 다크·앰버            | 2px, r0  | Archivo                 | **poster**     | cards       |
+| `sketch`               | 화이트·블랙          | 2px, r2  | Archivo                 | split          | list        |
+| `etching`              | 아이보리·황토        | 1px, r0  | Gowun Batang            | asymmetric     | list        |
+| `sonagi-blog`          | 웨더드 페이퍼·브론즈 | 1px, r10 | Cormorant·Noto Serif KR | split          | cards       |
+| `art-nouveau`          | 파치먼트·올리브·금   | 1px, r26 | Cormorant·Gowun Batang  | center         | cards       |
+| `victorian`            | 크림·적갈·금         | 2px, r2  | Cormorant·Gowun Batang  | center         | cards       |
+| `terracotta-editorial` | 테라코타·크림        | 2px, r8  | Cormorant·Gowun Batang  | asymmetric     | list        |
+| `newsprint-victorian`  | 뉴스프린트·먹        | 1px, r0  | Cormorant·Noto Serif KR | split          | list        |
+| `mint-swiss`           | 민트·딥그린          | 2px, r0  | Archivo·대문자          | split          | columns     |
+| `floral-editorial`     | 테라코타·크림        | 2px, r8  | Gowun Batang            | asymmetric     | list        |
+| `deco-noir`            | 뉴스프린트·먹        | 4px, r0  | Archivo·대문자          | center         | cards       |
+| `star-editorial`       | 민트·딥그린          | 1px, r4  | Archivo                 | split          | cards       |
+| `arch-classic`         | 테라코타·크림        | 2px, r8  | Cormorant·Gowun Batang  | split          | cards       |
+| `paper-editorial`      | 뉴스프린트·먹        | 1px, r0  | Cormorant·Noto Serif KR | split          | list        |
+| `bead-editorial`       | 테라코타·크림        | 2px, r8  | Gowun Batang            | asymmetric     | list        |
+| `hatch-editorial`      | 뉴스프린트·먹        | 1px, r0  | Archivo                 | split          | list        |
+| `burgundy-victorian`   | 버건디·크림          | 2px, r2  | Cormorant·Gowun Batang  | split          | cards       |
+| `ocean-swiss`          | 오션·스틸            | 2px, r0  | Archivo·대문자          | split          | columns     |
+| `sand-editorial`       | 샌드·토프            | 2px, r8  | Gowun Batang            | asymmetric     | list        |
+| `charcoal-brutal`      | 차콜·오프화이트      | 4px, r0  | Archivo·대문자          | center         | cards       |
+| `lilac-editorial`      | 라일락·플럼          | 1px, r10 | Cormorant·Noto Serif KR | split          | cards       |
+| `forest-paper`         | 포레스트·크림        | 1px, r4  | Gowun Batang            | split          | list        |
 
 ```bash
 python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
@@ -74,21 +74,21 @@ python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
 { "illustration_set": "opendoodles", "illustration": "mono" }
 ```
 
-| 세트 | 라이선스 | 수 | 그림체 |
-| --- | --- | --- | --- |
-| `illlustrations` | MIT | 133 | flat color |
-| `opendoodles` | CC0 | 33 | line drawing |
-| `etchings` | CC0(PD) | 25 | 동판화 래스터 |
+| 세트             | 라이선스 | 수  | 그림체        |
+| ---------------- | -------- | --- | ------------- |
+| `illlustrations` | MIT      | 133 | flat color    |
+| `opendoodles`    | CC0      | 33  | line drawing  |
+| `etchings`       | CC0(PD)  | 25  | 동판화 래스터 |
 
 레시피: `"illustration": ["open-vault", "float", "<etching 이름>"]` → 스타일에 맞는 후보를 선택.
 
 래스터(jpg/png)는 SVG에 base64로 임베드한다. 외부 참조가 없어 파일 단독으로 열린다.
 
-| 임베드 폭 | SVG 크기(동판화 1장) | 용도 |
-| --- | --- | --- |
-| 1600px (원본) | 2.5MB | 인쇄 원본 보관 |
-| 1200px (기본) | 1.3MB | Figma 임포트 권장 상한 |
-| 900px | 636KB | 화면 시안·클라이언트 전달 |
+| 임베드 폭     | SVG 크기(동판화 1장) | 용도                      |
+| ------------- | -------------------- | ------------------------- |
+| 1600px (원본) | 2.5MB                | 인쇄 원본 보관            |
+| 1200px (기본) | 1.3MB                | Figma 임포트 권장 상한    |
+| 900px         | 636KB                | 화면 시안·클라이언트 전달 |
 
 ```bash
 render_recipe.py ... --embed-max-width 900
@@ -98,10 +98,10 @@ render_recipe.py ... --embed-max-width 900
 
 ### 레이아웃 문법
 
-| 블록 | 변형 |
-| --- | --- |
-| hero | `split`(좌우) · `center`(중앙) · `asymmetric`(이미지 우측 블리드) · `poster`(패널+전면 이미지) |
-| features | `cards`(카드 3열) · `list`(번호+룰) · `columns`(상단 룰 3단) |
+| 블록     | 변형                                                                                           |
+| -------- | ---------------------------------------------------------------------------------------------- |
+| hero     | `split`(좌우) · `center`(중앙) · `asymmetric`(이미지 우측 블리드) · `poster`(패널+전면 이미지) |
+| features | `cards`(카드 3열) · `list`(번호+룰) · `columns`(상단 룰 3단)                                   |
 
 `canvas.height`가 `"auto"`이거나 스타일 팩에 `auto_height: true`가 있으면
 콘텐츠 높이에 맞춰 캔버스를 늘린다(magazine·poster가 사용).
@@ -120,11 +120,11 @@ press package --src out/press/dist --out delivery/x --name atelier --title "Atel
 press preview --sheet --png
 ```
 
-| 환경변수 | 기본 |
-| --- | --- |
-| `PRESS_CATALOG` | `/srv/sonagi-assets/catalog/catalog.json` |
-| `PRESS_TOKENS` | `tokens/semantic.json` |
-| `PRESS_FONTS_CSS` | `/home/ubuntu/brief/fonts/fonts.css` |
+| 환경변수          | 기본                                      |
+| ----------------- | ----------------------------------------- |
+| `PRESS_CATALOG`   | `/srv/sonagi-assets/catalog/catalog.json` |
+| `PRESS_TOKENS`    | `tokens/semantic.json`                    |
+| `PRESS_FONTS_CSS` | `/home/ubuntu/brief/fonts/fonts.css`      |
 
 `sonagi press ...`는 이 CLI에 인자를 그대로 넘긴다(`@sonagi/cli`, PRESS_BIN으로 경로 지정 가능).
 
@@ -132,17 +132,28 @@ press preview --sheet --png
 
 ```json
 {
-  "name": "landing-hero",
-  "seed": 7,
-  "theme": "editorial",
-  "canvas": { "width": 1440, "height": 1024 },
-  "blocks": [
-    { "type": "header", "brand": "...", "nav": ["..."] },
-    { "type": "hero", "eyebrow": "...", "title": "...", "body": "...",
-      "cta": "...", "ctaIcon": "arrow-right", "illustration": "open-vault" },
-    { "type": "features", "title": "...", "items": [{ "icon": "...", "title": "...", "body": "..." }] },
-    { "type": "footer", "left": "...", "right": "..." }
-  ]
+    "name": "landing-hero",
+    "seed": 7,
+    "theme": "editorial",
+    "canvas": { "width": 1440, "height": 1024 },
+    "blocks": [
+        { "type": "header", "brand": "...", "nav": ["..."] },
+        {
+            "type": "hero",
+            "eyebrow": "...",
+            "title": "...",
+            "body": "...",
+            "cta": "...",
+            "ctaIcon": "arrow-right",
+            "illustration": "open-vault"
+        },
+        {
+            "type": "features",
+            "title": "...",
+            "items": [{ "icon": "...", "title": "...", "body": "..." }]
+        },
+        { "type": "footer", "left": "...", "right": "..." }
+    ]
 }
 ```
 
@@ -163,12 +174,12 @@ press preview --sheet --png
 }
 ```
 
-| 축 | 정의 위치 | 예 |
-| --- | --- | --- |
-| `palette` | `axes.palette[*].colors` | 14종 |
-| `type` | `axes.type[*]` | 11종 (서체·자간·배율·한글 서체) |
-| `geometry` | `axes.geometry[*]` | 9종 (반경·선 두께·그림자) |
-| `layout` | `axes.layout[*]` | 7종 (hero·features·header) |
+| 축         | 정의 위치                | 예                              |
+| ---------- | ------------------------ | ------------------------------- |
+| `palette`  | `axes.palette[*].colors` | 14종                            |
+| `type`     | `axes.type[*]`           | 11종 (서체·자간·배율·한글 서체) |
+| `geometry` | `axes.geometry[*]`       | 9종 (반경·선 두께·그림자)       |
+| `layout`   | `axes.layout[*]`         | 7종 (hero·features·header)      |
 
 해석은 `scripts/style_axes.py`가 한다. 순서는 palette → type → geometry → layout →
 스타일 파일의 명시 값(우선). 기존 형태(`colors`·`type` 객체를 직접 가진 파일)도 그대로 동작한다.
@@ -185,19 +196,19 @@ press preview --sheet --png
 장식도 축이다. `styles/axes.json`의 `ornament` 항목이 `{motif, frame, weight, height}`를 정의하고,
 스타일은 이름으로 참조하거나 객체로 덮어쓴다.
 
-| 이름 | 구분선 | 테두리 |
-| --- | --- | --- |
-| `none` | 없음 | 없음 |
-| `rule` | 얇은 단일 선 | 단일 선 |
-| `star` | 중앙 8방 광선 + 선 | 이중 사각 |
-| `arch` | 낮은 아치 + 양 끝 점 | 모서리 틱 사각 |
-| `trellis` | 마름모 반복 | 모서리 틱 사각 |
-| `wave` | 폭에 맞춰 늘어나는 사인 곡선 | 없음 |
-| `bead` | 마름모 반복 | 얇은 사각 + 위아래 비드 |
-| `nouveau` | 곡선 줄기 + 봉오리 | 이중 가는 선 + 모서리 컬 |
+| 이름        | 구분선                       | 테두리                    |
+| ----------- | ---------------------------- | ------------------------- |
+| `none`      | 없음                         | 없음                      |
+| `rule`      | 얇은 단일 선                 | 단일 선                   |
+| `star`      | 중앙 8방 광선 + 선           | 이중 사각                 |
+| `arch`      | 낮은 아치 + 양 끝 점         | 모서리 틱 사각            |
+| `trellis`   | 마름모 반복                  | 모서리 틱 사각            |
+| `wave`      | 폭에 맞춰 늘어나는 사인 곡선 | 없음                      |
+| `bead`      | 마름모 반복                  | 얇은 사각 + 위아래 비드   |
+| `nouveau`   | 곡선 줄기 + 봉오리           | 이중 가는 선 + 모서리 컬  |
 | `victorian` | 굵은/가는 이중 괘선 + 로제트 | 이중 괘선 + 모서리 브래킷 |
-| `deco` | 전폭 직선 + 마름모 | 이중 직선 |
-| `floral` | 잎 두 장 + 줄기 | 단일 선 |
+| `deco`      | 전폭 직선 + 마름모           | 이중 직선                 |
+| `floral`    | 잎 두 장 + 줄기              | 단일 선                   |
 
 ```json
 { "ornament": "floral" }
@@ -239,8 +250,9 @@ python3 scripts/preview_ornament.py --motif floral --frame plain --png
 
 ```markdown
 ## hero
+
 title: 종이 위에 남는
-  풍경
+풍경
 cta: 컬렉션 보기
 ```
 
@@ -249,14 +261,14 @@ python3 scripts/import_content.py content/atelier-landing.md \
   --catalog catalog/catalog.json --out recipes/atelier-landing.json
 ```
 
-| 검사 | 결과 |
-| --- | --- |
-| 없는 타입·필드(오타) | 오류 + 유사 이름 제안 |
-| 필수 필드 누락 | 오류 |
-| 목록 수 초과 | 오류 |
+| 검사                            | 결과                  |
+| ------------------------------- | --------------------- |
+| 없는 타입·필드(오타)            | 오류 + 유사 이름 제안 |
+| 필수 필드 누락                  | 오류                  |
+| 목록 수 초과                    | 오류                  |
 | 카탈로그에 없는 아이콘·일러스트 | 오류 + 유사 이름 제안 |
-| `scope`가 `bundle` 아님 | 오류 |
-| 문장 길이 초과 | 경고 |
+| `scope`가 `bundle` 아님         | 오류                  |
+| 문장 길이 초과                  | 경고                  |
 
 지원 블록 12종: header · hero · stats · features · logos · quote · faq · cta · footer ·
 table · pricing · gallery.
@@ -265,6 +277,32 @@ table · pricing · gallery.
 생성된 레시피는 `content.source`·`content.sha256`으로 원본을 추적한다.
 
 같은 `content.md`로 스타일만 바꿔 뽑는 것이 목적이다.
+
+## 블록 배치 규약
+
+블록 사이 세로 간격은 **호출부가 소유**한다. 블록 메서드는 `top`을 받아 그 자리에서
+그리고, 자기 내용이 끝나는 높이만 돌려준다. 여백을 블록이 직접 만들지 않는다.
+
+```
+top = y + BLOCK_GAP          # BLOCK_GAP = 44
+svg, height = render_block(kind, block, W, top)
+y = top + height             # 다음 블록의 기준선
+```
+
+- `header`는 페이지 최상단 고정 좌표를 쓰고 `header_height()`(88 / 모바일 70)를 돌려준다.
+- `footer`는 `footer_height()`(46 / 모바일 58)를 쓰고 페이지를 닫는다.
+- 장식 구분선(`ornament_divider`)은 블록 사이에 **자기 자리**를 차지한다:
+  앞뒤로 `BLOCK_GAP`을 두고 `height + offset`만큼 소비한다.
+- 블록 높이는 그린 요소의 실제 하단이다. 카드·표처럼 상자가 있으면 상자 하단,
+  글자로 끝나면 baseline + descender다. "느낌상 여백"을 높이에 넣지 않는다.
+
+고치기 전에는 모든 블록이 `y + 30`으로 호출되면서 반환 높이가 30을 보정하지 않아
+섹션 간격이 블록마다 어긋났다(ASSET-2). 검수는 `scripts/check_gaps.py`로 한다.
+
+```bash
+python3 scripts/check_gaps.py out/golden --recursive        # 겹침만 본다
+python3 scripts/check_gaps.py out/sweep --recursive --max-gap 60
+```
 
 ```bash
 for s in editorial brutalist minimal magazine swiss poster sketch etching sonagi-blog art-nouveau victorian terracotta-editorial newsprint-victorian mint-swiss floral-editorial deco-noir star-editorial arch-classic paper-editorial bead-editorial hatch-editorial burgundy-victorian ocean-swiss sand-editorial charcoal-brutal lilac-editorial forest-paper; do
@@ -283,10 +321,17 @@ done
 ## 매니페스트
 
 ```json
-{ "recipe": "landing-hero", "seed": 7, "theme": "editorial",
-  "sha256": "...", "layers": ["header", "hero", "..."],
-  "assets": [{ "name": "open-vault", "kind": "illustration", "license": "mit", "scope": "bundle" }],
-  "license_ok": true }
+{
+    "recipe": "landing-hero",
+    "seed": 7,
+    "theme": "editorial",
+    "sha256": "...",
+    "layers": ["header", "hero", "..."],
+    "assets": [
+        { "name": "open-vault", "kind": "illustration", "license": "mit", "scope": "bundle" }
+    ],
+    "license_ok": true
+}
 ```
 
 납품 시 매니페스트를 함께 보내면 "이 결과물에 무엇이 들어갔는지"가 자동으로 증명된다.
@@ -295,24 +340,24 @@ done
 
 라이선스는 "무엇을 해도 되는가", 출처는 "어디서 왔는가"다. 둘을 분리해 태그한다.
 
-| origin | 뜻 | 기본 scope | 쓰이는 곳 |
-| --- | --- | --- | --- |
-| `open-source` | OFL·MIT·ISC·Apache | bundle | 폰트·아이콘·오픈 일러스트 |
-| `public-domain` | CC0·PD | bundle | 박물관 이미지·동판화 |
-| `in-house` | 자체 제작 | bundle | 직접 만든 컴포넌트·레시피 |
-| `freeware` | 무료지만 재배포 제한 | output | KOTRA·롯데마트 등 |
-| `generated` | AI 생성·합성 | **output 강제** | 히어로 삽화 등 1회성 |
-| `commercial` | 유료 라이선스 | blocked | 구매 전 사용 금지 |
-| `unknown` | 출처 불명 | blocked | 납품·판매 금지 |
+| origin          | 뜻                   | 기본 scope      | 쓰이는 곳                 |
+| --------------- | -------------------- | --------------- | ------------------------- |
+| `open-source`   | OFL·MIT·ISC·Apache   | bundle          | 폰트·아이콘·오픈 일러스트 |
+| `public-domain` | CC0·PD               | bundle          | 박물관 이미지·동판화      |
+| `in-house`      | 자체 제작            | bundle          | 직접 만든 컴포넌트·레시피 |
+| `freeware`      | 무료지만 재배포 제한 | output          | KOTRA·롯데마트 등         |
+| `generated`     | AI 생성·합성         | **output 강제** | 히어로 삽화 등 1회성      |
+| `commercial`    | 유료 라이선스        | blocked         | 구매 전 사용 금지         |
+| `unknown`       | 출처 불명            | blocked         | 납품·판매 금지            |
 
 ### 어디에 쓰이는가
 
-| 산출물 | 사용 가능 origin |
-| --- | --- |
-| **판매용 에셋 팩** (파일 재배포) | open-source · public-domain · in-house |
-| **클라이언트 납품물** (화면·인쇄) | 위 + freeware · generated(고지) |
-| **내부 작업** | 전부(commercial 제외) |
-| **재배포 금지 계약** | above minus generated |
+| 산출물                            | 사용 가능 origin                       |
+| --------------------------------- | -------------------------------------- |
+| **판매용 에셋 팩** (파일 재배포)  | open-source · public-domain · in-house |
+| **클라이언트 납품물** (화면·인쇄) | 위 + freeware · generated(고지)        |
+| **내부 작업**                     | 전부(commercial 제외)                  |
+| **재배포 금지 계약**              | above minus generated                  |
 
 납품 시 `render_recipe.py`가 `<name>-CREDITS.md`를 자동 생성한다.
 `origin:generated` 자산은 등록 단계에서 `scope:output`이 강제되므로 판매 팩에 들어갈 수 없다.
@@ -340,23 +385,23 @@ sudo python3 scripts/import_image_pack.py ... --origin generated \
 
 ```json
 {
-  "ai-archive-drawer": {
-    "model": "gemini-3.1-flash-image",
-    "prompt": "flat vector editorial illustration, wooden archive drawer ...",
-    "generated_at": "2026-11-22T18:13:00Z"
-  }
+    "ai-archive-drawer": {
+        "model": "gemini-3.1-flash-image",
+        "prompt": "flat vector editorial illustration, wooden archive drawer ...",
+        "generated_at": "2026-11-22T18:13:00Z"
+    }
 }
 ```
 
 ### 구현 규칙
 
-| 지점 | 규칙 |
-| --- | --- |
-| `license_policy.py` | `generated` → `output` (파일 재배포 금지) |
-| `import_image_pack.py` | `--origin generated`면 `scope:bundle`을 붙이지 않는다 |
+| 지점                     | 규칙                                                                                            |
+| ------------------------ | ----------------------------------------------------------------------------------------------- |
+| `license_policy.py`      | `generated` → `output` (파일 재배포 금지)                                                       |
+| `import_image_pack.py`   | `--origin generated`면 `scope:bundle`을 붙이지 않는다                                           |
 | `build_asset_catalog.py` | scope 태그가 충돌하면 `bundle < output < blocked` 순으로 보수 판정, generated는 무조건 `output` |
-| `render_recipe.py` | `blocked`만 중단. `output`은 결과물에 허용하고 `output_only`로 매니페스트·CREDITS에 남긴다 |
-| `import_content.py` | `output` 자산은 경고("에셋 팩에 넣을 수 없습니다"), `blocked`는 오류 |
+| `render_recipe.py`       | `blocked`만 중단. `output`은 결과물에 허용하고 `output_only`로 매니페스트·CREDITS에 남긴다      |
+| `import_content.py`      | `output` 자산은 경고("에셋 팩에 넣을 수 없습니다"), `blocked`는 오류                            |
 
 `scope:bundle`과 `scope:output`이 동시에 붙으면 카탈로그가 알파벳 순으로 `bundle`을
 먼저 집어 AI 자산을 판매 가능으로 승격시키는 버그가 있었다. 지금은 태그를 붙이지 않고,
@@ -377,11 +422,11 @@ python3 scripts/compose_sections.py --recipe recipes/landing-hero-v2.json \
 - 점수: 섹션 수·증거 유무·서사 순서 가중, 6개 이상이면 감점
 - 같은 `seed`면 같은 6종이 나온다
 
-| 산출 | 내용 |
-| --- | --- |
-| `<name>-vN.svg` | 조합별 결과 |
-| `<name>-vN-CREDITS.md` | 자산 출처 |
-| `variants.json` | 조합·점수·sha256 목록 |
+| 산출                   | 내용                  |
+| ---------------------- | --------------------- |
+| `<name>-vN.svg`        | 조합별 결과           |
+| `<name>-vN-CREDITS.md` | 자산 출처             |
+| `variants.json`        | 조합·점수·sha256 목록 |
 
 고른 1종은 `blocks` 레시피로 동결하면 이후 결정론적으로 재생된다.
 
@@ -395,15 +440,15 @@ render_recipe.py ... --breakpoint tablet                               # 768
 render_recipe.py ... --breakpoint mobile                               # 390
 ```
 
-| 블록 | mobile 재배치 |
-| --- | --- |
-| header | 브랜드만, 내비 숨김 |
+| 블록                 | mobile 재배치                                                    |
+| -------------------- | ---------------------------------------------------------------- |
+| header               | 브랜드만, 내비 숨김                                              |
 | hero (mobile·tablet) | 텍스트 → 일러스트 → 풀폭 CTA (tablet은 더 큰 활자·가로형 이미지) |
-| stats | 세로 스택 |
-| features | 아이콘 + 제목 + 본문 리스트 |
-| logos | 2열 |
-| cta | 카드 안 세로 배치 |
-| footer | 2줄 스택 |
+| stats                | 세로 스택                                                        |
+| features             | 아이콘 + 제목 + 본문 리스트                                      |
+| logos                | 2열                                                              |
+| cta                  | 카드 안 세로 배치                                                |
+| footer               | 2줄 스택                                                         |
 
 여백은 breakpoint별로 56/32/20, 본문 스케일은 1.0/0.88/0.72를 쓴다.
 
@@ -416,11 +461,11 @@ python3 scripts/export_recipe.py --src out/ --pattern '*.svg' --out dist/ \
   --formats pdf,png,webp --scale 2 --fonts-css fonts/fonts.css
 ```
 
-| 형식 | 내용 |
-| --- | --- |
-| PDF | 화면당 1페이지, 폰트 임베드(Chromium 인쇄) |
-| PNG | `@2x` (예: 1440×2293 → 2880×4586) |
-| WebP | PNG에서 변환 |
+| 형식 | 내용                                       |
+| ---- | ------------------------------------------ |
+| PDF  | 화면당 1페이지, 폰트 임베드(Chromium 인쇄) |
+| PNG  | `@2x` (예: 1440×2293 → 2880×4586)          |
+| WebP | PNG에서 변환                               |
 
 - 같은 폴더의 `*.manifest.json`을 읽어 **출처 게이트**를 통과해야 한다
   (`origin:commercial` 자산이 있으면 중단)
@@ -473,12 +518,12 @@ render_recipe.py --recipe recipes/studio-plan-dark.json --style styles/swiss.jso
 
 같은 입력이면 바이트까지 같은 산출물이 나온다.
 
-| 산출물 | 고정 방법 |
-| --- | --- |
-| SVG·manifest | 입력 해시(recipe·style·tokens·catalog) 기록, 경로 대신 파일명 |
-| PDF | pypdf로 `CreationDate`/`ModDate` 고정, `/ID`를 내용 해시로 교체 |
-| PNG·WebP | Chromium·Pillow 출력이 이미 결정론적 |
-| ZIP | 항목 타임스탬프 `1980-01-01`, 정렬된 순서, 권한 고정 |
+| 산출물       | 고정 방법                                                       |
+| ------------ | --------------------------------------------------------------- |
+| SVG·manifest | 입력 해시(recipe·style·tokens·catalog) 기록, 경로 대신 파일명   |
+| PDF          | pypdf로 `CreationDate`/`ModDate` 고정, `/ID`를 내용 해시로 교체 |
+| PNG·WebP     | Chromium·Pillow 출력이 이미 결정론적                            |
+| ZIP          | 항목 타임스탬프 `1980-01-01`, 정렬된 순서, 권한 고정            |
 
 검증(같은 디렉터리 이름으로 두 번 실행):
 

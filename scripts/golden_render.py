@@ -33,7 +33,7 @@ TOKENS = ROOT / "tokens/semantic.json"
 BASELINE = ROOT / "test_data/golden/baseline.json"
 WORK = ROOT / "out/golden"
 
-DEFAULT_STYLES = ("editorial", "brutalist", "art-nouveau")
+DEFAULT_STYLES = ("editorial", "brutalist", "etching", "poster", "swiss", "art-nouveau", "minimal")
 DEFAULT_BREAKPOINTS = ("desktop", "tablet", "mobile")
 THEMES = (("light", []), ("dark", ["--dark"]))
 

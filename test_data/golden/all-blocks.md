@@ -22,7 +22,8 @@ title: 열두 블록을 한 번에 고정한다
 body: 간격 회귀를 잡기 위한 고정 픽스처. 문장은 검수용이며 배포하지 않는다.
 cta: 기준선 보기
 ctaIcon: arrow-right
-illustration: fixture-plate-a
+illustration:
+- fixture-plate-a
 
 ## stats
 
