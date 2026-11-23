@@ -203,6 +203,30 @@ def cmd_preview(args) -> int:
     return run(cmd)
 
 
+def cmd_print(args) -> int:
+    cmd = [
+        sys.executable,
+        SCRIPTS / "export_print.py",
+        "--src",
+        args.src,
+        "--out",
+        args.out,
+        "--trim",
+        args.trim,
+        "--bleed",
+        str(args.bleed),
+        "--slug",
+        str(args.slug),
+    ]
+    if args.icc:
+        cmd += ["--icc", args.icc]
+    if args.check:
+        cmd.append("--check")
+    if args.json:
+        cmd.append("--json")
+    return run(cmd)
+
+
 def cmd_brandsheet(args) -> int:
     pages = Path(args.out) / "pages"
     code = run([sys.executable, SCRIPTS / "render_brandsheet.py", "--spec", args.spec, "--out", pages])
@@ -329,6 +353,17 @@ def build_parser() -> argparse.ArgumentParser:
     sheet.add_argument("--pdf", action="store_true", help="8페이지 PDF까지 만든다")
     sheet.add_argument("--fonts-css", default=DEFAULT_FONTS_CSS)
     sheet.set_defaults(func=cmd_brandsheet)
+
+    printing = sub.add_parser("print", help="인쇄용 PDF(도련·재단선·CMYK)")
+    printing.add_argument("--src", required=True, help="SVG 파일 또는 폴더")
+    printing.add_argument("--out", default="out/print")
+    printing.add_argument("--trim", default="210x297", help="재단 크기(mm)")
+    printing.add_argument("--bleed", type=float, default=3.0)
+    printing.add_argument("--slug", type=float, default=5.0)
+    printing.add_argument("--icc", default=None)
+    printing.add_argument("--check", action="store_true")
+    printing.add_argument("--json", action="store_true")
+    printing.set_defaults(func=cmd_print)
 
     return parser
 
