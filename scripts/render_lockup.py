@@ -284,11 +284,7 @@ def single_lockup(spec, body, view, name):
     lockup, role, (w, h) = SINGLE[name]
     color = spec["colors"][role]
     markup = lockup_markup(lockup, body, view, w / 2, h / 2, color, spec)
-    return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'
-        + markup
-        + "</svg>"
-    )
+    return f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">' + markup + "</svg>"
 
 
 def main():
@@ -333,9 +329,7 @@ def main():
             written[f"{single}.svg"] = hashlib.sha256(text.encode()).hexdigest()
         manifest["singles"] = written
         if not args.check:
-            (Path(args.out) / f"{name}.manifest.json").write_text(
-                json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
-            )
+            (Path(args.out) / f"{name}.manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
 
     if args.json:
         print(json.dumps({"name": name, "cells": len(manifest["cells"]), "checks": manifest["checks"]}, ensure_ascii=False))
