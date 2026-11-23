@@ -136,6 +136,8 @@ def cmd_render(args) -> int:
                 bp,
                 "--embed-max-width",
                 args.embed_max_width,
+                "--raster-mode",
+                args.raster,
             ]
         )
         if code != 0:
@@ -201,6 +203,66 @@ def cmd_preview(args) -> int:
     return run(cmd)
 
 
+def cmd_brandsheet(args) -> int:
+    pages = Path(args.out) / "pages"
+    code = run([sys.executable, SCRIPTS / "render_brandsheet.py", "--spec", args.spec, "--out", pages])
+    if code != 0:
+        return code
+    if not args.pdf:
+        return 0
+    dist = Path(args.out) / "dist"
+    code = run(
+        [
+            sys.executable,
+            SCRIPTS / "export_recipe.py",
+            "--src",
+            pages,
+            "--out",
+            dist,
+            "--formats",
+            "pdf",
+            "--pdf-mode",
+            "single",
+            "--pdf-name",
+            args.name,
+            "--fonts-css",
+            args.fonts_css,
+        ]
+    )
+    if code == 0:
+        print(f"PDF: {dist / (args.name + '.pdf')}")
+    return code
+
+
+def cmd_spec(args) -> int:
+    cmd = [sys.executable, SCRIPTS / "render_spec.py", "--spec", args.spec, "--out", args.out]
+    if args.check:
+        cmd.append("--check")
+    if args.json:
+        cmd.append("--json")
+    return run(cmd)
+
+
+def cmd_lockup(args) -> int:
+    cmd = [
+        sys.executable,
+        SCRIPTS / "render_lockup.py",
+        "--spec",
+        args.spec,
+        "--out",
+        args.out,
+    ]
+    if args.name:
+        cmd += ["--name", args.name]
+    if args.check:
+        cmd.append("--check")
+    if args.allow_low_contrast:
+        cmd.append("--allow-low-contrast")
+    if args.json:
+        cmd.append("--json")
+    return run(cmd)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="press", description="소나기 렌더·납품 엔진")
     parser.add_argument("--version", action="version", version=f"press {VERSION}")
@@ -219,6 +281,7 @@ def build_parser() -> argparse.ArgumentParser:
     render.add_argument("--catalog", default=DEFAULT_CATALOG)
     render.add_argument("--tokens", default=DEFAULT_TOKENS)
     render.add_argument("--embed-max-width", default="900")
+    render.add_argument("--raster", default="embed", choices=("embed", "link"), help="래스터 임베드(embed) 또는 파일 1벌 참조(link)")
     render.add_argument("--json", action="store_true")
     render.set_defaults(func=cmd_render)
 
@@ -242,6 +305,30 @@ def build_parser() -> argparse.ArgumentParser:
     preview.add_argument("--frame")
     preview.add_argument("--png", action="store_true")
     preview.set_defaults(func=cmd_preview)
+
+    lockup = sub.add_parser("lockup", help="락업·변형 시트 (로고 규격)")
+    lockup.add_argument("--spec", required=True)
+    lockup.add_argument("--out", default="out/lockup")
+    lockup.add_argument("--name")
+    lockup.add_argument("--check", action="store_true", help="검사만")
+    lockup.add_argument("--allow-low-contrast", action="store_true")
+    lockup.add_argument("--json", action="store_true")
+    lockup.set_defaults(func=cmd_lockup)
+
+    spec = sub.add_parser("spec", help="규격 도해(클리어 스페이스·작도·최소 크기)")
+    spec.add_argument("--spec", required=True)
+    spec.add_argument("--out", default="out/spec")
+    spec.add_argument("--check", action="store_true")
+    spec.add_argument("--json", action="store_true")
+    spec.set_defaults(func=cmd_spec)
+
+    sheet = sub.add_parser("brandsheet", help="브랜드 시트(A4 8페이지)")
+    sheet.add_argument("--spec", required=True)
+    sheet.add_argument("--out", default="out/brandsheet")
+    sheet.add_argument("--name", default="brand-sheet")
+    sheet.add_argument("--pdf", action="store_true", help="8페이지 PDF까지 만든다")
+    sheet.add_argument("--fonts-css", default=DEFAULT_FONTS_CSS)
+    sheet.set_defaults(func=cmd_brandsheet)
 
     return parser
 

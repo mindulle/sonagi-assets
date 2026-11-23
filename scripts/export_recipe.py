@@ -101,6 +101,24 @@ def run(cmd):
         raise SystemExit(f"command failed: {' '.join(cmd)}")
 
 
+def absolutize_refs(text, base_dir):
+    """상대 경로 래스터 참조를 절대 file URI로 바꾼다.
+
+    link 모드 SVG는 `assets/<hash>.jpg`를 상대 경로로 가리킨다. Chromium은
+    임시 HTML 폴더를 기준으로 상대 경로를 풀기 때문에 그대로 두면 이미지가 빠진다.
+    """
+    base = Path(base_dir).resolve()
+    pattern = re.compile(r'(xlink:href|href)="([^"]+)"')
+
+    def repl(m):
+        attr, ref = m.group(1), m.group(2)
+        if ref.startswith(("data:", "http://", "https://", "file:", "#")):
+            return m.group(0)
+        return f'{attr}="{(base / ref).as_uri()}"'
+
+    return pattern.sub(repl, text)
+
+
 def export_pdf(chrome, svgs, fonts_css, out_pdf):
     html = build_html(svgs, fonts_css)
     # snap chromium은 /tmp을 볼 수 없다 → 출력 폴더 옆에 임시 페이지를 만든다
@@ -196,6 +214,8 @@ def main():
     ap.add_argument("--scale", type=float, default=2.0)
     ap.add_argument("--fonts-css", default=None, help="@font-face 정의가 담긴 css 파일")
     ap.add_argument("--allow-freeware", action="store_true", default=True)
+    ap.add_argument("--pdf-mode", default="per-file", choices=("per-file", "single"), help="PDF를 화면별로 나누거나 한 파일로 묶는다")
+    ap.add_argument("--pdf-name", default="sheet", help="--pdf-mode single일 때 파일명")
     args = ap.parse_args()
 
     src = Path(args.src)
@@ -213,10 +233,19 @@ def main():
     formats = {f.strip() for f in args.formats.split(",")}
 
     gate = [check_assets(f) for f in files]
-    svgs = [(f.read_text(), svg_size(f.read_text())) for f in files]
+    svgs = [(absolutize_refs(f.read_text(), src), svg_size(f.read_text())) for f in files]
 
     produced = []
-    if "pdf" in formats:
+    if "pdf" in formats and args.pdf_mode == "single":
+        # 다페이지 문서(브랜드 시트 등): 페이지 크기가 같을 때만 한 파일로 묶는다
+        sizes = {size for _, size in svgs}
+        if len(sizes) != 1:
+            raise SystemExit(f"--pdf-mode single은 페이지 크기가 같아야 합니다: {sorted(sizes)}")
+        pdf = out / f"{args.pdf_name}.pdf"
+        export_pdf(chrome, svgs, fonts_css, pdf)
+        normalize_pdf(pdf, title=args.pdf_name)
+        produced.append(pdf)
+    elif "pdf" in formats:
         # 페이지 크기가 다른 캔버스를 한 PDF에 넣으면 Chromium이 한 크기로 합친다
         # → 화면(브레이크포인트)별로 PDF를 따로 만든다
         for (text, size), f in zip(svgs, files):
@@ -226,7 +255,7 @@ def main():
             produced.append(pdf)
 
     for f in files:
-        text = f.read_text()
+        text = absolutize_refs(f.read_text(), src)
         w, h = svg_size(text)
         if "png" in formats or "webp" in formats:
             png = out / f"{f.stem}@{int(args.scale)}x.png"
@@ -240,6 +269,9 @@ def main():
         manifest = f.with_suffix(".manifest.json")
         if manifest.is_file():
             shutil.copy2(manifest, out / manifest.name)
+
+    if (src / "assets").is_dir():
+        shutil.copytree(src / "assets", out / "assets", dirs_exist_ok=True)
 
     summary = {
         "formats": sorted(formats),

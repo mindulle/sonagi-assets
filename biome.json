@@ -21,5 +21,8 @@
             "bracketSameLine": false,
             "quoteStyle": "double"
         }
+    },
+    "files": {
+        "ignore": ["test_data/golden/baseline.json"]
     }
 }

@@ -1,19 +1,86 @@
 name: CI Checks
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Run pre-commit
-        uses: pre-commit/action@v3.0.1
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+            - name: Run pre-commit
+              uses: pre-commit/action@v3.0.1
+
+    determinism:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+            - name: Install render deps
+              # SVG 렌더 경로는 PyYAML만 쓴다(Pillow·Chromium은 export 전용)
+              run: python3 -m pip install --quiet pyyaml
+            - name: 레시피 스키마
+              run: python3 scripts/recipe_schema.py recipes/*.json
+            - name: 골든 기준선과 비교
+              run: python3 scripts/golden_render.py
+            - name: 같은 입력 2회 → 해시 동일
+              run: |
+                  python3 scripts/golden_render.py --update --baseline /tmp/golden-a.json
+                  python3 scripts/golden_render.py --update --baseline /tmp/golden-b.json
+                  diff -u /tmp/golden-a.json /tmp/golden-b.json
+            - name: 블록 겹침 검수
+              run: python3 scripts/check_gaps.py out/golden --recursive
+            - name: 락업 시트
+              run: |
+                  python3 scripts/render_lockup.py --spec test_data/identity/lockup.json \
+                    --out out/lockup --name sonagi-lockup --json
+                  python3 scripts/render_lockup.py --spec test_data/identity/lockup.json \
+                    --out out/lockup-2 --name sonagi-lockup >/dev/null
+                  a=$(sha256sum out/lockup/sonagi-lockup.svg | cut -d' ' -f1)
+                  b=$(sha256sum out/lockup-2/sonagi-lockup.svg | cut -d' ' -f1)
+                  test "$a" = "$b"
+                  if python3 scripts/render_lockup.py \
+                    --spec test_data/identity/lockup-low-contrast.json --check >/dev/null 2>&1; then
+                    echo "저대비 스펙이 통과했습니다"
+                    exit 1
+                  fi
+            - name: 브랜드 시트
+              run: |
+                  python3 scripts/render_brandsheet.py --spec test_data/identity/lockup.json --out out/bs --json
+                  python3 scripts/render_brandsheet.py --spec test_data/identity/lockup.json --out out/bs-2 >/dev/null
+                  test "$(ls out/bs/*.svg | wc -l)" = "8"
+                  for f in out/bs/*.svg; do
+                    n=$(basename "$f")
+                    test "$(sha256sum "$f" | cut -d' ' -f1)" = "$(sha256sum "out/bs-2/$n" | cut -d' ' -f1)"
+                  done
+            - name: 규격 도해
+              run: |
+                  python3 scripts/render_spec.py --spec test_data/identity/lockup.json --out out/spec --json
+                  python3 scripts/render_spec.py --spec test_data/identity/lockup.json --out out/spec-2 >/dev/null
+                  for f in clearspace construction minimum-size; do
+                    test -f "out/spec/$f.svg"
+                    a=$(sha256sum "out/spec/$f.svg" | cut -d' ' -f1)
+                    b=$(sha256sum "out/spec-2/$f.svg" | cut -d' ' -f1)
+                    test "$a" = "$b"
+                  done
+            - name: 래스터 링크 모드
+              run: |
+                  python3 scripts/render_recipe.py --recipe out/golden/recipe.json \
+                    --style styles/etching.json --catalog test_data/golden/catalog.json \
+                    --tokens tokens/semantic.json --out out/link-check --breakpoint desktop \
+                    --raster-mode link
+                  if grep -q "data:image" out/link-check/*.svg; then
+                    echo "link 모드 SVG에 data URI가 남아 있습니다"
+                    exit 1
+                  fi
+                  ls out/link-check/assets/*.jpg >/dev/null

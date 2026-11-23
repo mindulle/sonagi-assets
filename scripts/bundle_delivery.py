@@ -128,6 +128,9 @@ def main():
             shutil.copy2(f, out / f.name)
     if (src / "export.json").is_file():
         shutil.copy2(src / "export.json", out / "export.json")
+    # link 모드 래스터는 SVG 옆(svg/assets/)에 둬야 상대 경로가 풀린다
+    if (src / "assets").is_dir():
+        shutil.copytree(src / "assets", out / "svg" / "assets", dirs_exist_ok=True)
 
     (out / "CREDITS.md").write_text(credits_md(manifests))
     (out / "index.html").write_text(index_html(args.name, screens, manifests))
@@ -136,6 +139,7 @@ def main():
         f"- screens: {', '.join(sorted(screens))}\n"
         "- `svg/` 원본(편집 가능) · `pdf/` 승인용(폰트 임베드) · `png/` 화면용 2x · `webp/` 웹용\n"
         "- `index.html`을 열면 미리보기와 다운로드 링크가 나옵니다\n"
+        "- 래스터를 링크 모드로 뽑았다면 `svg/assets/`에 이미지가 함께 들어갑니다\n"
         "- 자산 출처와 라이선스는 `CREDITS.md`\n"
     )
 

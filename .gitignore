@@ -8,3 +8,6 @@ __pycache__/
 
 # 장식 미리보기 산출물
 previews/
+
+# 골든 렌더 산출물
+out/

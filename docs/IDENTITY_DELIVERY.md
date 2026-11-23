@@ -152,11 +152,88 @@ brand-sheet.pdf
 | 타입 | 내용 | 현재 |
 | --- | --- | --- |
 | `page` | 웹·랜딩 | ✅ 구현 |
-| `lockup` | 락업·변형 시트 | ❌ |
-| `brand-sheet` | 8페이지 가이드 | ❌ |
-| `spec-diagram` | 클리어 스페이스·작도 | ❌ |
+| `lockup` | 락업·변형 시트 | ✅ 구현 (`press lockup`) |
+| `brand-sheet` | 8페이지 가이드 | ✅ 구현 (`press brandsheet`) |
+| `spec-diagram` | 클리어 스페이스·작도 | ✅ 구현 (`press spec`) |
 
 `lockup`·`spec-diagram`은 SVG 블록으로 비교적 쉽게 만들 수 있다. `brand-sheet`는 A4 다페이지 PDF 조판이 필요해 별도 작업이다.
+
+### lockup 시트 (구현됨)
+
+스펙 JSON 하나로 락업 × 변형 매트릭스를 전개한다. press는 로고를 만들지 않고,
+받은 심볼 벡터를 다시 칠해 배치하고 **실제 배경 대비를 계산**한다.
+
+```json
+{
+    "brand": "SONAGI",
+    "version": "v1.0",
+    "symbol": "assets/logo/symbol.svg",
+    "wordmark": "SONAGI",
+    "type": { "family": "Archivo", "weight": 700, "tracking": 0.14 },
+    "colors": {
+        "primary": "#1f4536",
+        "ink": "#161616",
+        "paper": "#fbf9f5",
+        "accent": "#b4551f"
+    },
+    "backgrounds": { "light": "#fbf9f5", "dark": "#12100e" },
+    "lockups": ["horizontal", "stacked", "symbol"],
+    "variants": ["color", "mono", "inverse", "one-color"],
+    "clearspace": 0.5,
+    "minimum": { "print_mm": 15, "screen_px": 24 }
+}
+```
+
+```bash
+press lockup --spec brand/lockup.json --out out/lockup --name sonagi-lockup
+press lockup --spec brand/lockup.json --check      # 파일 없이 검사만
+```
+
+- 셀마다 전경·배경·대비를 매니페스트에 남긴다. 4.5:1 미만이면 exit 1
+  (`--allow-low-contrast`로 강제 진행)
+- 심볼은 `stroke`/`fill`의 hex만 다시 칠한다. `none`·그라디언트 정의는 건드리지 않는다
+- 워드마크는 텍스트로 그린다. **제출용은 벡터 아웃라인을 권장** — `wordmark` 대신
+  별도 SVG를 쓰는 경로는 아직 없다
+- 파일명은 브랜드명을 소문자·하이픈으로 바꿔 만든다(8절 규칙)
+
+### 규격 도해 (구현됨)
+
+lockup 스펙 하나로 세 장을 뽑는다. 값은 스펙의 `clearspace`·`minimum`을 그대로 쓴다.
+
+```bash
+press spec --spec brand/lockup.json --out out/spec
+```
+
+| 파일 | 내용 | 결정하는 값 |
+| --- | --- | --- |
+| `clearspace.svg` | 심볼 높이 기준 여백 + 치수선 | `clearspace` (기본 0.5h) |
+| `construction.svg` | 12u 그리드·중심축·대각선·내접원 | 심볼 비율 |
+| `minimum-size.svg` | 인쇄 mm / 화면 px 실물 크기 + ×5 확대 | `minimum` |
+
+`spec.manifest.json`에 파일별 해시와 계산된 여백(px)을 남긴다. 심볼이 바뀌면 해시가 바뀐다.
+
+### 브랜드 시트 (구현됨)
+
+5절의 8페이지를 A4 세로(794×1123px 벡터)로 조판하고 한 PDF로 묶는다.
+
+```bash
+press brandsheet --spec brand/lockup.json --out out/brandsheet --name sonagi-brand-sheet --pdf
+```
+
+| 페이지 | 내용 | 근거 데이터 |
+| --- | --- | --- |
+| 1 | 표지 | 브랜드·버전·`date`·`tagline` |
+| 2 | 락업 3종 | `symbol`·`wordmark` |
+| 3 | 클리어 스페이스·최소 크기 | `clearspace`·`minimum` |
+| 4 | 색 (HEX·RGB·CMYK) | `colors` 또는 `palette` |
+| 5 | 타이포그래피 | `type` |
+| 6 | 적용 예시 | 심볼·색 |
+| 7 | Do / Don't | 심볼·색 |
+| 8 | 자산·라이선스 | 파일 해시·폰트·권리 |
+
+- `export_recipe.py --pdf-mode single`로 같은 크기 페이지를 한 PDF에 묶는다
+- `brandsheet.manifest.json`에 페이지별 해시·팔레트(HEX/RGB/CMYK)·검사값을 남긴다
+- 인쇄는 RGB 기준이다. CMYK·도련은 6절 이후 별도 경로(ASSET-6)
 
 ## 11. 남은 구멍
 

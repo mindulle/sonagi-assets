@@ -1,0 +1,19 @@
+{
+    "brand": "LOW CONTRAST CHECK",
+    "version": "v0",
+    "note": "검사 실패를 확인하는 픽스처 — 제출용이 아닙니다.",
+    "symbol": "test_data/identity/symbol.svg",
+    "wordmark": "LOW",
+    "colors": {
+        "primary": "#1f4536",
+        "ink": "#161616",
+        "paper": "#fbf9f5",
+        "accent": "#efe6d8"
+    },
+    "backgrounds": {
+        "light": "#fbf9f5",
+        "dark": "#4a4640"
+    },
+    "lockups": ["horizontal", "symbol"],
+    "variants": ["color", "inverse", "one-color"]
+}
