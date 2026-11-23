@@ -248,6 +248,26 @@ python3 scripts/recipe_schema.py recipes/*.json        # 스키마·블록 요�
 - `offset`은 선을 아래로 내리는 값이다(아치처럼 위로 솟는 모티프가 앞 블록을 침범하지 않게).
 - `repeat` 대신 `grid`를 주면 2차원으로 반복한다: `{cols, rows, x, y}`에 표현식을 쓰고
   `col`·`row` 변수를 받는다.
+
+### 배경 패턴과 Figma
+
+배경 패턴은 두 가지로 그린다. `styles/ornaments.json`의 `background`에 있고, 스타일이 이름으로 고른다.
+
+| 이름 | 방식 | 1440×3117 SVG |
+| --- | --- | --- |
+| `dots` · `hatch` | SVG `<pattern>` 타일 | 0.2~0.3KB |
+| `dots-lines` · `hatch-lines` | 선·원 그리드(개별 요소) | 181~584KB |
+
+**Figma는 `<pattern>` 채우기를 버린다**(2026-11-23 실측, ASSET-7). Figma에 드래그하면 패턴 사각형이
+빈 상태로 들어오고, 선 기반 폴백만 남는다. 그래서 렌더 옵션으로 고른다.
+
+```bash
+render_recipe.py ... --pattern-mode tile   # 기본. 작지만 Figma에서 사라짐
+render_recipe.py ... --pattern-mode line   # Figma 안전. 같은 페이지가 168KB → 943KB
+press render content.md --pattern line
+```
+
+`tile` 모드로 패턴이 있는 스타일을 렌더하면 stderr에 안내가 한 줄 나온다.
 - 장식 축에 `background`를 넣으면 본문 뒤에 패턴을 깐다(`dots`, `hatch`).
 - 반복이 많으면 `pattern` 요소로 타일 한 장을 정의한다. `{el: "pattern", id, attrs, elements, rect}`.
   실측(1440×2400): `hatch` 0.3KB vs `hatch-lines` 447KB, `dots` 0.2KB vs `dots-lines` 141KB.

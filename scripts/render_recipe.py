@@ -1214,6 +1214,12 @@ def main():
     ap.add_argument("--dark", action="store_true", help="팔레트를 다크로 변환(레시피의 dark:true 보다 우선)")
     ap.add_argument("--raster-mode", default="embed", choices=("embed", "link"), help="래스터 임베드(embed) 또는 파일 1벌 참조(link)")
     ap.add_argument("--raster-dir", default="assets", help="link 모드에서 이미지를 둘 하위 폴더")
+    ap.add_argument(
+        "--pattern-mode",
+        default="tile",
+        choices=("tile", "line"),
+        help="배경 패턴: tile=SVG pattern(작음, Figma는 버림) · line=선 그리드(큼, Figma 안전)",
+    )
     args = ap.parse_args()
 
     try:
@@ -1239,6 +1245,19 @@ def main():
     auto_height = (H == "auto" or bool(style.get("auto_height"))) and args.force_height == 0
     if args.force_height:
         H = args.force_height
+    ornament = style.get("ornament") or {}
+    if isinstance(ornament, dict) and ornament.get("background"):
+        background = ornament["background"]
+        if args.pattern_mode == "line" and background in ("dots", "hatch"):
+            ornament["background"] = f"{background}-lines"
+            style["ornament"] = ornament
+        elif args.pattern_mode == "tile" and background in ("dots", "hatch"):
+            print(
+                "참고: 배경 패턴을 <pattern> 타일로 그립니다. Figma는 이 채우기를 버립니다 — "
+                "피그마 왕복이면 --pattern-mode line",
+                file=sys.stderr,
+            )
+
     theme = style.get("theme") or recipe["theme"]
     r = Renderer(catalog, tokens, theme, style, strict=not args.allow_blocked)
     dark = args.dark or bool(recipe.get("dark"))
