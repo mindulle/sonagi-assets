@@ -1,0 +1,162 @@
+{
+    "generated_at": "2026-11-23T00:00:00Z",
+    "source_db": "fixture",
+    "library_root": "test_data/golden",
+    "counts": { "total": 7 },
+    "items": [
+        {
+            "id": "fx-icon-arrow-right",
+            "name": "arrow-right",
+            "ext": "svg",
+            "category": "icons",
+            "source": "fixture",
+            "format": "vector",
+            "license": "cc0-1.0",
+            "license_basis": "authored",
+            "license_scope": "bundle",
+            "origin": "open-source",
+            "junk": false,
+            "kind": "icon",
+            "tags": [
+                "kind:icon",
+                "set:fixture",
+                "origin:open-source",
+                "scope:bundle",
+                "license:cc0"
+            ],
+            "path": "test_data/golden/icons/arrow-right.svg"
+        },
+        {
+            "id": "fx-icon-package",
+            "name": "package",
+            "ext": "svg",
+            "category": "icons",
+            "source": "fixture",
+            "format": "vector",
+            "license": "cc0-1.0",
+            "license_basis": "authored",
+            "license_scope": "bundle",
+            "origin": "open-source",
+            "junk": false,
+            "kind": "icon",
+            "tags": [
+                "kind:icon",
+                "set:fixture",
+                "origin:open-source",
+                "scope:bundle",
+                "license:cc0"
+            ],
+            "path": "test_data/golden/icons/package.svg"
+        },
+        {
+            "id": "fx-icon-eye",
+            "name": "eye",
+            "ext": "svg",
+            "category": "icons",
+            "source": "fixture",
+            "format": "vector",
+            "license": "cc0-1.0",
+            "license_basis": "authored",
+            "license_scope": "bundle",
+            "origin": "open-source",
+            "junk": false,
+            "kind": "icon",
+            "tags": [
+                "kind:icon",
+                "set:fixture",
+                "origin:open-source",
+                "scope:bundle",
+                "license:cc0"
+            ],
+            "path": "test_data/golden/icons/eye.svg"
+        },
+        {
+            "id": "fx-icon-ruler",
+            "name": "ruler",
+            "ext": "svg",
+            "category": "icons",
+            "source": "fixture",
+            "format": "vector",
+            "license": "cc0-1.0",
+            "license_basis": "authored",
+            "license_scope": "bundle",
+            "origin": "open-source",
+            "junk": false,
+            "kind": "icon",
+            "tags": [
+                "kind:icon",
+                "set:fixture",
+                "origin:open-source",
+                "scope:bundle",
+                "license:cc0"
+            ],
+            "path": "test_data/golden/icons/ruler.svg"
+        },
+        {
+            "id": "fx-plate-a",
+            "name": "fixture-plate-a",
+            "ext": "svg",
+            "category": "illustrations",
+            "source": "fixture",
+            "format": "vector",
+            "license": "cc0-1.0",
+            "license_basis": "authored",
+            "license_scope": "bundle",
+            "origin": "open-source",
+            "junk": false,
+            "kind": "illustration",
+            "tags": [
+                "kind:illustration",
+                "set:fixture",
+                "origin:open-source",
+                "scope:bundle",
+                "license:cc0"
+            ],
+            "path": "test_data/golden/illustrations/plate-a.svg"
+        },
+        {
+            "id": "fx-plate-b",
+            "name": "fixture-plate-b",
+            "ext": "svg",
+            "category": "illustrations",
+            "source": "fixture",
+            "format": "vector",
+            "license": "cc0-1.0",
+            "license_basis": "authored",
+            "license_scope": "bundle",
+            "origin": "open-source",
+            "junk": false,
+            "kind": "illustration",
+            "tags": [
+                "kind:illustration",
+                "set:fixture",
+                "origin:open-source",
+                "scope:bundle",
+                "license:cc0"
+            ],
+            "path": "test_data/golden/illustrations/plate-b.svg"
+        },
+        {
+            "id": "fx-plate-c",
+            "name": "fixture-plate-c",
+            "ext": "svg",
+            "category": "illustrations",
+            "source": "fixture",
+            "format": "vector",
+            "license": "cc0-1.0",
+            "license_basis": "authored",
+            "license_scope": "bundle",
+            "origin": "open-source",
+            "junk": false,
+            "kind": "illustration",
+            "tags": [
+                "kind:illustration",
+                "set:fixture",
+                "origin:open-source",
+                "scope:bundle",
+                "license:cc0"
+            ],
+            "path": "test_data/golden/illustrations/plate-c.svg"
+        }
+    ]
+}
