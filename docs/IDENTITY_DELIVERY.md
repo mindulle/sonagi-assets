@@ -153,7 +153,7 @@ brand-sheet.pdf
 | --- | --- | --- |
 | `page` | 웹·랜딩 | ✅ 구현 |
 | `lockup` | 락업·변형 시트 | ✅ 구현 (`press lockup`) |
-| `brand-sheet` | 8페이지 가이드 | ❌ |
+| `brand-sheet` | 8페이지 가이드 | ✅ 구현 (`press brandsheet`) |
 | `spec-diagram` | 클리어 스페이스·작도 | ✅ 구현 (`press spec`) |
 
 `lockup`·`spec-diagram`은 SVG 블록으로 비교적 쉽게 만들 수 있다. `brand-sheet`는 A4 다페이지 PDF 조판이 필요해 별도 작업이다.
@@ -211,6 +211,29 @@ press spec --spec brand/lockup.json --out out/spec
 | `minimum-size.svg` | 인쇄 mm / 화면 px 실물 크기 + ×5 확대 | `minimum` |
 
 `spec.manifest.json`에 파일별 해시와 계산된 여백(px)을 남긴다. 심볼이 바뀌면 해시가 바뀐다.
+
+### 브랜드 시트 (구현됨)
+
+5절의 8페이지를 A4 세로(794×1123px 벡터)로 조판하고 한 PDF로 묶는다.
+
+```bash
+press brandsheet --spec brand/lockup.json --out out/brandsheet --name sonagi-brand-sheet --pdf
+```
+
+| 페이지 | 내용 | 근거 데이터 |
+| --- | --- | --- |
+| 1 | 표지 | 브랜드·버전·`date`·`tagline` |
+| 2 | 락업 3종 | `symbol`·`wordmark` |
+| 3 | 클리어 스페이스·최소 크기 | `clearspace`·`minimum` |
+| 4 | 색 (HEX·RGB·CMYK) | `colors` 또는 `palette` |
+| 5 | 타이포그래피 | `type` |
+| 6 | 적용 예시 | 심볼·색 |
+| 7 | Do / Don't | 심볼·색 |
+| 8 | 자산·라이선스 | 파일 해시·폰트·권리 |
+
+- `export_recipe.py --pdf-mode single`로 같은 크기 페이지를 한 PDF에 묶는다
+- `brandsheet.manifest.json`에 페이지별 해시·팔레트(HEX/RGB/CMYK)·검사값을 남긴다
+- 인쇄는 RGB 기준이다. CMYK·도련은 6절 이후 별도 경로(ASSET-6)
 
 ## 11. 남은 구멍
 

@@ -54,6 +54,15 @@ jobs:
                     echo "저대비 스펙이 통과했습니다"
                     exit 1
                   fi
+            - name: 브랜드 시트
+              run: |
+                  python3 scripts/render_brandsheet.py --spec test_data/identity/lockup.json --out out/bs --json
+                  python3 scripts/render_brandsheet.py --spec test_data/identity/lockup.json --out out/bs-2 >/dev/null
+                  test "$(ls out/bs/*.svg | wc -l)" = "8"
+                  for f in out/bs/*.svg; do
+                    n=$(basename "$f")
+                    test "$(sha256sum "$f" | cut -d' ' -f1)" = "$(sha256sum "out/bs-2/$n" | cut -d' ' -f1)"
+                  done
             - name: 규격 도해
               run: |
                   python3 scripts/render_spec.py --spec test_data/identity/lockup.json --out out/spec --json

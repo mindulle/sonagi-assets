@@ -133,6 +133,7 @@ dist/
 - 레시피: `blocks` 정본 + 레거시 `content` 맵 자동 변환. 레시피 4종 스키마 검사 통과
 - 락업: 3락업 × 4변형 12셀 대비 계산(최저 4.69:1). 저대비 스펙은 exit 1, 2회 렌더 해시 동일
 - 규격 도해: 클리어 스페이스(0.5h=119px)·작도 12u·최소 크기 15mm/24px. 3장 2회 렌더 해시 동일
+- 브랜드 시트: 8페이지 A4(210×297mm) 단일 PDF. 페이지별 해시 동일, 8페이지 확인
 
 ## 9. 알려진 부채
 
@@ -155,13 +156,12 @@ dist/
 
 | 순서 | 이슈                     | 모듈          | 이유                          |
 | ---- | ------------------------ | ------------- | ----------------------------- |
-| 1    | ASSET-11 brand-sheet     | 아이덴티티    | 다페이지 PDF 조판 필요        |
-| 2    | ASSET-12 `.ai` 검증      | 아이덴티티    | 제출 직전 확인                |
-| 3    | ASSET-6 인쇄 CMYK        | 인쇄 지원     | 별도 색 경로                  |
-| 4    | ASSET-7 Figma pattern    | Figma 왕복    | 재임포트 확인                 |
-| 5    | ASSET-8 타입·레이아웃 축 | 스타일 시스템 | 표현력 확장                   |
+| 1    | ASSET-12 `.ai` 검증      | 아이덴티티    | 제출 직전 확인                |
+| 2    | ASSET-6 인쇄 CMYK        | 인쇄 지원     | 별도 색 경로                  |
+| 3    | ASSET-7 Figma pattern    | Figma 왕복    | 재임포트 확인                 |
+| 4    | ASSET-8 타입·레이아웃 축 | 스타일 시스템 | 표현력 확장                   |
 
-납품 품질(ASSET-2·3·4·5)과 lockup·spec(ASSET-9·10)은 완료. 다음은 brand-sheet다.
+납품 품질(ASSET-2·3·4·5)과 아이덴티티(ASSET-9·10·11)는 완료. 다음은 `.ai` 제출 경로 확인이다.
 
 ## 12. 재현 체크리스트
 
@@ -192,12 +192,13 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 
 | 경로                                                           | 역할                                          |
 | -------------------------------------------------------------- | --------------------------------------------- |
-| `press` · `scripts/press.py`                                   | 단일 CLI(check·render·package·lockup·spec·styles·preview) |
+| `press` · `scripts/press.py`                                   | 단일 CLI(check·render·package·lockup·spec·brandsheet·styles·preview) |
 | `scripts/render_recipe.py`                                     | 렌더러·스타일·다크 변환·매니페스트            |
 | `scripts/import_content.py`                                    | content.md → recipe + 검증                    |
 | `scripts/export_recipe.py`                                     | PDF·PNG·WebP + 라이선스 게이트                |
 | `scripts/render_lockup.py`                                     | 락업·변형 시트(스펙 JSON → SVG + 대비 검사)   |
 | `scripts/render_spec.py`                                       | 규격 도해(클리어 스페이스·작도·최소 크기)     |
+| `scripts/render_brandsheet.py`                                 | 브랜드 시트(A4 8페이지 → 단일 PDF)            |
 | `scripts/bundle_delivery.py`                                   | zip·index.html·CREDITS                        |
 | `scripts/build_asset_catalog.py`                               | DB → catalog.json (scope 판정 포함)           |
 | `scripts/import_image_pack.py`                                 | 래스터 등록 + 생성 메타데이터                 |

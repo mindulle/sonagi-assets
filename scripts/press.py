@@ -203,6 +203,37 @@ def cmd_preview(args) -> int:
     return run(cmd)
 
 
+def cmd_brandsheet(args) -> int:
+    pages = Path(args.out) / "pages"
+    code = run([sys.executable, SCRIPTS / "render_brandsheet.py", "--spec", args.spec, "--out", pages])
+    if code != 0:
+        return code
+    if not args.pdf:
+        return 0
+    dist = Path(args.out) / "dist"
+    code = run(
+        [
+            sys.executable,
+            SCRIPTS / "export_recipe.py",
+            "--src",
+            pages,
+            "--out",
+            dist,
+            "--formats",
+            "pdf",
+            "--pdf-mode",
+            "single",
+            "--pdf-name",
+            args.name,
+            "--fonts-css",
+            args.fonts_css,
+        ]
+    )
+    if code == 0:
+        print(f"PDF: {dist / (args.name + '.pdf')}")
+    return code
+
+
 def cmd_spec(args) -> int:
     cmd = [sys.executable, SCRIPTS / "render_spec.py", "--spec", args.spec, "--out", args.out]
     if args.check:
@@ -290,6 +321,14 @@ def build_parser() -> argparse.ArgumentParser:
     spec.add_argument("--check", action="store_true")
     spec.add_argument("--json", action="store_true")
     spec.set_defaults(func=cmd_spec)
+
+    sheet = sub.add_parser("brandsheet", help="브랜드 시트(A4 8페이지)")
+    sheet.add_argument("--spec", required=True)
+    sheet.add_argument("--out", default="out/brandsheet")
+    sheet.add_argument("--name", default="brand-sheet")
+    sheet.add_argument("--pdf", action="store_true", help="8페이지 PDF까지 만든다")
+    sheet.add_argument("--fonts-css", default=DEFAULT_FONTS_CSS)
+    sheet.set_defaults(func=cmd_brandsheet)
 
     return parser
 

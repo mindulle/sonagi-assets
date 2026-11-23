@@ -214,6 +214,8 @@ def main():
     ap.add_argument("--scale", type=float, default=2.0)
     ap.add_argument("--fonts-css", default=None, help="@font-face 정의가 담긴 css 파일")
     ap.add_argument("--allow-freeware", action="store_true", default=True)
+    ap.add_argument("--pdf-mode", default="per-file", choices=("per-file", "single"), help="PDF를 화면별로 나누거나 한 파일로 묶는다")
+    ap.add_argument("--pdf-name", default="sheet", help="--pdf-mode single일 때 파일명")
     args = ap.parse_args()
 
     src = Path(args.src)
@@ -234,7 +236,16 @@ def main():
     svgs = [(absolutize_refs(f.read_text(), src), svg_size(f.read_text())) for f in files]
 
     produced = []
-    if "pdf" in formats:
+    if "pdf" in formats and args.pdf_mode == "single":
+        # 다페이지 문서(브랜드 시트 등): 페이지 크기가 같을 때만 한 파일로 묶는다
+        sizes = {size for _, size in svgs}
+        if len(sizes) != 1:
+            raise SystemExit(f"--pdf-mode single은 페이지 크기가 같아야 합니다: {sorted(sizes)}")
+        pdf = out / f"{args.pdf_name}.pdf"
+        export_pdf(chrome, svgs, fonts_css, pdf)
+        normalize_pdf(pdf, title=args.pdf_name)
+        produced.append(pdf)
+    elif "pdf" in formats:
         # 페이지 크기가 다른 캔버스를 한 PDF에 넣으면 Chromium이 한 크기로 합친다
         # → 화면(브레이크포인트)별로 PDF를 따로 만든다
         for (text, size), f in zip(svgs, files):
