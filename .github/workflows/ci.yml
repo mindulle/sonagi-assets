@@ -54,6 +54,16 @@ jobs:
                     echo "저대비 스펙이 통과했습니다"
                     exit 1
                   fi
+            - name: 규격 도해
+              run: |
+                  python3 scripts/render_spec.py --spec test_data/identity/lockup.json --out out/spec --json
+                  python3 scripts/render_spec.py --spec test_data/identity/lockup.json --out out/spec-2 >/dev/null
+                  for f in clearspace construction minimum-size; do
+                    test -f "out/spec/$f.svg"
+                    a=$(sha256sum "out/spec/$f.svg" | cut -d' ' -f1)
+                    b=$(sha256sum "out/spec-2/$f.svg" | cut -d' ' -f1)
+                    test "$a" = "$b"
+                  done
             - name: 래스터 링크 모드
               run: |
                   python3 scripts/render_recipe.py --recipe out/golden/recipe.json \

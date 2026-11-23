@@ -203,6 +203,15 @@ def cmd_preview(args) -> int:
     return run(cmd)
 
 
+def cmd_spec(args) -> int:
+    cmd = [sys.executable, SCRIPTS / "render_spec.py", "--spec", args.spec, "--out", args.out]
+    if args.check:
+        cmd.append("--check")
+    if args.json:
+        cmd.append("--json")
+    return run(cmd)
+
+
 def cmd_lockup(args) -> int:
     cmd = [
         sys.executable,
@@ -274,6 +283,13 @@ def build_parser() -> argparse.ArgumentParser:
     lockup.add_argument("--allow-low-contrast", action="store_true")
     lockup.add_argument("--json", action="store_true")
     lockup.set_defaults(func=cmd_lockup)
+
+    spec = sub.add_parser("spec", help="규격 도해(클리어 스페이스·작도·최소 크기)")
+    spec.add_argument("--spec", required=True)
+    spec.add_argument("--out", default="out/spec")
+    spec.add_argument("--check", action="store_true")
+    spec.add_argument("--json", action="store_true")
+    spec.set_defaults(func=cmd_spec)
 
     return parser
 

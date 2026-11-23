@@ -154,7 +154,7 @@ brand-sheet.pdf
 | `page` | 웹·랜딩 | ✅ 구현 |
 | `lockup` | 락업·변형 시트 | ✅ 구현 (`press lockup`) |
 | `brand-sheet` | 8페이지 가이드 | ❌ |
-| `spec-diagram` | 클리어 스페이스·작도 | ❌ |
+| `spec-diagram` | 클리어 스페이스·작도 | ✅ 구현 (`press spec`) |
 
 `lockup`·`spec-diagram`은 SVG 블록으로 비교적 쉽게 만들 수 있다. `brand-sheet`는 A4 다페이지 PDF 조판이 필요해 별도 작업이다.
 
@@ -195,6 +195,22 @@ press lockup --spec brand/lockup.json --check      # 파일 없이 검사만
 - 워드마크는 텍스트로 그린다. **제출용은 벡터 아웃라인을 권장** — `wordmark` 대신
   별도 SVG를 쓰는 경로는 아직 없다
 - 파일명은 브랜드명을 소문자·하이픈으로 바꿔 만든다(8절 규칙)
+
+### 규격 도해 (구현됨)
+
+lockup 스펙 하나로 세 장을 뽑는다. 값은 스펙의 `clearspace`·`minimum`을 그대로 쓴다.
+
+```bash
+press spec --spec brand/lockup.json --out out/spec
+```
+
+| 파일 | 내용 | 결정하는 값 |
+| --- | --- | --- |
+| `clearspace.svg` | 심볼 높이 기준 여백 + 치수선 | `clearspace` (기본 0.5h) |
+| `construction.svg` | 12u 그리드·중심축·대각선·내접원 | 심볼 비율 |
+| `minimum-size.svg` | 인쇄 mm / 화면 px 실물 크기 + ×5 확대 | `minimum` |
+
+`spec.manifest.json`에 파일별 해시와 계산된 여백(px)을 남긴다. 심볼이 바뀌면 해시가 바뀐다.
 
 ## 11. 남은 구멍
 
