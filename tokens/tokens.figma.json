@@ -2,7 +2,7 @@
     "global": {
         "color": {
             "background": {
-                "value": "#fbf9f5",
+                "value": "#fbfbfa",
                 "type": "color"
             },
             "surface": {
@@ -10,63 +10,63 @@
                 "type": "color"
             },
             "surface-sunken": {
-                "value": "#f4f1ea",
+                "value": "#f4f4f5",
                 "type": "color"
             },
             "ink": {
-                "value": "#161616",
+                "value": "#18181b",
                 "type": "color"
             },
             "text": {
-                "value": "#161616",
+                "value": "#18181b",
                 "type": "color"
             },
             "text-secondary": {
-                "value": "#3a3a36",
+                "value": "#52525b",
                 "type": "color"
             },
             "text-muted": {
-                "value": "#63635e",
+                "value": "#71717a",
                 "type": "color"
             },
             "text-faint": {
-                "value": "#8d8d86",
+                "value": "#a1a1aa",
                 "type": "color"
             },
             "accent": {
-                "value": "#d97706",
+                "value": "#9e5a03",
                 "type": "color"
             },
             "accent-strong": {
-                "value": "#f59e0b",
+                "value": "#eab308",
                 "type": "color"
             },
             "accent-ink": {
-                "value": "#161616",
+                "value": "#fbfbfa",
                 "type": "color"
             },
             "border": {
-                "value": "#dcd7cc",
+                "value": "#e4e4e7",
                 "type": "color"
             },
             "border-strong": {
-                "value": "#161616",
+                "value": "#9e5a03",
                 "type": "color"
             },
             "success": {
-                "value": "#2f7a4f",
+                "value": "#1b7a2e",
                 "type": "color"
             },
             "warning": {
-                "value": "#b45309",
+                "value": "#855b00",
                 "type": "color"
             },
             "danger": {
-                "value": "#b42318",
+                "value": "#b02a37",
                 "type": "color"
             },
             "info": {
-                "value": "#1d4ed8",
+                "value": "#0f659c",
                 "type": "color"
             }
         },
@@ -162,7 +162,7 @@
     "editorial": {
         "color": {
             "background": {
-                "value": "#fbf9f5",
+                "value": "#fbfbfa",
                 "type": "color"
             },
             "surface": {
@@ -170,63 +170,63 @@
                 "type": "color"
             },
             "surface-sunken": {
-                "value": "#f4f1ea",
+                "value": "#f4f4f5",
                 "type": "color"
             },
             "ink": {
-                "value": "#161616",
+                "value": "#18181b",
                 "type": "color"
             },
             "text": {
-                "value": "#161616",
+                "value": "#18181b",
                 "type": "color"
             },
             "text-secondary": {
-                "value": "#3a3a36",
+                "value": "#52525b",
                 "type": "color"
             },
             "text-muted": {
-                "value": "#63635e",
+                "value": "#71717a",
                 "type": "color"
             },
             "text-faint": {
-                "value": "#8d8d86",
+                "value": "#a1a1aa",
                 "type": "color"
             },
             "accent": {
-                "value": "#d97706",
+                "value": "#9e5a03",
                 "type": "color"
             },
             "accent-strong": {
-                "value": "#f59e0b",
+                "value": "#eab308",
                 "type": "color"
             },
             "accent-ink": {
-                "value": "#161616",
+                "value": "#fbfbfa",
                 "type": "color"
             },
             "border": {
-                "value": "#dcd7cc",
+                "value": "#e4e4e7",
                 "type": "color"
             },
             "border-strong": {
-                "value": "#161616",
+                "value": "#9e5a03",
                 "type": "color"
             },
             "success": {
-                "value": "#2f7a4f",
+                "value": "#1b7a2e",
                 "type": "color"
             },
             "warning": {
-                "value": "#b45309",
+                "value": "#855b00",
                 "type": "color"
             },
             "danger": {
-                "value": "#b42318",
+                "value": "#b02a37",
                 "type": "color"
             },
             "info": {
-                "value": "#1d4ed8",
+                "value": "#0f659c",
                 "type": "color"
             }
         }
@@ -234,39 +234,39 @@
     "architecture": {
         "color": {
             "background": {
-                "value": "#060911",
+                "value": "#12151d",
                 "type": "color"
             },
             "surface": {
-                "value": "#090d16",
+                "value": "#1b202c",
                 "type": "color"
             },
             "surface-sunken": {
-                "value": "#04060c",
+                "value": "#242b3b",
                 "type": "color"
             },
             "ink": {
-                "value": "#ffffff",
+                "value": "#f1f5f9",
                 "type": "color"
             },
             "text": {
-                "value": "#ffffff",
+                "value": "#f1f5f9",
                 "type": "color"
             },
             "text-secondary": {
-                "value": "#c9d1d9",
+                "value": "#94a3b8",
                 "type": "color"
             },
             "text-muted": {
-                "value": "#9aa4b2",
+                "value": "#64748b",
                 "type": "color"
             },
             "text-faint": {
-                "value": "#6b7280",
+                "value": "#6c605e",
                 "type": "color"
             },
             "accent": {
-                "value": "#4a90e2",
+                "value": "#ffc837",
                 "type": "color"
             },
             "accent-strong": {
@@ -274,31 +274,31 @@
                 "type": "color"
             },
             "accent-ink": {
-                "value": "#060911",
+                "value": "#12151d",
                 "type": "color"
             },
             "border": {
-                "value": "#30363d",
+                "value": "#2c3547",
                 "type": "color"
             },
             "border-strong": {
-                "value": "#4a5260",
+                "value": "#ffc837",
                 "type": "color"
             },
             "success": {
-                "value": "#3fb950",
+                "value": "#eaf4eb",
                 "type": "color"
             },
             "warning": {
-                "value": "#ffd166",
+                "value": "#fdf5e5",
                 "type": "color"
             },
             "danger": {
-                "value": "#f85149",
+                "value": "#fde8e8",
                 "type": "color"
             },
             "info": {
-                "value": "#4a90e2",
+                "value": "#79c0ff",
                 "type": "color"
             },
             "terminal": {

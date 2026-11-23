@@ -1,24 +1,38 @@
 #!/usr/bin/env python3
-"""브랜드 시각 언어 → 디자인 토큰(primitives/semantic/CSS/Figma JSON) 생성.
+"""MDS 토큰 → 이 저장소의 렌더 토큰(primitives/semantic/CSS/Figma JSON) 생성.
 
-SSOT는 `mindulle-visual-style` 스킬의 두 팔레트다.
-- Editorial(뉴스프린트): 종이 배경 + 잉크 + 단일 골드 악센트
-- Architecture(다크): 60-30-10, 레인 블루 + 앰버
+정본은 `mindulle-design-system/packages/tokens`다(2026-11-23 결정).
+이 저장소의 `tokens/semantic.json`은 **생성물**이며, MDS의 `light`/`dark`를
+`editorial`/`architecture` 두 테마로 투영한다.
 
-지원 색상 램프(상태·호버용)는 Radix Colors(MIT)에서 가져와 primitives로 둔다.
-브랜드 코어 값은 semantic에서 고정한다.
+| 여기 | MDS |
+| --- | --- |
+| `editorial` | `light` |
+| `architecture` | `dark` |
+
+브랜드 역할(`accent`, `accent-strong`)과 중성 역할 모두 MDS 값을 그대로 쓴다.
+MDS에 없는 역할만 규칙으로 파생한다(`accent-ink`는 대비가 큰 쪽 선택,
+`terminal`은 `brand.cyan`).
+
+지원 색상 램프(프리뷰용)는 Radix Colors(MIT)에서 가져와 primitives로 둔다.
+브랜드 값이 아니라 보조 스케일이다.
 
 사용::
 
     python3 build_design_tokens.py \
         --radix node_modules/@radix-ui/colors \
+        --mds ../mindulle-design-system/packages/tokens \
         --out tokens
 """
 
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from compare_tokens import contrast, load_mds  # noqa: E402
 
 LIGHT_SCALES = ["sand", "amber", "blue", "cyan", "red", "green"]
 DARK_SCALES = [f"{s}-dark" for s in ("sand", "amber", "blue", "cyan", "red", "green")]
@@ -67,47 +81,65 @@ def build_primitives(radix_dir):
     return primitives
 
 
-def build_semantic():
-    editorial = {
-        "background": "#fbf9f5",
-        "surface": "#ffffff",
-        "surface-sunken": "#f4f1ea",
-        "ink": "#161616",
-        "text": "#161616",
-        "text-secondary": "#3a3a36",
-        "text-muted": "#63635e",
-        "text-faint": "#8d8d86",
-        "accent": "#d97706",
-        "accent-strong": "#f59e0b",
-        "accent-ink": "#161616",
-        "border": "#dcd7cc",
-        "border-strong": "#161616",
-        "success": "#2f7a4f",
-        "warning": "#b45309",
-        "danger": "#b42318",
-        "info": "#1d4ed8",
-    }
-    architecture = {
-        "background": "#060911",
-        "surface": "#090d16",
-        "surface-sunken": "#04060c",
-        "ink": "#ffffff",
-        "text": "#ffffff",
-        "text-secondary": "#c9d1d9",
-        "text-muted": "#9aa4b2",
-        "text-faint": "#6b7280",
-        "accent": "#4a90e2",
-        "accent-strong": "#ffd166",
-        "accent-ink": "#060911",
-        "border": "#30363d",
-        "border-strong": "#4a5260",
-        "success": "#3fb950",
-        "warning": "#ffd166",
-        "danger": "#f85149",
-        "info": "#4a90e2",
-        "terminal": "#00ffcc",
-    }
-    return {"editorial": editorial, "architecture": architecture}
+MDS_ROLES = {
+    "background": "background.base",
+    "surface": "background.surface",
+    "surface-sunken": "background.hover",
+    "ink": "text.primary",
+    "text": "text.primary",
+    "text-secondary": "text.secondary",
+    "text-muted": "text.muted",
+    "text-faint": "text.disabled",
+    "accent": "brand.primary",
+    "accent-strong": "brand.accent",
+    "border": "border.default",
+    "border-strong": "border.strong",
+    "success": "state.success",
+    "warning": "state.warning",
+    "danger": "state.danger",
+    "info": "state.info",
+}
+
+ROLE_ORDER = [
+    "background",
+    "surface",
+    "surface-sunken",
+    "ink",
+    "text",
+    "text-secondary",
+    "text-muted",
+    "text-faint",
+    "accent",
+    "accent-strong",
+    "accent-ink",
+    "border",
+    "border-strong",
+    "success",
+    "warning",
+    "danger",
+    "info",
+]
+
+THEMES = {"editorial": "light", "architecture": "dark"}
+
+
+def build_semantic(mds_path):
+    """MDS light/dark를 editorial/architecture로 투영한다."""
+    modes = load_mds(Path(mds_path))
+    out = {}
+    for theme, mode in THEMES.items():
+        source = modes[mode]
+        values = {role: source[f"color.{key}"] for role, key in MDS_ROLES.items()}
+        # 악센트 위 글자는 배경/잉크 중 대비가 큰 쪽
+        values["accent-ink"] = max(
+            (source["color.text.primary"], source["color.background.base"]),
+            key=lambda color: contrast(color, values["accent"]),
+        )
+        theme_values = {role: values[role] for role in ROLE_ORDER}
+        if theme == "architecture":
+            theme_values["terminal"] = source["color.brand.cyan"]
+        out[theme] = theme_values
+    return out
 
 
 def css_block(theme, sem):
@@ -168,15 +200,25 @@ def figma_json(semantic):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--radix", required=True)
+    ap.add_argument("--radix", default=None, help="Radix colors CSS 폴더(없으면 기존 primitives.json 유지)")
+    ap.add_argument(
+        "--mds",
+        default="/home/ubuntu/mindulle-design-system/packages/tokens",
+        help="MDS 토큰 패키지(정본)",
+    )
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
 
-    primitives = build_primitives(args.radix)
-    semantic = build_semantic()
+    primitives = build_primitives(args.radix) if args.radix else {}
+    if not primitives:
+        existing = out / "primitives.json"
+        if existing.is_file():
+            primitives = json.loads(existing.read_text())
+            print("참고: Radix 폴더가 없어 기존 primitives.json을 유지합니다", file=sys.stderr)
+    semantic = build_semantic(args.mds)
 
     dump_json(out / "primitives.json", primitives)
     dump_json(out / "semantic.json", semantic)

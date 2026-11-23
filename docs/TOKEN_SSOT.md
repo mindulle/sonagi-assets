@@ -96,3 +96,21 @@ python3 scripts/compare_tokens.py --mds /path/to/mindulle-design-system/packages
 ```
 
 값을 바꾸지 않는다. 판정만 한다.
+
+## 5. 결정 (2026-11-23)
+
+**MDS `packages/tokens`가 정본이다.** 이 저장소의 `tokens/`는 MDS의 `light`/`dark`를
+`editorial`/`architecture`로 투영한 생성물로 강등했다.
+
+- `scripts/build_design_tokens.py`가 MDS를 읽어 `semantic.json`·`tokens.css`·
+  `tokens.figma.json`을 만든다. 브랜드 값 리터럴은 제거했다.
+- 다크 accent는 골드(`#ffc837`)가 됐다. ΔE 124.8만큼 다르지만, 정본을 하나로
+  두는 쪽을 택했다.
+- MDS에 없는 역할은 규칙으로 파생한다: `accent-ink`는 배경/잉크 중 대비가 큰 쪽,
+  `terminal`은 `brand.cyan`, `text-faint`는 `text.disabled`.
+- 렌더러가 `text-faint`(disabled)를 로고 워드마크에 쓰고 있어 MDS 값에서 2.56:1로
+  떨어졌다. 로고는 비활성 텍스트가 아니므로 `text-muted`로 고쳤다.
+
+영향: 골든 42렌더 SVG 해시 변경(높이 변화 0), 판정 골든 16케이스 재기준화,
+`tokens_version` 변경으로 매니페스트 해시 갱신. editorial 기준선은 WARN에서 PASS로
+올라갔다(eyebrow 3.03:1 → 5.18:1).
