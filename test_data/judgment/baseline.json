@@ -1,0 +1,215 @@
+{
+    "schema": 1,
+    "ruleset_version": "1.0.0",
+    "tokens_version": "e6f5ad880d19",
+    "cases": {
+        "clean-desktop-light": {
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "clean-mobile-dark": {
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "brutalist@0588f96b469d",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "good-editorial-desktop-light": {
+            "expect": "warn",
+            "verdict": "warn",
+            "rules": [
+                "text.contrast"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "good-brutalist-mobile-dark": {
+            "expect": "warn",
+            "verdict": "warn",
+            "rules": [
+                "text.overflow"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "brutalist@0588f96b469d",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "good-poster-tablet-light": {
+            "expect": "warn",
+            "verdict": "warn",
+            "rules": [
+                "text.contrast",
+                "text.overflow"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "poster@fec3e90ad981",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "good-swiss-desktop-dark": {
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "swiss@10cfb1a1905d",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "good-etching-mobile-light": {
+            "expect": "warn",
+            "verdict": "warn",
+            "rules": [
+                "text.contrast",
+                "text.overflow"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "etching@636cc0c1fa07",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "good-artnouveau-tablet-dark": {
+            "expect": "warn",
+            "verdict": "warn",
+            "rules": [
+                "text.contrast",
+                "text.overflow"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "art-nouveau@105369d3cb00",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "bad-squash": {
+            "expect": "fail",
+            "verdict": "fail",
+            "rules": [
+                "canvas.size",
+                "text.contrast",
+                "text.overflow"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "bad-overlap": {
+            "expect": "fail",
+            "verdict": "fail",
+            "rules": [
+                "block.overlap",
+                "text.contrast"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "bad-contrast": {
+            "expect": "fail",
+            "verdict": "fail",
+            "rules": [
+                "text.contrast"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "bad-missing-layer": {
+            "expect": "fail",
+            "verdict": "fail",
+            "rules": [
+                "layer.required",
+                "text.contrast"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "bad-license": {
+            "expect": "fail",
+            "verdict": "fail",
+            "rules": [
+                "license.scope",
+                "text.contrast"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "bad-overflow": {
+            "expect": "warn",
+            "verdict": "warn",
+            "rules": [
+                "text.contrast",
+                "text.overflow"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "1.0.0"
+            }
+        },
+        "bad-no-contract": {
+            "expect": "fail",
+            "verdict": "fail",
+            "rules": [
+                "contract.present",
+                "text.contrast"
+            ],
+            "contract": {}
+        },
+        "bad-stale-ruleset": {
+            "expect": "warn",
+            "verdict": "warn",
+            "rules": [
+                "contract.stale",
+                "text.contrast"
+            ],
+            "contract": {
+                "schema_version": 1,
+                "tokens_version": "e6f5ad880d19",
+                "style_id": "editorial@6b6b1bac5733",
+                "ruleset_version": "0.0.0"
+            }
+        }
+    }
+}

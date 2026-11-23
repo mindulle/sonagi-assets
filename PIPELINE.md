@@ -389,6 +389,12 @@ done
 
 ```json
 {
+    "contract": {
+        "schema_version": 1,
+        "tokens_version": "e6f5ad880d19",
+        "style_id": "editorial@6b6b1bac5733",
+        "ruleset_version": "1.0.0"
+    },
     "recipe": "landing-hero",
     "seed": 7,
     "theme": "editorial",
@@ -403,7 +409,163 @@ done
 
 납품 시 매니페스트를 함께 보내면 "이 결과물에 무엇이 들어갔는지"가 자동으로 증명된다.
 
+## 계약 헤더
+
+골든 기준선은 SVG 바이트만 본다. 그래서 토큰을 고치거나 판정 룰셋을 바꿔도
+산출물은 조용히 지나간다. 계약 헤더가 그 변화를 이름으로 남긴다(4칸).
+
+| 칸                | 값                                  | 왜                   |
+| ----------------- | ----------------------------------- | -------------------- |
+| `schema_version`  | 헤더 형식 판(현재 1)                | 헤더 개정 추적       |
+| `tokens_version`  | `tokens/semantic.json` sha256 앞 12 | 팔레트 개정 추적     |
+| `style_id`        | `<이름>@<해석된 스타일 해시 12>`    | 축 조합 동일성       |
+| `ruleset_version` | `rules/ruleset.json`의 version      | 어떤 룰로 판정했나   |
+
+`style_id`는 파일 해시가 아니라 **축 병합이 끝난 스타일**의 해시다. 같은 축
+조합이면 파일이 달라도 같은 id가 나오고, 1px만 달라도 다른 id가 나온다.
+
+```bash
+python3 scripts/contract.py --style styles/editorial.json
+```
+
+레시피는 `contract.schema_version`만 선언할 수 있다(값은 렌더 시점에 다시 계산).
+`--update`로 골든을 갱신할 때 42렌더 전부가 `manifest`만 바뀌고 `0px`면,
+헤더 추가가 시각을 건드리지 않았다는 증거다.
+
+## 명부(registry)
+
+산출물은 `style_id`로 스타일을 가리키는데, 그래프와 문서는 아직 이름으로 부른다.
+이름은 내용이 바뀌어도 그대로라서 "어느 빅토리안인가"를 기록하지 못한다.
+`registry/`가 그 간극을 메운다(생성물 — 손으로 고치지 않는다).
+
+```bash
+python3 scripts/build_registry.py          # registry/ 다시 쓰기
+python3 scripts/build_registry.py --check  # 커밋된 명부와 현재 파일 비교 (CI)
+```
+
+| 파일          | 내용                                                   |
+| ------------- | ------------------------------------------------------ |
+| `styles.json` | 29스타일의 `id`·선언된 축·파일·`sha256`·`theme`        |
+| `blocks.json` | 12블록 `id`와 `order`                                  |
+| `rules.json`  | 룰셋 version + 룰 `id`/`severity`                      |
+| `index.json`  | `tokens_version`·`themes`·개수·섹션 해시·중복 id·레시피 참조 |
+
+```json
+{
+    "id": "arch-classic@6721abdbf248",
+    "name": "arch-classic",
+    "file": "styles/arch-classic.json",
+    "sha256": "5680cfab7c89",
+    "theme": "editorial",
+    "axes": {
+        "palette": "terracotta",
+        "type": "cormorant-nouveau",
+        "geometry": "r8b2",
+        "layout": "split-cards",
+        "ornament": "arch"
+    }
+}
+```
+
+`--check`는 네 가지를 본다.
+
+| 검사           | 실패 조건                                        |
+| -------------- | ------------------------------------------------ |
+| 파일 최신      | `registry/*.json`이 현재 스타일·룰과 다름        |
+| 중복 id        | 두 스타일 파일이 같은 축 조합(같은 `style_id`)   |
+| 레시피 참조    | 레시피의 `style`·`theme` 이름이 명부에 없음      |
+| 스타일 테마    | 스타일의 `theme`이 `tokens/semantic.json`에 없음 |
+
+이름 규칙: **렌더는 경로로, 기록은 id로.** 그래프는 `styles/<name>.json`을
+넘기되, 결과 매니페스트의 `contract.style_id`를 명부와 대조해 남긴다.
+
+## 판정 린트와 판정 골든
+
+`visual_consistency_graph`는 LLM에게 점수를 묻는다. 점수는 흔들리고, 룰을 바꿨을 때
+개선인지 표류인지 구분하지 못한다. 그 앞단에 **결정론 게이트**를 둔다.
+
+```
+SVG + manifest ──▶ lint_render.py ──▶ {verdict, findings, ruleset_version}
+                        │
+        rules/ruleset.json (판 1.0.0)
+        canvas.size · canvas.squash · block.overlap · layer.required
+        text.contrast(floor 3.0 fail / AA 4.5 warn) · text.overflow
+        license.scope · contract.present · contract.stale
+```
+
+```bash
+python3 scripts/lint_render.py --svg out/x.svg --manifest out/x.manifest.json \
+  --tokens tokens/semantic.json            # PASS/WARN/FAIL + 룰 id
+python3 scripts/lint_render.py --dir out/golden --recursive --quiet
+python3 scripts/judgment_golden.py          # 판정 기준선과 비교 (CI)
+python3 scripts/judgment_golden.py --update # 룰을 의도적으로 바꿨을 때
+```
+
+`test_data/judgment/cases.json`은 16케이스다.
+
+| 종류    | 수 | 뜻                                                              |
+| ------- | -: | --------------------------------------------------------------- |
+| `clean` |  2 | 짧은 문장으로 만든 통과 기준선 — 린터가 PASS를 낼 수 있음을 증명 |
+| `good`  |  6 | 실제 스타일 6종. 알려진 WARN은 baseline에 고정(FAIL이면 회귀)   |
+| `bad`   |  8 | 겹침·저대비·찌그러짐·레이어·라이선스·계약 누락·룰셋 노후         |
+
+`bad-*`는 좋은 렌더를 코드로 망쳐서 만든다(mutation). 픽스처를 손으로 그리지
+않으므로 "나쁜 예"가 왜 나쁜지 diff로 읽힌다.
+
+### 이 린터가 처음 찾아낸 것
+
+`good-*` 6장 중 5장이 WARN이고, 원인은 두 가지다. 둘 다 렌더러가 아니라
+**디자인 결정의 부채**다(baseline에 고정해 두고, 고치면 `--update`).
+
+| 증상                                       | 위치                          | 값          |
+| ------------------------------------------ | ----------------------------- | ----------- |
+| 12px accent eyebrow가 AA 미달              | hero·cta eyebrow              | 3.03:1      |
+| 390px에서 hero 제목이 줄바꿈되지 않고 넘침 | brutalist·etching 모바일 제목 | +18~51px    |
+| 로고 워드마크가 cream 위에서 AA 미달       | logos (poster·etching)        | 3.34~4.12:1 |
+
+## 결정 원장
+
+매니페스트는 **무엇이 들어갔나**(자산·입력 해시·계약)를 증명한다. 원장은
+**왜 그렇게 골랐나**를 남긴다. 그래프가 변주 12개를 만들어 3개로 좁히는 순간,
+선택의 이유가 사라지면 다음 사람은 같은 고민을 처음부터 다시 한다.
+
+```bash
+python3 scripts/lint_render.py --svg out/x.svg --manifest out/x.manifest.json \
+  --tokens tokens/semantic.json --out out/x.lint.json
+
+python3 scripts/ledger.py --svg out/x.svg --manifest out/x.manifest.json \
+  --lint out/x.lint.json \
+  --decision "style=editorial: 레퍼런스보다 여백이 넓어 제목이 살았다" \
+  --by hoyacho
+
+python3 scripts/ledger.py --check out/x.decisions.json --manifest out/x.manifest.json
+```
+
+| 층           | 누가 쓰나   | 내용                                       |
+| ------------ | ----------- | ------------------------------------------ |
+| `contract`   | 렌더러      | tokens·style·ruleset 버전(재현 좌표)       |
+| `references` | 렌더러      | 실제로 쓰인 자산과 라이선스 범위           |
+| `judgement`  | 린터        | verdict와 발화한 룰 id                     |
+| `decisions`  | 사람/그래프 | `key=choice: 이유`. 자동 3건은 `render.*`  |
+
+자동 3건(`render.style`·`render.tokens`·`render.ruleset`)은 렌더러가 남기고,
+사람과 그래프는 자기 키를 더한다. 키가 겹치면 `--check`가 실패한다 —
+"같은 결정을 두 번 했다"는 뜻이기 때문이다.
+
+`--check`는 네 가지를 본다.
+
+| 검사            | 실패 조건                                     |
+| --------------- | --------------------------------------------- |
+| contract        | 원장과 매니페스트의 contract가 다름(재렌더)   |
+| style_id        | `registry/styles.json`에 없는 id              |
+| decisions       | key 중복 또는 choice/reason 누락              |
+| references      | 원장과 매니페스트의 자산 목록이 다름          |
+
+시각은 기본으로 넣지 않는다(번들 결정론). 필요하면 `--at`으로 고정 값을 준다.
+`bundle_delivery.py`는 `*.decisions.json`이 있으면 함께 담는다.
+
 ## 출처(origin)와 사용 범위
+
 
 라이선스는 "무엇을 해도 되는가", 출처는 "어디서 왔는가"다. 둘을 분리해 태그한다.
 

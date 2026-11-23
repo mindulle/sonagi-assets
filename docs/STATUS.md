@@ -11,7 +11,7 @@
    │  catalog.json + license/scope/origin 태그
    ▼
 content.md ──import──▶ recipe.json ──render──▶ SVG (+manifest, CREDITS)
-   │                    │  style 27종
+   │                    │  style 29종 (registry/styles.json)
    │                    │  breakpoint 3종
    │                    └  light | dark
    ▼
@@ -55,7 +55,7 @@ scope 태그가 충돌하면 `bundle < output < blocked` 순으로 보수적으�
 | 축             | 값                                                                                       |
 | -------------- | ---------------------------------------------------------------------------------------- |
 | 블록           | 12종 (header·hero·stats·features·logos·quote·faq·cta·footer·table·pricing·gallery)       |
-| 스타일         | 27종 — palette 20 × type 11 × geometry 9 × layout 7 × ornament 15 조합                   |
+| 스타일         | 29종(문서화 27 + 축 스모크 2) — palette 20 × type 11 × geometry 9 × layout 7 × ornament 15 |
 | 브레이크포인트 | desktop 1440 · tablet 768 · mobile 390                                                   |
 | 테마           | light · dark (`dark: true`)                                                              |
 | 장식           | 축(`ornament`) 15종 + 배경 패턴(dots·hatch, 타일) — 템플릿은 JSON                        |
@@ -80,6 +80,7 @@ dist/
 ├─ <name>@2x.png
 ├─ <name>@2x.webp
 ├─ <name>.svg + manifest
+├─ *.decisions.json     선택 이유(있으면)
 └─ index.html · CREDITS.md · README.md · export.json
 ```
 
@@ -138,6 +139,13 @@ dist/
 - 패키지: 90×60mm 라벨 audit P001–P007 전부 통과, 승인 해시 변조 시 exit 1
 - Figma: `<pattern>` 배경은 임포트에서 사라진다. `--pattern-mode line`이면 유지(168KB → 943KB)
 - 축 확장: type 4종·layout 2종 추가. `split-reverse`·`magazine-grid` 렌더 확인(데모 스타일 2종)
+- 계약 헤더: 매니페스트에 `schema_version`·`tokens_version`·`style_id`·`ruleset_version` 4칸.
+  골든 42렌더 갱신이 `manifest`만 바꾸고 `0px`(시각 무변)임을 확인
+- 판정 골든 16케이스(clean 2·good 6·bad 8) 기준선 고정. bad는 mutation으로 생성
+- 명부 정합성: 29스타일 × 12블록 × 룰 1.0.0, 중복 `style_id` 0, 레시피 참조 오류 0
+- 결정 원장: contract·style_id·references 삼중 대조 통과, 자동 3건 + 사람 결정
+- L1 린트가 처음 찾은 부채 3건: 12px accent eyebrow AA 미달(3.03:1),
+  모바일 hero 제목 미줄바꿈(+18~51px), 로고 워드마크 대비 3.34~4.12:1
 
 ## 9. 알려진 부채
 
@@ -146,6 +154,10 @@ dist/
 | 갤러리 4개 배치   | 3열 그리드라 4번째가 빈 칸과 함께 남음                                        | 미관                                      |
 | 다크 + 래스터     | 동판화가 밝은 종이색으로 남음                                                 | 갤러리 눈부심                             |
 | devops 폰트 없음  | export는 호스트에서만 가능                                                    | 도구가 두 단계로 나뉨                     |
+| eyebrow 대비      | 12px accent eyebrow가 3.03:1 (AA 4.5 미달). 판정 골든에 WARN으로 고정          | 접근성                                    |
+| 모바일 제목 넘침  | brutalist·etching 390px에서 hero 제목이 줄바꿈 없이 +18~51px 넘침              | 모바일 가독성                             |
+| 로고 대비         | poster·etching 로고 워드마크 3.34~4.12:1                                       | 접근성                                    |
+| 토큰 이중 소스    | `tokens/`(여기)와 `mindulle-design-system/packages/tokens/`가 둘 다 SSOT를 자칭. 비교 스크립트 없음 | 팔레트 개정 시 갈라짐. `tokens_version`이 드러냄 |
 | 보존 밖 자산      | 이전 `assets/` 업로드분은 lifecycle 미적용                                    | 수동 정리 필요                            |
 
 ## 10. 다음 후보
@@ -197,6 +209,14 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 | -------------------------------------------------------------- | --------------------------------------------- |
 | `press` · `scripts/press.py`                                   | 단일 CLI(check·render·package·print·lockup·spec·brandsheet·styles·preview) |
 | `scripts/render_recipe.py`                                     | 렌더러·스타일·다크 변환·매니페스트            |
+| `scripts/contract.py`                                          | 계약 헤더 4칸 생성·검사                        |
+| `scripts/build_registry.py`                                    | 명부 생성·정합성 검사(`registry/`)             |
+| `scripts/ledger.py`                                            | 결정 원장 생성·검사(`*.decisions.json`)        |
+| `scripts/lint_render.py`                                       | L1 기계 판정(대비·겹침·레이어·라이선스·계약)  |
+| `scripts/judgment_golden.py`                                   | 판정 골든셋 16케이스 + mutation               |
+| `rules/ruleset.json`                                           | 판정 룰 정의(version 1.0.0)                   |
+| `test_data/judgment/`                                          | clean.md · cases.json · baseline.json         |
+| `registry/`                                                     | 스타일·블록·룰 명부(생성물, `--check`로 검증)  |
 | `scripts/import_content.py`                                    | content.md → recipe + 검증                    |
 | `scripts/export_recipe.py`                                     | PDF·PNG·WebP + 라이선스 게이트                |
 | `scripts/render_lockup.py`                                     | 락업·변형 시트(스펙 JSON → SVG + 대비 검사)   |

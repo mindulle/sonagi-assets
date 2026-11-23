@@ -116,3 +116,34 @@ jobs:
                     exit 1
                   fi
                   ls out/link-check/assets/*.jpg >/dev/null
+
+    judgment:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+            - name: Install render deps
+              run: python3 -m pip install --quiet pyyaml
+            - name: 계약 헤더
+              run: python3 scripts/contract.py --style styles/editorial.json
+            - name: 명부 정합성
+              run: python3 scripts/build_registry.py --check
+            - name: 판정 골든셋
+              run: python3 scripts/judgment_golden.py
+            - name: 기준선 렌더 L1 린트
+              run: python3 scripts/lint_render.py --dir out/judgment/_base --recursive --quiet
+            - name: 결정 원장
+              run: |
+                  SVG=$(find out/judgment/_base -type f -name 'golden-all-blocks.svg' \
+                    | grep 'editorial-desktop-light' | head -1)
+                  MANIFEST="${SVG%.svg}.manifest.json"
+                  test -f "$SVG" && test -f "$MANIFEST"
+                  python3 scripts/lint_render.py --svg "$SVG" --manifest "$MANIFEST" \
+                    --tokens tokens/semantic.json --out out/lint.json
+                  python3 scripts/ledger.py --svg "$SVG" --manifest "$MANIFEST" \
+                    --lint out/lint.json --decision "style=editorial: 판정 골든 기준선" \
+                    --by ci --out out/decisions.json
+                  python3 scripts/ledger.py --check out/decisions.json --manifest "$MANIFEST"

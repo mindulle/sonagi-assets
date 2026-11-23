@@ -1,0 +1,43 @@
+{
+    "schema": 1,
+    "ruleset_version": "1.0.0",
+    "rules": [
+        {
+            "id": "canvas.size",
+            "severity": "fail"
+        },
+        {
+            "id": "canvas.squash",
+            "severity": "fail"
+        },
+        {
+            "id": "block.overlap",
+            "severity": "fail"
+        },
+        {
+            "id": "layer.required",
+            "severity": "fail"
+        },
+        {
+            "id": "text.contrast",
+            "severity": "warn"
+        },
+        {
+            "id": "text.overflow",
+            "severity": "warn"
+        },
+        {
+            "id": "license.scope",
+            "severity": "fail"
+        },
+        {
+            "id": "contract.present",
+            "severity": "fail"
+        },
+        {
+            "id": "contract.stale",
+            "severity": "warn"
+        }
+    ],
+    "sha256": "63d0a7192e38"
+}

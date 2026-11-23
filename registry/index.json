@@ -1,0 +1,29 @@
+{
+    "schema": 1,
+    "tokens_version": "e6f5ad880d19",
+    "themes": [
+        "architecture",
+        "editorial"
+    ],
+    "style_count": 29,
+    "block_count": 12,
+    "ruleset_version": "1.0.0",
+    "sections": {
+        "styles.json": "dd290735f5f9",
+        "blocks.json": "4024e65d5327",
+        "rules.json": "fccf59cdf6f1"
+    },
+    "duplicate_style_ids": {},
+    "recipes": {
+        "landing-hero-v2.json": {
+            "theme": "editorial"
+        },
+        "landing-hero.json": {
+            "theme": "editorial"
+        },
+        "resp-v2.json": {
+            "theme": "editorial"
+        }
+    },
+    "unknown": []
+}
