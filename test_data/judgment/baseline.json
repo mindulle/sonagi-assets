@@ -1,7 +1,7 @@
 {
     "schema": 1,
     "ruleset_version": "1.0.0",
-    "tokens_version": "e6f5ad880d19",
+    "tokens_version": "d73bbac048e2",
     "cases": {
         "clean-desktop-light": {
             "expect": "pass",
@@ -9,7 +9,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -20,20 +20,18 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "brutalist@0588f96b469d",
                 "ruleset_version": "1.0.0"
             }
         },
         "good-editorial-desktop-light": {
-            "expect": "warn",
-            "verdict": "warn",
-            "rules": [
-                "text.contrast"
-            ],
+            "expect": "pass",
+            "verdict": "pass",
+            "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -46,7 +44,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "brutalist@0588f96b469d",
                 "ruleset_version": "1.0.0"
             }
@@ -55,12 +53,11 @@
             "expect": "warn",
             "verdict": "warn",
             "rules": [
-                "text.contrast",
                 "text.overflow"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "poster@fec3e90ad981",
                 "ruleset_version": "1.0.0"
             }
@@ -71,7 +68,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "swiss@10cfb1a1905d",
                 "ruleset_version": "1.0.0"
             }
@@ -80,12 +77,11 @@
             "expect": "warn",
             "verdict": "warn",
             "rules": [
-                "text.contrast",
                 "text.overflow"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "etching@636cc0c1fa07",
                 "ruleset_version": "1.0.0"
             }
@@ -94,12 +90,11 @@
             "expect": "warn",
             "verdict": "warn",
             "rules": [
-                "text.contrast",
                 "text.overflow"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "art-nouveau@105369d3cb00",
                 "ruleset_version": "1.0.0"
             }
@@ -109,12 +104,11 @@
             "verdict": "fail",
             "rules": [
                 "canvas.size",
-                "text.contrast",
                 "text.overflow"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -123,12 +117,11 @@
             "expect": "fail",
             "verdict": "fail",
             "rules": [
-                "block.overlap",
-                "text.contrast"
+                "block.overlap"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -141,7 +134,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -150,12 +143,11 @@
             "expect": "fail",
             "verdict": "fail",
             "rules": [
-                "layer.required",
-                "text.contrast"
+                "layer.required"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -164,12 +156,11 @@
             "expect": "fail",
             "verdict": "fail",
             "rules": [
-                "license.scope",
-                "text.contrast"
+                "license.scope"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -178,12 +169,11 @@
             "expect": "warn",
             "verdict": "warn",
             "rules": [
-                "text.contrast",
                 "text.overflow"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -192,8 +182,7 @@
             "expect": "fail",
             "verdict": "fail",
             "rules": [
-                "contract.present",
-                "text.contrast"
+                "contract.present"
             ],
             "contract": {}
         },
@@ -201,12 +190,11 @@
             "expect": "warn",
             "verdict": "warn",
             "rules": [
-                "contract.stale",
-                "text.contrast"
+                "contract.stale"
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "e6f5ad880d19",
+                "tokens_version": "d73bbac048e2",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "0.0.0"
             }

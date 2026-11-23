@@ -142,6 +142,8 @@ dist/
 - 계약 헤더: 매니페스트에 `schema_version`·`tokens_version`·`style_id`·`ruleset_version` 4칸.
   골든 42렌더 갱신이 `manifest`만 바꾸고 `0px`(시각 무변)임을 확인
 - 판정 골든 16케이스(clean 2·good 6·bad 8) 기준선 고정. bad는 mutation으로 생성
+- 토큰 정본 단일화: MDS light/dark → editorial/architecture 투영. `tokens_version` d73bbac048e2
+- MDS 적용으로 editorial 판정이 WARN→PASS (eyebrow 3.03:1 → 5.18:1)
 - 명부 정합성: 29스타일 × 12블록 × 룰 1.0.0, 중복 `style_id` 0, 레시피 참조 오류 0
 - 결정 원장: contract·style_id·references 삼중 대조 통과, 자동 3건 + 사람 결정
 - L1 린트가 처음 찾은 부채 3건: 12px accent eyebrow AA 미달(3.03:1),
@@ -157,7 +159,7 @@ dist/
 | eyebrow 대비      | 12px accent eyebrow가 3.03:1 (AA 4.5 미달). 판정 골든에 WARN으로 고정          | 접근성                                    |
 | 모바일 제목 넘침  | brutalist·etching 390px에서 hero 제목이 줄바꿈 없이 +18~51px 넘침              | 모바일 가독성                             |
 | 로고 대비         | poster·etching 로고 워드마크 3.34~4.12:1                                       | 접근성                                    |
-| 토큰 이중 소스    | `tokens/`와 `mindulle-design-system/packages/tokens/`가 둘 다 SSOT를 자칭. 18역할 중 13개가 ΔE 3 초과, 다크 accent는 ΔE 124.8(블루 vs 골드) | `docs/TOKEN_SSOT.md`에 대조표. 브랜드 결정 후 단일화 |
+| 토큰 이중 소스    | 해소 — MDS `packages/tokens`가 정본, `tokens/`는 생성물. 다크 accent가 블루→골드로 바뀜(ΔE 124.8) | `docs/TOKEN_SSOT.md` |
 | 보존 밖 자산      | 이전 `assets/` 업로드분은 lifecycle 미적용                                    | 수동 정리 필요                            |
 
 ## 10. 다음 후보

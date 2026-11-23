@@ -845,7 +845,7 @@ class Renderer:
         parts = []
         for i, name in enumerate(names):
             x = 56 + i * (col_w + gap) + col_w / 2
-            parts.append(self.text(x, y0 + 40, self.case(name), 18, 700, c["text-faint"], family=self.f_display, anchor="middle", tracking=1.2))
+            parts.append(self.text(x, y0 + 40, self.case(name), 18, 700, c["text-muted"], family=self.f_display, anchor="middle", tracking=1.2))
         return f'<g id="logos">{"".join(parts)}</g>', 46
 
     def faq(self, block, W, y0):
@@ -1125,7 +1125,7 @@ class Renderer:
         for i, name in enumerate(names):
             row, col = divmod(i, 2)
             x = m + col * ((W - 2 * m) / 2)
-            parts.append(self.text(x, y0 + 24 + row * 34, self.case(name), 13, 700, c["text-faint"], family=self.f_display, tracking=1))
+            parts.append(self.text(x, y0 + 24 + row * 34, self.case(name), 13, 700, c["text-muted"], family=self.f_display, tracking=1))
         return f'<g id="logos">{"".join(parts)}</g>', 24 + 34 * ((len(names) - 1) // 2) + 20
 
     def cta_band_mobile(self, block, W, y0):

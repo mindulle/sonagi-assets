@@ -1,12 +1,24 @@
 # Design tokens
 
-브랜드 시각 언어(`mindulle-visual-style`)를 코드 토큰으로 옮긴 결과물. 직접 수정하지 말고
-`scripts/build_design_tokens.py`로 다시 생성한다.
+**생성물이다. 직접 수정하지 않는다.**
+
+정본은 `mindulle-design-system/packages/tokens`(2026-11-23 결정)다. 이 폴더는 MDS의
+`light`/`dark`를 이 저장소의 두 테마 `editorial`/`architecture`로 투영한 결과다.
 
 ```bash
 python3 scripts/build_design_tokens.py \
+  --mds ../mindulle-design-system/packages/tokens \
   --radix node_modules/@radix-ui/colors \
   --out tokens
+```
+
+`--radix`를 생략하면 기존 `primitives.json`을 유지한다(Radix는 프리뷰용 보조 스케일).
+값을 바꾸려면 MDS를 고치고 이 스크립트를 다시 돌린 뒤, 골든과 판정 기준선을 갱신한다.
+
+```bash
+python3 scripts/golden_render.py --update
+python3 scripts/judgment_golden.py --update
+python3 scripts/build_registry.py
 ```
 
 ## 파일
@@ -22,13 +34,13 @@ python3 scripts/build_design_tokens.py \
 
 | 역할 | Editorial | Architecture |
 | --- | --- | --- |
-| 배경 | `#fbf9f5` | `#060911` |
-| 표면 | `#ffffff` | `#090d16` |
-| 텍스트 | `#161616` | `#ffffff` |
-| 보조 텍스트 | `#3a3a36` | `#c9d1d9` |
-| 악센트 | `#d97706` (Dandelion Gold) | `#4a90e2` (Sonagi Rain) |
-| 2차 악센트 | `#f59e0b` | `#ffd166` (Dandelion Amber) |
-| 구조선 | `#dcd7cc` | `#30363d` |
+| 배경 | `#fbfbfa` | `#12151d` |
+| 표면 | `#ffffff` | `#1b202c` |
+| 텍스트 | `#18181b` | `#f1f5f9` |
+| 보조 텍스트 | `#52525b` | `#94a3b8` |
+| 악센트 | `#9e5a03` (MDS gold.700) | `#ffc837` (MDS gold.300) |
+| 2차 악센트 | `#eab308` (MDS yellow.500) | `#ffd166` (Dandelion Amber) |
+| 구조선 | `#e4e4e7` | `#2c3547` |
 
 `data-theme="architecture"` 한 속성으로 화면 전체가 전환된다.
 
@@ -43,4 +55,4 @@ python3 scripts/build_design_tokens.py \
 ## 라이선스
 
 - 색상 램프: Radix Colors — MIT
-- 브랜드 역할값·타입 스케일: 사내 SSOT (`mindulle-visual-style`)
+- 브랜드 역할값: `mindulle-design-system/packages/tokens`(정본)

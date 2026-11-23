@@ -28,8 +28,8 @@
             "breakpoint": "desktop",
             "theme": "light",
             "mutations": [],
-            "expect": "warn",
-            "note": "기준선 픽스처. 12px accent eyebrow가 AA 미달(3.03:1) — 알려진 부채"
+            "expect": "pass",
+            "note": "MDS 토큰 적용 후 eyebrow 5.18:1 — 알려진 부채 해소"
         },
         {
             "id": "good-brutalist-mobile-dark",
@@ -47,7 +47,7 @@
             "theme": "light",
             "mutations": [],
             "expect": "warn",
-            "note": "로고 워드마크 대비 4.12:1 + 제목 넘침 — 알려진 부채"
+            "note": "로고 대비는 MDS 토큰으로 해소. 제목 넘침만 남음"
         },
         {
             "id": "good-swiss-desktop-dark",
@@ -65,7 +65,7 @@
             "theme": "light",
             "mutations": [],
             "expect": "warn",
-            "note": "로고 대비 3.34:1 + 모바일 제목 넘침 — 알려진 부채"
+            "note": "로고 대비는 MDS 토큰으로 해소. 모바일 제목 넘침만 남음"
         },
         {
             "id": "good-artnouveau-tablet-dark",
@@ -74,7 +74,7 @@
             "theme": "dark",
             "mutations": [],
             "expect": "warn",
-            "note": "eyebrow 대비 + 제목 넘침 — 알려진 부채"
+            "note": "eyebrow 대비는 해소. 제목 넘침만 남음"
         },
         {
             "id": "bad-squash",
