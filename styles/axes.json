@@ -380,6 +380,42 @@
             "scale": 1.0,
             "uppercase": false,
             "tracking": 0.8
+        },
+        "black-display": {
+            "display": "Black Han Sans",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "korean": "Black Han Sans",
+            "scale": 1.0,
+            "uppercase": false,
+            "tracking": 0
+        },
+        "nanum-display": {
+            "display": "NanumSquare",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "korean": "NanumSquare",
+            "scale": 1.06,
+            "uppercase": false,
+            "tracking": -0.5
+        },
+        "mono-display": {
+            "display": "JetBrains Mono",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "korean": "NanumSquare",
+            "scale": 0.92,
+            "uppercase": true,
+            "tracking": 0.4
+        },
+        "pretendard-tight": {
+            "display": "Pretendard",
+            "sans": "Pretendard",
+            "mono": "JetBrains Mono",
+            "korean": "Pretendard",
+            "scale": 1.08,
+            "uppercase": false,
+            "tracking": -0.8
         }
     },
     "geometry": {
@@ -461,6 +497,15 @@
         "center-cards-plain": {
             "hero": "center",
             "features_layout": "cards"
+        },
+        "split-reverse": {
+            "hero": "split-reverse",
+            "header": "rule"
+        },
+        "magazine-grid": {
+            "hero": "split",
+            "features_layout": "magazine",
+            "header": "rule"
         }
     },
     "ornament": {

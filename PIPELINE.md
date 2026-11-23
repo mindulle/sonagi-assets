@@ -189,6 +189,23 @@ python3 scripts/recipe_schema.py recipes/*.json        # 스키마·블록 요�
 
 스타일은 **손으로 쓴 덩어리**가 아니라 축의 조합이다. 축 정의는 `styles/axes.json`.
 
+현재 축: palette 20 · **type 15** · geometry 9 · **layout 9** · ornament 15.
+
+새로 추가된 값(ASSET-8):
+
+| 축 | 값 | 성격 |
+| --- | --- | --- |
+| type | `black-display` | Black Han Sans. 굵은 한글 디스플레이 |
+| type | `nanum-display` | NanumSquare를 제목에 (자간 -0.5) |
+| type | `mono-display` | JetBrains Mono 제목(라틴만 모노, 한글은 NanumSquare) |
+| type | `pretendard-tight` | Pretendard 제목, 자간 -0.8 |
+| layout | `split-reverse` | 히어로 그림 왼쪽·글 오른쪽 |
+| layout | `magazine-grid` | 피처 2단 비대칭(큰 카드 1 + 작은 카드 2) |
+
+**폰트 전제**: `black-display`는 `BlackHanSans.ttf`가 필요하다. `~/brief/fonts/fonts.css`에
+`@font-face`를 추가했고, devops·Figma에는 해당 폰트가 설치돼 있어야 재임포트가 깨지지 않는다.
+`mono-display`는 JetBrains Mono가 없으면 시스템 모노로 대체된다.
+
 ```json
 {
     "name": "terracotta-editorial",

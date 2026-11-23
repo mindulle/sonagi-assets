@@ -1,0 +1,10 @@
+{
+    "name": "mono-signal",
+    "theme": "editorial",
+    "palette": "mint",
+    "type": "mono-display",
+    "geometry": "r2b2",
+    "layout": "split-reverse",
+    "illustration": "mono",
+    "density": 1.0
+}
