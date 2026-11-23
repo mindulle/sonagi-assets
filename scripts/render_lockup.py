@@ -268,6 +268,25 @@ def build(spec):
     return svg, manifest
 
 
+SINGLE = {
+    # 파일명: (락업, 색 역할, 캔버스)
+    "primary-horizontal": ("horizontal", "primary", (640, 200)),
+    "primary-stacked": ("stacked", "primary", (420, 380)),
+    "symbol": ("symbol", "primary", (256, 256)),
+    "mono-black": ("horizontal", "ink", (640, 200)),
+    "mono-white": ("horizontal", "paper", (640, 200)),
+    "one-color": ("horizontal", "accent", (640, 200)),
+}
+
+
+def single_lockup(spec, body, view, name):
+    """제출용 단일 락업. 배경 없이(투명) 락업만 그린다."""
+    lockup, role, (w, h) = SINGLE[name]
+    color = spec["colors"][role]
+    markup = lockup_markup(lockup, body, view, w / 2, h / 2, color, spec)
+    return f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">' + markup + "</svg>"
+
+
 def main():
     ap = argparse.ArgumentParser(description="락업·변형 시트")
     ap.add_argument("--spec", required=True)
@@ -275,6 +294,7 @@ def main():
     ap.add_argument("--name", default=None, help="파일명(소문자·하이픈). 기본은 brand")
     ap.add_argument("--check", action="store_true", help="검사만 하고 쓰지 않는다")
     ap.add_argument("--allow-low-contrast", action="store_true")
+    ap.add_argument("--lockup-dir", default=None, help="제출용 단일 락업 SVG를 쓸 폴더(01_logo)")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
@@ -297,6 +317,19 @@ def main():
         manifest["sheet"] = f"{name}.svg"
         manifest["sha256"] = hashlib.sha256(svg.encode()).hexdigest()
         (out / f"{name}.manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+
+    if args.lockup_dir:
+        body, view = load_symbol(spec["symbol"])
+        target = Path(args.lockup_dir)
+        target.mkdir(parents=True, exist_ok=True)
+        written = {}
+        for single in SINGLE:
+            text = single_lockup(spec, body, view, single)
+            (target / f"{single}.svg").write_text(text)
+            written[f"{single}.svg"] = hashlib.sha256(text.encode()).hexdigest()
+        manifest["singles"] = written
+        if not args.check:
+            (Path(args.out) / f"{name}.manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
 
     if args.json:
         print(json.dumps({"name": name, "cells": len(manifest["cells"]), "checks": manifest["checks"]}, ensure_ascii=False))
