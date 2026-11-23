@@ -30,7 +30,6 @@ from provenance import disclosure_for, origin_from_tags  # noqa: E402
 from recipe_schema import RecipeError, normalize  # noqa: E402
 from style_axes import load_style  # noqa: E402
 
-PLATE_INVERT_MATRIX = "-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"
 HEX_COLOR = re.compile(r"#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b")
 
 
@@ -361,6 +360,32 @@ class Renderer:
         mime = "image/png" if ext == ".png" else "image/jpeg"
         raw = Path(path).read_bytes()
         limit = getattr(self, "embed_max_width", 0)
+        if getattr(self, "dark", False):
+            # 다크에서는 픽셀을 뒤집어 다시 인코딩한다. SVG 필터와 달리 Figma에서도 유지된다.
+            try:
+                from io import BytesIO
+
+                from PIL import Image, ImageOps
+            except ImportError as exc:  # pragma: no cover
+                raise SystemExit("다크 래스터 반전에는 Pillow가 필요합니다: pip install pillow") from exc
+            im = Image.open(BytesIO(raw))
+            if im.mode in ("RGBA", "LA", "P"):
+                rgba = im.convert("RGBA")
+                r, g, b, a = rgba.split()
+                im = Image.merge(
+                    "RGBA",
+                    (ImageOps.invert(r), ImageOps.invert(g), ImageOps.invert(b), a),
+                )
+            else:
+                im = ImageOps.invert(im.convert("RGB"))
+            buf = BytesIO()
+            if im.mode == "RGBA":
+                im.save(buf, "PNG", optimize=True)
+                mime = "image/png"
+            else:
+                im.save(buf, "JPEG", quality=82, optimize=True)
+                mime = "image/jpeg"
+            raw = buf.getvalue()
         if limit and ext in (".jpg", ".jpeg", ".png"):
             try:
                 from io import BytesIO
@@ -379,11 +404,10 @@ class Renderer:
         href = self.raster_href(raw, mime)
         # href 하나만 쓴다. xlink:href를 함께 넣으면 같은 base64가 두 번 들어가
         # SVG가 정확히 2배가 된다(ASSET-3). Chromium·Figma 모두 href를 읽는다.
-        filt = ' filter="url(#plate-invert)"' if getattr(self, "dark", False) else ""
         return (
             f'<g id="illo-raster" clip-path="url(#{clip})">'
-            f'<image x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid slice"'
-            f'{filt} href="{href}"/></g>'
+            f'<image x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid slice" '
+            f'href="{href}"/></g>'
         )
 
     def illustration(self, spec, x, y, w, h):
@@ -1388,12 +1412,7 @@ def main():
     r.K = 1.0 if args.breakpoint == "desktop" else (0.88 if args.breakpoint == "tablet" else 0.72)
 
     body = []
-    plate_filter = (
-        f'<filter id="plate-invert" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="{PLATE_INVERT_MATRIX}"/></filter>'
-        if dark
-        else ""
-    )
-    body.append(f'<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter>{plate_filter}</defs>')
+    body.append('<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter></defs>')
     y = 0
     ornament_types = {"stats", "features", "quote", "faq", "table", "pricing", "gallery", "logos", "cta"}
     for index, block in enumerate(recipe["blocks"]):

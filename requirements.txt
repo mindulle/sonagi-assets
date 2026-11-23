@@ -4,3 +4,4 @@ tqdm
 sentry-sdk[fastapi]
 prometheus-fastapi-instrumentator
 mcp==1.27.1
+pillow==12.2.0  # 다크 래스터 반전의 인코딩 바이트를 고정한다
