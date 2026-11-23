@@ -69,6 +69,8 @@ jobs:
                   python3 scripts/render_label.py --spec test_data/package/packaging.example.label.yaml \
                     --out out/pkg-schema --name schema-label
                   python3 scripts/export_print.py --src out/pkg-schema/schema-label.svg --trim 90x60 --check
+                  python3 scripts/render_mockup.py --spec test_data/package/packaging.example.label.yaml \
+                    --label out/pkg-schema/schema-label.svg --check
             - name: 패키지 라벨 audit
               run: |
                   python3 scripts/render_label.py --spec test_data/package/label.json \
