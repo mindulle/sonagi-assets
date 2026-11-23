@@ -1,0 +1,10 @@
+{
+    "name": "black-han",
+    "theme": "architecture",
+    "palette": "charcoal",
+    "type": "black-display",
+    "geometry": "r0b2",
+    "layout": "magazine-grid",
+    "illustration": "mono",
+    "density": 1.05
+}

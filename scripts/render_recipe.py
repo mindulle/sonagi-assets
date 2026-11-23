@@ -550,6 +550,8 @@ class Renderer:
             return self.hero_asymmetric(block, W, y0)
         if self.hero_layout == "poster":
             return self.hero_poster(block, W, y0)
+        if self.hero_layout == "split-reverse":
+            return self.hero_split_reverse(block, W, y0)
         if self.hero_layout == "center":
             cx = W / 2
             size = 86 * s
@@ -592,6 +594,33 @@ class Renderer:
         )
         parts.append(self.text(288, by + 36, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
         parts.append(self.illustration(block["illustration"], W - 56 - 520, y0 + 30, 520, 380))
+        return f'<g id="hero">{"".join(parts)}</g>', max(by + btn_h, y0 + 410) + 4 - y0
+
+    def hero_split_reverse(self, block, W, y0):
+        """글은 오른쪽, 그림은 왼쪽. split의 거울상."""
+        c = self.colors
+        s = self.scale
+        col_w = 520
+        tx = 56 + col_w + 40
+        size = 64 * s
+        lines = block["title"].count("\n") + 1
+        title_h = size * 1.12 * lines
+        body_y = y0 + 108 + (title_h - size) + 46
+        parts = [
+            self.text(tx, y0 + 40, self.case(block["eyebrow"]), 12, 600, c["accent"], family=self.f_mono, tracking=2.6),
+            self.text(tx, y0 + 108, self.case(block["title"]), size, 700, family=self.f_display, leading=1.12),
+            self.text(tx, body_y, self.case(block["body"]), 18 * s, 400, c["text-secondary"]),
+        ]
+        btn_w, btn_h = 208, 56
+        by = body_y + 46
+        parts.append(
+            f'<g id="cta">{self.card(tx, by, btn_w, btn_h, c["accent"])}'
+            + self.text(tx + 28, by + 36, self.case(block["cta"]), 16, 700, c["accent-ink"])
+            + self.icon(block["ctaIcon"], tx + btn_w - 46, by + 19, 18, c["accent-ink"])
+            + "</g>"
+        )
+        parts.append(self.text(tx + btn_w + 24, by + 36, self.case(block.get("note", "")), 13, 400, c["text-muted"]))
+        parts.append(self.illustration(block["illustration"], 56, y0 + 30, 520, 380))
         return f'<g id="hero">{"".join(parts)}</g>', max(by + btn_h, y0 + 410) + 4 - y0
 
     def hero_plain(self, block, W, y0):
@@ -696,6 +725,8 @@ class Renderer:
             return self.features_list(block, W, y0)
         if self.features_layout == "columns":
             return self.features_columns(block, W, y0)
+        if self.features_layout == "magazine":
+            return self.features_magazine(block, W, y0)
         c = self.colors
         parts = [self.text(56, y0, self.case(block["title"]), 36 * self.scale, 700, family=self.f_display)]
         gap = 24
@@ -742,6 +773,37 @@ class Renderer:
             parts.append(self.text(x, y + 112, self.case(item["body"]), 14, 400, c["text-secondary"], leading=1.5))
             parts.append("</g>")
         return f'<g id="features">{"".join(parts)}</g>', 194
+
+    def features_magazine(self, block, W, y0):
+        """2단 비대칭: 왼쪽 큰 카드 하나 + 오른쪽 작은 카드 둘."""
+        c = self.colors
+        parts = [self.text(56, y0, self.case(block["title"]), 34 * self.scale, 700, family=self.f_display)]
+        items = block["items"][:3]
+        gap = 24
+        left_w = (W - 112) * 0.58
+        right_w = (W - 112) - left_w - gap
+        top = y0 + 40
+        if items:
+            item = items[0]
+            parts.append(
+                '<g id="feature-1">'
+                + self.card(56, top, left_w, 260)
+                + self.icon(item["icon"], 56 + 32, top + 36, 30, c["text"])
+                + self.text(56 + 32, top + 130, self.case(item["title"]), 26, 700, family=self.f_display)
+                + self.text(56 + 32, top + 172, self.case(item["body"]), 16, 400, c["text-secondary"], leading=1.6)
+                + "</g>"
+            )
+        for i, item in enumerate(items[1:], start=2):
+            y = top + (i - 2) * 156
+            parts.append(
+                f'<g id="feature-{i}">'
+                + self.card(56 + left_w + gap, y, right_w, 132)
+                + self.icon(item["icon"], 56 + left_w + gap + 24, y + 24, 22, c["text"])
+                + self.text(56 + left_w + gap + 60, y + 44, self.case(item["title"]), 18, 700, family=self.f_display)
+                + self.text(56 + left_w + gap + 60, y + 76, self.case(item["body"]), 13, 400, c["text-secondary"], leading=1.5)
+                + "</g>"
+            )
+        return f'<g id="features">{"".join(parts)}</g>', 40 + 260
 
     def stats(self, block, W, y0):
         c = self.colors
