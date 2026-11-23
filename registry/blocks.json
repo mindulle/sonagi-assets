@@ -1,0 +1,53 @@
+{
+    "schema": 1,
+    "blocks": [
+        {
+            "id": "header",
+            "order": 1
+        },
+        {
+            "id": "hero",
+            "order": 2
+        },
+        {
+            "id": "stats",
+            "order": 3
+        },
+        {
+            "id": "features",
+            "order": 4
+        },
+        {
+            "id": "logos",
+            "order": 5
+        },
+        {
+            "id": "quote",
+            "order": 6
+        },
+        {
+            "id": "faq",
+            "order": 7
+        },
+        {
+            "id": "cta",
+            "order": 8
+        },
+        {
+            "id": "footer",
+            "order": 9
+        },
+        {
+            "id": "table",
+            "order": 10
+        },
+        {
+            "id": "pricing",
+            "order": 11
+        },
+        {
+            "id": "gallery",
+            "order": 12
+        }
+    ]
+}

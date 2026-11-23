@@ -23,6 +23,10 @@
         }
     },
     "files": {
-        "ignore": ["test_data/golden/baseline.json", "test_data/judgment/baseline.json"]
+        "ignore": [
+            "test_data/golden/baseline.json",
+            "test_data/judgment/baseline.json",
+            "registry/*.json"
+        ]
     }
 }

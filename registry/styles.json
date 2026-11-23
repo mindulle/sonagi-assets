@@ -1,0 +1,439 @@
+{
+    "schema": 1,
+    "styles": [
+        {
+            "id": "arch-classic@6721abdbf248",
+            "name": "arch-classic",
+            "file": "styles/arch-classic.json",
+            "sha256": "5680cfab7c89",
+            "theme": "editorial",
+            "axes": {
+                "palette": "terracotta",
+                "type": "cormorant-nouveau",
+                "geometry": "r8b2",
+                "layout": "split-cards",
+                "ornament": "arch"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "art-nouveau@105369d3cb00",
+            "name": "art-nouveau",
+            "file": "styles/art-nouveau.json",
+            "sha256": "01675fff3e64",
+            "theme": "editorial",
+            "axes": {
+                "palette": "art-nouveau",
+                "type": "cormorant-nouveau",
+                "geometry": "r26b1",
+                "layout": "center-cards-plain",
+                "ornament": "nouveau"
+            },
+            "illustration_set": "etchings",
+            "density": 1.05
+        },
+        {
+            "id": "bead-editorial@364db2b01a51",
+            "name": "bead-editorial",
+            "file": "styles/bead-editorial.json",
+            "sha256": "3686abb4eb42",
+            "theme": "editorial",
+            "axes": {
+                "palette": "terracotta",
+                "type": "gowun-magazine",
+                "geometry": "r8b2",
+                "layout": "asymmetric-list",
+                "ornament": "bead"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "black-han@cba6e7bb634e",
+            "name": "black-han",
+            "file": "styles/black-han.json",
+            "sha256": "0a66677b4efe",
+            "theme": "architecture",
+            "axes": {
+                "palette": "charcoal",
+                "type": "black-display",
+                "geometry": "r0b2",
+                "layout": "magazine-grid"
+            },
+            "density": 1.05
+        },
+        {
+            "id": "brutalist@0588f96b469d",
+            "name": "brutalist",
+            "file": "styles/brutalist.json",
+            "sha256": "71145ddd7b86",
+            "theme": "editorial",
+            "axes": {
+                "palette": "brutalist",
+                "type": "archivo-caps-loud",
+                "geometry": "r0b4",
+                "layout": "center-cards"
+            },
+            "illustration_set": "opendoodles",
+            "density": 1.15
+        },
+        {
+            "id": "burgundy-victorian@006ccfa7099b",
+            "name": "burgundy-victorian",
+            "file": "styles/burgundy-victorian.json",
+            "sha256": "12a2cc7f1e53",
+            "theme": "editorial",
+            "axes": {
+                "palette": "burgundy",
+                "type": "cormorant-victorian",
+                "geometry": "r2b2",
+                "layout": "split-cards",
+                "ornament": "victorian"
+            },
+            "density": 1.05
+        },
+        {
+            "id": "charcoal-brutal@84cc1bf4c769",
+            "name": "charcoal-brutal",
+            "file": "styles/charcoal-brutal.json",
+            "sha256": "7aebc3c4e484",
+            "theme": "editorial",
+            "axes": {
+                "palette": "charcoal",
+                "type": "archivo-caps-loud",
+                "geometry": "r0b4",
+                "layout": "center-cards",
+                "ornament": "deco"
+            },
+            "density": 1.05
+        },
+        {
+            "id": "deco-noir@4ae05919af09",
+            "name": "deco-noir",
+            "file": "styles/deco-noir.json",
+            "sha256": "cb89f71a20b3",
+            "theme": "editorial",
+            "axes": {
+                "palette": "newsprint",
+                "type": "archivo-caps-loud",
+                "geometry": "r0b4",
+                "layout": "center-cards",
+                "ornament": "deco"
+            },
+            "density": 1.05
+        },
+        {
+            "id": "editorial@6b6b1bac5733",
+            "name": "editorial",
+            "file": "styles/editorial.json",
+            "sha256": "9a55d6798fd0",
+            "theme": "editorial",
+            "axes": {
+                "palette": "editorial",
+                "type": "nanumsquare",
+                "geometry": "r8b2",
+                "layout": "split-cards"
+            },
+            "illustration_set": "illlustrations",
+            "density": 1.0
+        },
+        {
+            "id": "etching@636cc0c1fa07",
+            "name": "etching",
+            "file": "styles/etching.json",
+            "sha256": "edba4590694c",
+            "theme": "editorial",
+            "axes": {
+                "palette": "etching",
+                "type": "gowun-etching",
+                "geometry": "r0b1",
+                "layout": "asymmetric-list"
+            },
+            "illustration_set": "etchings",
+            "density": 1.05
+        },
+        {
+            "id": "floral-editorial@c60c54f071a9",
+            "name": "floral-editorial",
+            "file": "styles/floral-editorial.json",
+            "sha256": "c314a17cf81f",
+            "theme": "editorial",
+            "axes": {
+                "palette": "terracotta",
+                "type": "gowun-etching",
+                "geometry": "r8b2",
+                "layout": "asymmetric-list",
+                "ornament": "floral"
+            },
+            "illustration_set": "etchings",
+            "density": 1.0
+        },
+        {
+            "id": "forest-paper@539eb6849b93",
+            "name": "forest-paper",
+            "file": "styles/forest-paper.json",
+            "sha256": "2ea1e66580c7",
+            "theme": "editorial",
+            "axes": {
+                "palette": "forest",
+                "type": "gowun-etching",
+                "geometry": "r4b1",
+                "layout": "split-list",
+                "ornament": "paper"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "hatch-editorial@400befa56e8a",
+            "name": "hatch-editorial",
+            "file": "styles/hatch-editorial.json",
+            "sha256": "dc91e05b37d2",
+            "theme": "editorial",
+            "axes": {
+                "palette": "newsprint",
+                "type": "archivo-plain",
+                "geometry": "r0b1",
+                "layout": "split-list",
+                "ornament": "hatch"
+            },
+            "density": 1.02
+        },
+        {
+            "id": "lilac-editorial@8141a6f29b59",
+            "name": "lilac-editorial",
+            "file": "styles/lilac-editorial.json",
+            "sha256": "0e291adcdc45",
+            "theme": "editorial",
+            "axes": {
+                "palette": "lilac",
+                "type": "cormorant-serif",
+                "geometry": "r10b1",
+                "layout": "split-cards",
+                "ornament": "floral"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "magazine@d56b37db3d12",
+            "name": "magazine",
+            "file": "styles/magazine.json",
+            "sha256": "eb07ffef5d91",
+            "theme": "editorial",
+            "axes": {
+                "palette": "magazine",
+                "type": "gowun-magazine",
+                "geometry": "r0b1",
+                "layout": "asymmetric-list"
+            },
+            "illustration_set": "illlustrations",
+            "density": 1.05
+        },
+        {
+            "id": "minimal@c45535060a3a",
+            "name": "minimal",
+            "file": "styles/minimal.json",
+            "sha256": "665cc90af8cb",
+            "theme": "editorial",
+            "axes": {
+                "palette": "minimal",
+                "type": "archivo-airy",
+                "geometry": "r4b1",
+                "layout": "split-cards"
+            },
+            "illustration_set": "illlustrations",
+            "density": 0.92
+        },
+        {
+            "id": "mint-swiss@5a12447c04e9",
+            "name": "mint-swiss",
+            "file": "styles/mint-swiss.json",
+            "sha256": "179bf01ccb12",
+            "theme": "editorial",
+            "axes": {
+                "palette": "mint",
+                "type": "archivo-caps-tight",
+                "geometry": "r0b2",
+                "layout": "split-columns"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "mono-signal@9fd65936cc43",
+            "name": "mono-signal",
+            "file": "styles/mono-signal.json",
+            "sha256": "38804bf42272",
+            "theme": "editorial",
+            "axes": {
+                "palette": "mint",
+                "type": "mono-display",
+                "geometry": "r2b2",
+                "layout": "split-reverse"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "newsprint-victorian@ff8522343317",
+            "name": "newsprint-victorian",
+            "file": "styles/newsprint-victorian.json",
+            "sha256": "4d48e91518a1",
+            "theme": "editorial",
+            "axes": {
+                "palette": "newsprint",
+                "type": "cormorant-serif",
+                "geometry": "r0b1",
+                "layout": "split-list",
+                "ornament": "victorian"
+            },
+            "density": 1.02
+        },
+        {
+            "id": "ocean-swiss@3008adfce0e5",
+            "name": "ocean-swiss",
+            "file": "styles/ocean-swiss.json",
+            "sha256": "0c29fe0483b5",
+            "theme": "editorial",
+            "axes": {
+                "palette": "ocean",
+                "type": "archivo-caps-tight",
+                "geometry": "r0b2",
+                "layout": "split-columns",
+                "ornament": "wave"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "paper-editorial@4e819bbb3b8d",
+            "name": "paper-editorial",
+            "file": "styles/paper-editorial.json",
+            "sha256": "fbe3a8f61b03",
+            "theme": "editorial",
+            "axes": {
+                "palette": "newsprint",
+                "type": "cormorant-serif",
+                "geometry": "r0b1",
+                "layout": "split-list",
+                "ornament": "paper"
+            },
+            "density": 1.02
+        },
+        {
+            "id": "poster@fec3e90ad981",
+            "name": "poster",
+            "file": "styles/poster.json",
+            "sha256": "02cb9a5eae93",
+            "theme": "architecture",
+            "axes": {
+                "palette": "poster",
+                "type": "archivo-tight",
+                "geometry": "r0b2",
+                "layout": "poster-cards"
+            },
+            "illustration_set": "illlustrations",
+            "density": 0.95
+        },
+        {
+            "id": "sand-editorial@eaa3776751fc",
+            "name": "sand-editorial",
+            "file": "styles/sand-editorial.json",
+            "sha256": "82f8b222d4d4",
+            "theme": "editorial",
+            "axes": {
+                "palette": "sand",
+                "type": "gowun-magazine",
+                "geometry": "r8b2",
+                "layout": "asymmetric-list",
+                "ornament": "arch"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "sketch@f57bb769a24e",
+            "name": "sketch",
+            "file": "styles/sketch.json",
+            "sha256": "61d4fce88114",
+            "theme": "editorial",
+            "axes": {
+                "palette": "sketch",
+                "type": "archivo-plain",
+                "geometry": "r2b2-crisp",
+                "layout": "split-list"
+            },
+            "illustration_set": "opendoodles",
+            "density": 1.0
+        },
+        {
+            "id": "sonagi-blog@43ff1beb8fb0",
+            "name": "sonagi-blog",
+            "file": "styles/sonagi-blog.json",
+            "sha256": "845d8dd9f9a8",
+            "theme": "editorial",
+            "axes": {
+                "palette": "sonagi-blog",
+                "type": "cormorant-serif",
+                "geometry": "r10b1",
+                "layout": "split-cards"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "star-editorial@47a81755d5d5",
+            "name": "star-editorial",
+            "file": "styles/star-editorial.json",
+            "sha256": "6addb7c5a88c",
+            "theme": "editorial",
+            "axes": {
+                "palette": "mint",
+                "type": "archivo-airy",
+                "geometry": "r4b1",
+                "layout": "split-cards",
+                "ornament": "star"
+            },
+            "density": 1.0
+        },
+        {
+            "id": "swiss@10cfb1a1905d",
+            "name": "swiss",
+            "file": "styles/swiss.json",
+            "sha256": "325a9a696426",
+            "theme": "editorial",
+            "axes": {
+                "palette": "swiss",
+                "type": "archivo-caps-tight",
+                "geometry": "r0b2",
+                "layout": "split-columns"
+            },
+            "illustration_set": "opendoodles",
+            "density": 1.0
+        },
+        {
+            "id": "terracotta-editorial@92dae480faba",
+            "name": "terracotta-editorial",
+            "file": "styles/terracotta-editorial.json",
+            "sha256": "5fd958862ddd",
+            "theme": "editorial",
+            "axes": {
+                "palette": "terracotta",
+                "type": "cormorant-nouveau",
+                "geometry": "r8b2",
+                "layout": "asymmetric-list"
+            },
+            "illustration_set": "etchings",
+            "density": 1.0
+        },
+        {
+            "id": "victorian@f2ada546b2c5",
+            "name": "victorian",
+            "file": "styles/victorian.json",
+            "sha256": "97ea657656cc",
+            "theme": "editorial",
+            "axes": {
+                "palette": "victorian",
+                "type": "cormorant-victorian",
+                "geometry": "r2b2",
+                "layout": "center-cards-plain",
+                "ornament": "victorian"
+            },
+            "illustration_set": "etchings",
+            "density": 1.05
+        }
+    ]
+}

@@ -11,7 +11,7 @@
    │  catalog.json + license/scope/origin 태그
    ▼
 content.md ──import──▶ recipe.json ──render──▶ SVG (+manifest, CREDITS)
-   │                    │  style 27종
+   │                    │  style 29종 (registry/styles.json)
    │                    │  breakpoint 3종
    │                    └  light | dark
    ▼
@@ -55,7 +55,7 @@ scope 태그가 충돌하면 `bundle < output < blocked` 순으로 보수적으�
 | 축             | 값                                                                                       |
 | -------------- | ---------------------------------------------------------------------------------------- |
 | 블록           | 12종 (header·hero·stats·features·logos·quote·faq·cta·footer·table·pricing·gallery)       |
-| 스타일         | 27종 — palette 20 × type 11 × geometry 9 × layout 7 × ornament 15 조합                   |
+| 스타일         | 29종(문서화 27 + 축 스모크 2) — palette 20 × type 11 × geometry 9 × layout 7 × ornament 15 |
 | 브레이크포인트 | desktop 1440 · tablet 768 · mobile 390                                                   |
 | 테마           | light · dark (`dark: true`)                                                              |
 | 장식           | 축(`ornament`) 15종 + 배경 패턴(dots·hatch, 타일) — 템플릿은 JSON                        |
@@ -141,6 +141,7 @@ dist/
 - 계약 헤더: 매니페스트에 `schema_version`·`tokens_version`·`style_id`·`ruleset_version` 4칸.
   골든 42렌더 갱신이 `manifest`만 바꾸고 `0px`(시각 무변)임을 확인
 - 판정 골든 16케이스(clean 2·good 6·bad 8) 기준선 고정. bad는 mutation으로 생성
+- 명부 정합성: 29스타일 × 12블록 × 룰 1.0.0, 중복 `style_id` 0, 레시피 참조 오류 0
 - L1 린트가 처음 찾은 부채 3건: 12px accent eyebrow AA 미달(3.03:1),
   모바일 hero 제목 미줄바꿈(+18~51px), 로고 워드마크 대비 3.34~4.12:1
 
@@ -207,10 +208,12 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 | `press` · `scripts/press.py`                                   | 단일 CLI(check·render·package·print·lockup·spec·brandsheet·styles·preview) |
 | `scripts/render_recipe.py`                                     | 렌더러·스타일·다크 변환·매니페스트            |
 | `scripts/contract.py`                                          | 계약 헤더 4칸 생성·검사                        |
+| `scripts/build_registry.py`                                    | 명부 생성·정합성 검사(`registry/`)             |
 | `scripts/lint_render.py`                                       | L1 기계 판정(대비·겹침·레이어·라이선스·계약)  |
 | `scripts/judgment_golden.py`                                   | 판정 골든셋 16케이스 + mutation               |
 | `rules/ruleset.json`                                           | 판정 룰 정의(version 1.0.0)                   |
 | `test_data/judgment/`                                          | clean.md · cases.json · baseline.json         |
+| `registry/`                                                     | 스타일·블록·룰 명부(생성물, `--check`로 검증)  |
 | `scripts/import_content.py`                                    | content.md → recipe + 검증                    |
 | `scripts/export_recipe.py`                                     | PDF·PNG·WebP + 라이선스 게이트                |
 | `scripts/render_lockup.py`                                     | 락업·변형 시트(스펙 JSON → SVG + 대비 검사)   |

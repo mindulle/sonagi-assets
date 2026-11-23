@@ -129,6 +129,8 @@ jobs:
               run: python3 -m pip install --quiet pyyaml
             - name: 계약 헤더
               run: python3 scripts/contract.py --style styles/editorial.json
+            - name: 명부 정합성
+              run: python3 scripts/build_registry.py --check
             - name: 판정 골든셋
               run: python3 scripts/judgment_golden.py
             - name: 기준선 렌더 L1 린트

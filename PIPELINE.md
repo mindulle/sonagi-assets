@@ -432,6 +432,53 @@ python3 scripts/contract.py --style styles/editorial.json
 `--update`로 골든을 갱신할 때 42렌더 전부가 `manifest`만 바뀌고 `0px`면,
 헤더 추가가 시각을 건드리지 않았다는 증거다.
 
+## 명부(registry)
+
+산출물은 `style_id`로 스타일을 가리키는데, 그래프와 문서는 아직 이름으로 부른다.
+이름은 내용이 바뀌어도 그대로라서 "어느 빅토리안인가"를 기록하지 못한다.
+`registry/`가 그 간극을 메운다(생성물 — 손으로 고치지 않는다).
+
+```bash
+python3 scripts/build_registry.py          # registry/ 다시 쓰기
+python3 scripts/build_registry.py --check  # 커밋된 명부와 현재 파일 비교 (CI)
+```
+
+| 파일          | 내용                                                   |
+| ------------- | ------------------------------------------------------ |
+| `styles.json` | 29스타일의 `id`·선언된 축·파일·`sha256`·`theme`        |
+| `blocks.json` | 12블록 `id`와 `order`                                  |
+| `rules.json`  | 룰셋 version + 룰 `id`/`severity`                      |
+| `index.json`  | `tokens_version`·`themes`·개수·섹션 해시·중복 id·레시피 참조 |
+
+```json
+{
+    "id": "arch-classic@6721abdbf248",
+    "name": "arch-classic",
+    "file": "styles/arch-classic.json",
+    "sha256": "5680cfab7c89",
+    "theme": "editorial",
+    "axes": {
+        "palette": "terracotta",
+        "type": "cormorant-nouveau",
+        "geometry": "r8b2",
+        "layout": "split-cards",
+        "ornament": "arch"
+    }
+}
+```
+
+`--check`는 네 가지를 본다.
+
+| 검사           | 실패 조건                                        |
+| -------------- | ------------------------------------------------ |
+| 파일 최신      | `registry/*.json`이 현재 스타일·룰과 다름        |
+| 중복 id        | 두 스타일 파일이 같은 축 조합(같은 `style_id`)   |
+| 레시피 참조    | 레시피의 `style`·`theme` 이름이 명부에 없음      |
+| 스타일 테마    | 스타일의 `theme`이 `tokens/semantic.json`에 없음 |
+
+이름 규칙: **렌더는 경로로, 기록은 id로.** 그래프는 `styles/<name>.json`을
+넘기되, 결과 매니페스트의 `contract.style_id`를 명부와 대조해 남긴다.
+
 ## 판정 린트와 판정 골든
 
 `visual_consistency_graph`는 LLM에게 점수를 묻는다. 점수는 흔들리고, 룰을 바꿨을 때
