@@ -525,6 +525,35 @@ delivery/landing-v2/
 - 화면(SVG)이 있는 항목만 번들에 포함한다(중간 산출물 제외)
 - zip은 폴더 루트를 포함해 풀었을 때 구조가 유지된다
 
+## 인쇄 (별도 경로)
+
+화면용 export와 섞지 않는다. 색 재현이 다르기 때문이다.
+
+```
+SVG ──조판(도련+재단선)──▶ Chromium PDF(RGB) ──Ghostscript──▶ CMYK PDF
+```
+
+```bash
+press print --src out/brandsheet --trim 210x297 --bleed 3 --slug 5
+press print --src out/brandsheet/01-cover.svg --check     # 조판만 검사
+```
+
+| 항목 | 기본값 | 설명 |
+| --- | --- | --- |
+| `--trim` | `210x297` | 재단 크기(mm). 원본 비율과 1% 넘게 다르면 중단 |
+| `--bleed` | `3` | 도련. 배경색을 도련까지 깐다 |
+| `--slug` | `5` | 재단선 바깥 여백. 모서리에 재단선 8개 |
+| `--icc` | 없음 | 출력 ICC 지정(있으면 `-dOverrideICC`) |
+
+- 페이지 크기 = 재단 + 2 × (도련 + 여백) → A4면 **226×313mm**
+- 검증: 페이지 mm, 내용 스트림 색 연산자(`k`/`K`=CMYK, `rg`/`RG`=RGB), 임베드 래스터 실효 dpi
+- 결정론: Ghostscript 출력의 생성 시각·ID를 고정값으로 바꿔 2회 실행 해시 동일
+- 래스터는 `--embed-max-width`로 줄인 뒤 들어간다. 인쇄 전 300dpi 이상인지 확인한다
+  (`raster_dpi_min` < 300이면 실패로 표시)
+
+**한계**: PDF/X·별색(Pantone) 미지원. ICC를 지정하지 않으면 Ghostscript 기본 CMYK 변환이다.
+색 교정이 필요하면 `--icc`로 프로파일을 넣고, 별색은 인쇄소와 직접 맞춘다.
+
 ## 다크 테마
 
 `dark: true`(레시피) 또는 `--dark`(CLI)로 같은 레시피를 다크로 렌더한다.

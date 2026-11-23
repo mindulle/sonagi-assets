@@ -63,6 +63,8 @@ jobs:
                     n=$(basename "$f")
                     test "$(sha256sum "$f" | cut -d' ' -f1)" = "$(sha256sum "out/bs-2/$n" | cut -d' ' -f1)"
                   done
+            - name: 인쇄 조판 검사
+              run: python3 scripts/export_print.py --src out/bs --check
             - name: 규격 도해
               run: |
                   python3 scripts/render_spec.py --spec test_data/identity/lockup.json --out out/spec --json
