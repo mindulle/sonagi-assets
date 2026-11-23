@@ -129,6 +129,9 @@ render_recipe.py ... --embed-max-width 900
 
 ## press CLI
 
+`press --version`은 릴리즈 태그를 따른다. 우선순위는 `PRESS_VERSION` 환경변수(이미지 빌드에서 주입) → `git describe --tags` → `dev`다.
+`.dockerignore`가 `.git`을 빼므로 이미지 안에서는 반드시 빌드 인자로 준다.
+
 단일 진입점. 기존 스크립트를 감싸기만 하고 로직은 그대로 둔다.
 
 ```bash

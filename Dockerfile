@@ -13,5 +13,9 @@ RUN npm install -g opendevbrowser
 
 COPY . .
 
+# 릴리즈 워크플로가 build-arg로 주입한다(.git이 이미지에 없어 git describe 불가).
+ARG PRESS_VERSION=dev
+ENV PRESS_VERSION=${PRESS_VERSION}
+
 # Default command for the web app
 CMD ["uvicorn", "asset_hub_app:app", "--host", "0.0.0.0", "--port", "34920"]
