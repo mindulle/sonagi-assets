@@ -75,6 +75,16 @@ jobs:
                     b=$(sha256sum "out/spec-2/$f.svg" | cut -d' ' -f1)
                     test "$a" = "$b"
                   done
+            - name: 패턴 라인 모드
+              run: |
+                  python3 scripts/render_recipe.py --recipe out/golden/recipe.json \
+                    --style styles/hatch-editorial.json --catalog test_data/golden/catalog.json \
+                    --tokens tokens/semantic.json --out out/pat-line --breakpoint desktop \
+                    --pattern-mode line
+                  if grep -q "<pattern" out/pat-line/*.svg; then
+                    echo "line 모드에 <pattern>이 남아 있습니다"
+                    exit 1
+                  fi
             - name: 래스터 링크 모드
               run: |
                   python3 scripts/render_recipe.py --recipe out/golden/recipe.json \
