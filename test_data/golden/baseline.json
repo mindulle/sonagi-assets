@@ -25,9 +25,9 @@
   },
   "renders": {
     "editorial|desktop|light": {
-      "svg_sha256": "a401b7103d7b46a320a21283bbbf1d68d6cacc6d8f534ab4cc043f4a5cb8da0b",
-      "svg_bytes": 18454,
-      "manifest_sha256": "79fa43d653d8f5b839918e23887d948aca69fcdcbf92e698ae642179a07faae2",
+      "svg_sha256": "cef3075fe445589b38065447049d9721dfa1f91b34f8dd3081c990c58be6bcd2",
+      "svg_bytes": 162619,
+      "manifest_sha256": "b68784e9a31c446632cf9948d0a5c09c53938cacb09575b0d2aed6c9d7ce2487",
       "canvas": {
         "width": 1440,
         "height": 3145
@@ -37,7 +37,7 @@
         "hero",
         "cta",
         "icon-arrow-right",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "stats",
         "stat-1",
         "stat-2",
@@ -62,8 +62,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -71,9 +71,9 @@
       ]
     },
     "editorial|desktop|dark": {
-      "svg_sha256": "26b678dcf0d377281adc00cfac1c0715f90ab53a54b759f9193d6536e0e0f041",
-      "svg_bytes": 18454,
-      "manifest_sha256": "d5d1d545ac5da131cc09f575d5de1a56e77b5b4b427a66e768ce4a2004a5bb5a",
+      "svg_sha256": "6e2ed6d3cbeb4bd3ca4089f866b9de00a16675023dba90d1d0c265aacae8cb0c",
+      "svg_bytes": 162619,
+      "manifest_sha256": "7f4078fee0373e1040f6dbf16caabaa05b538814e1e0cd9bf981b89d52082a83",
       "canvas": {
         "width": 1440,
         "height": 3145
@@ -83,7 +83,7 @@
         "hero",
         "cta",
         "icon-arrow-right",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "stats",
         "stat-1",
         "stat-2",
@@ -108,8 +108,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -117,9 +117,9 @@
       ]
     },
     "editorial|tablet|light": {
-      "svg_sha256": "bf528db927aad5a4b7f4b362e02c229b67e12ec103d4551369d3cfa56c4269f2",
-      "svg_bytes": 19270,
-      "manifest_sha256": "9a2aa0c1cb22cedb77eed8ab9ddc297b0d095de8ba053a09f79d9d8193cfacc7",
+      "svg_sha256": "e968306271aec9407d99ec2df98344f2dc3e117581ed8645283a6bb755518517",
+      "svg_bytes": 163435,
+      "manifest_sha256": "2d4d5d00fd41520d0fe845ccca1dbc1b3933441c1fad4a6c3474c2fd700e7ad2",
       "canvas": {
         "width": 768,
         "height": 3273
@@ -127,7 +127,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -154,8 +154,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -163,9 +163,9 @@
       ]
     },
     "editorial|tablet|dark": {
-      "svg_sha256": "66fb53873e2f573c99e3040cb3947f853deb06313ccb9be0acc80d73638a4fd6",
-      "svg_bytes": 19270,
-      "manifest_sha256": "f9edf3c06cfea4efad348269c69b97ec89c1febb0d59d8ec63867433cb92c85f",
+      "svg_sha256": "7901b5f4d7e827afc22381e238da5a7fb047e778e877cafe279e43b630165576",
+      "svg_bytes": 163435,
+      "manifest_sha256": "b830f6b7d39345c46687c8ae17bd11b4e0a9658313f6a0ab713a9ecd9372abe2",
       "canvas": {
         "width": 768,
         "height": 3273
@@ -173,7 +173,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -200,8 +200,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -209,9 +209,9 @@
       ]
     },
     "editorial|mobile|light": {
-      "svg_sha256": "ab5f080b571470042a0aa47d593b59654148fff95d5bf6b4af970312ade21ae4",
-      "svg_bytes": 16993,
-      "manifest_sha256": "11e5a52db31ca95e5acd516f1cc3c2bcf45c9575b9f572af703377ec04e1b1a8",
+      "svg_sha256": "08dfa8dd17e5eac1e37a645cdfe4f6875835304795ca17871341aac748d605f9",
+      "svg_bytes": 161158,
+      "manifest_sha256": "11efcdadf2f6d9a4de057e7055015dfbcf3dd1892278e07bae8ccbb16099152d",
       "canvas": {
         "width": 390,
         "height": 3718
@@ -219,7 +219,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -246,8 +246,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -255,9 +255,9 @@
       ]
     },
     "editorial|mobile|dark": {
-      "svg_sha256": "550b1f14cd48287ebba214eee11909b61b405e5efe3d8a55d9a4cd9afb462e13",
-      "svg_bytes": 16993,
-      "manifest_sha256": "694cf7f69f2a908aa8fd3e648c390fc7d28b750a714a0bd9edb3ffa42d087939",
+      "svg_sha256": "680cdfcaa4dc3fabf521a4011bec0bbcbeb098eb5f2c9c6c9ef35f4ec35bd9db",
+      "svg_bytes": 161158,
+      "manifest_sha256": "a2d21ce48fba31e5970763dbbde52d470d0c5414e6f0bdc6fb302f094235f757",
       "canvas": {
         "width": 390,
         "height": 3718
@@ -265,7 +265,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -292,8 +292,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -303,7 +303,7 @@
     "brutalist|desktop|light": {
       "svg_sha256": "1a5d9c7a257bc752fa9bc99c4735bf42119ff64d4378260585bd8f95228ce090",
       "svg_bytes": 16927,
-      "manifest_sha256": "102ba7b9f75c2cbc6511762799620f2f50022f35fd060b79f914a95fd27504ac",
+      "manifest_sha256": "4b2d23a77d48731077f1551d86ea17381aeac20c14a9effa7a371d2843fe4955",
       "canvas": {
         "width": 1440,
         "height": 3160
@@ -347,7 +347,7 @@
     "brutalist|desktop|dark": {
       "svg_sha256": "fb576e7a48629c8b049b9bcbb555a858416050e61072c2f0dabd344d33a98bed",
       "svg_bytes": 16927,
-      "manifest_sha256": "6ad92f0391a824efcd30b516f7a2c7e7b83b5df541ad09f41862f38bed0fd830",
+      "manifest_sha256": "7bb4a1086e922fabfa8162e44cbfb2fe08b823e2b44ff98869c7fd7dc942785a",
       "canvas": {
         "width": 1440,
         "height": 3160
@@ -391,7 +391,7 @@
     "brutalist|tablet|light": {
       "svg_sha256": "bedd5da78bf323d25b4f85d3ea48d23b3e2fadb52344053980a13c21438bcb0f",
       "svg_bytes": 17572,
-      "manifest_sha256": "51b62fc0b91f202a6509ad093a2a7811f04487f715390d5647d1c4d93af62220",
+      "manifest_sha256": "b6110d632a337bbe3665282767705e91aa57df4b07b60b4eef56ee5486a2cd62",
       "canvas": {
         "width": 768,
         "height": 3304
@@ -437,7 +437,7 @@
     "brutalist|tablet|dark": {
       "svg_sha256": "b70266228ecddf6bf3dfce2e14104be6637a202fc48eb7b1b9f08d92119f43dc",
       "svg_bytes": 17572,
-      "manifest_sha256": "df473df9b687067ecb1b7d2c37b7362470685959c180cd6ec528a6e70f059231",
+      "manifest_sha256": "f04bc8d591f591e6f362a9e42167b6fc4eec6293d1e021a88a88eb1ebc7d2347",
       "canvas": {
         "width": 768,
         "height": 3304
@@ -483,7 +483,7 @@
     "brutalist|mobile|light": {
       "svg_sha256": "d9da09d76f24cfe8489278ef8d1a49648f55b256ebef1ad18f5a50709c09e605",
       "svg_bytes": 15466,
-      "manifest_sha256": "8a398e3b20b3696c455f7f94ce64b65c492835ebb239c6afda7177f823d8a93e",
+      "manifest_sha256": "64f951e3ee1ab204fd054aa71f9fe47ebf01a18e86549a22eefc05e5a33128f1",
       "canvas": {
         "width": 390,
         "height": 3735
@@ -529,7 +529,7 @@
     "brutalist|mobile|dark": {
       "svg_sha256": "a3f515ec1763f34cf682503627b0d8e4a745de37db8ed86704ba57a475dd25aa",
       "svg_bytes": 15466,
-      "manifest_sha256": "e8008384edc6cb2994631e5346d18750339e55f830dfed037bd416e03997d00b",
+      "manifest_sha256": "6bd8f3b57809fede7a71af4c61c691b3e895d1a2051720d8e18ea55037421780",
       "canvas": {
         "width": 390,
         "height": 3735
@@ -573,9 +573,9 @@
       ]
     },
     "etching|desktop|light": {
-      "svg_sha256": "d748f4024c12b50f5a34f29ff86ebdc1ca5c8eda0271fac90bd8e3796f41d43d",
-      "svg_bytes": 20203,
-      "manifest_sha256": "8c443b39ae46272ecdef018dc93815b6fbb3631cb4354517e07410cb12e8c484",
+      "svg_sha256": "b12088bcbe1aa5e8ec907da8d2fc9166138031953ce09bbee4accb23e1970878",
+      "svg_bytes": 164368,
+      "manifest_sha256": "408ca8de77f7210db9c996ebd580a4d16d2fd48463c1125ecb7024014792b210",
       "canvas": {
         "width": 1440,
         "height": 3306
@@ -583,7 +583,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -610,8 +610,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -619,9 +619,9 @@
       ]
     },
     "etching|desktop|dark": {
-      "svg_sha256": "52c57ba2ae4f17c643e11ea0b9b33ad381035ea318d1d1a08f224a748e6e3cc5",
-      "svg_bytes": 20203,
-      "manifest_sha256": "2c6e2c1aca71f531fd225e02d29d58b06d6b124cbac2fc18fe743c3e15c0461d",
+      "svg_sha256": "75264538d7068e85180259905a79c0b972c0e780659e653b63d6d0e84f9007c3",
+      "svg_bytes": 164368,
+      "manifest_sha256": "0f79fb94c7361e13543e155a08f52110574135ee486f2b15b562723832cf21a7",
       "canvas": {
         "width": 1440,
         "height": 3306
@@ -629,7 +629,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -656,8 +656,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -665,9 +665,9 @@
       ]
     },
     "etching|tablet|light": {
-      "svg_sha256": "e925ea683e613b57771305f8c10b6e8f6bd2d2211eae1b02b12086dd3c446010",
-      "svg_bytes": 19939,
-      "manifest_sha256": "63d31a6a3738f29314e9ca526ed273fae3bb9848d73156fa54e097100bcdf95f",
+      "svg_sha256": "a901e43410e7ad3291cc3e08296f5efe6dc1de275f2e7c0239837696455befea",
+      "svg_bytes": 164104,
+      "manifest_sha256": "f48c161fb05d00bc79eba4fb12a9d3f78043d9f6a03011e9f8738b7c8022ffd1",
       "canvas": {
         "width": 768,
         "height": 3390
@@ -675,7 +675,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -702,8 +702,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -711,9 +711,9 @@
       ]
     },
     "etching|tablet|dark": {
-      "svg_sha256": "43edf32ce662945d88349ff190ec6655c1f456f81648ed8f5174f481cc928caa",
-      "svg_bytes": 19939,
-      "manifest_sha256": "dd502316a08a98382d1d29ffedc2da7f428ce9feab4dbc878fab617a181b4dd6",
+      "svg_sha256": "845cd402b1f993160be4926de9aacd74bdfd29bf4c5ad9374d21c9c9905a087c",
+      "svg_bytes": 164104,
+      "manifest_sha256": "0f537439f4115ca975c26e086ee933d1c19bc9f510f74febc3fbffded2f160fe",
       "canvas": {
         "width": 768,
         "height": 3390
@@ -721,7 +721,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -748,8 +748,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -757,9 +757,9 @@
       ]
     },
     "etching|mobile|light": {
-      "svg_sha256": "3a29794819784e54c4cbf63e58f1686241fe0937ee3bb65942c91c92cfdca7d1",
-      "svg_bytes": 17623,
-      "manifest_sha256": "ce7e3b1275a609ed10561faf61c0e084215250b4e1f61fa5ebc96f1d6be10234",
+      "svg_sha256": "74d009184a7a02681ff9fecf29cb8305adc33842e3d6f5c5d91a3ad0ce95bae1",
+      "svg_bytes": 161788,
+      "manifest_sha256": "ef9d80c550bd15bfe5ac61265b1babfeac71c4e5714bfa10183d7fc2cc7b4041",
       "canvas": {
         "width": 390,
         "height": 3725
@@ -767,7 +767,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -794,8 +794,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -803,9 +803,9 @@
       ]
     },
     "etching|mobile|dark": {
-      "svg_sha256": "4c0d1e78665d29977eeab0c8865f511e8ddc5c06ef53fd49f72c42f85123e417",
-      "svg_bytes": 17623,
-      "manifest_sha256": "c6572130a9966fb0ed75d90980f2742be466330d7d525369fd90c21810469ca0",
+      "svg_sha256": "d6ab723941caaf1ed8a2a0165e7fa3869069ebc18126717f798bac48437970bf",
+      "svg_bytes": 161788,
+      "manifest_sha256": "bb044413f7488cbef894ff57dcf5e7fd44dbf7e4997e7c39ac25f819a2c08737",
       "canvas": {
         "width": 390,
         "height": 3725
@@ -813,7 +813,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -840,8 +840,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -849,9 +849,9 @@
       ]
     },
     "poster|desktop|light": {
-      "svg_sha256": "e946748af9c9ca3306ebf36da5854e0633febb6cba842c6488831284b9f8f709",
-      "svg_bytes": 18730,
-      "manifest_sha256": "6a466c350cfb2d71278d9c49ae06c782e3a35d9ba334f57b5dace9fce9a76e86",
+      "svg_sha256": "ab9a0a0ca6df52a46423ee0be88501154e24d855ba564465336d5f427797c442",
+      "svg_bytes": 162895,
+      "manifest_sha256": "9f7f03c1a145a7e57be9589c9ff571ac1582d49db88f6a7531c1e299d88e00f7",
       "canvas": {
         "width": 1440,
         "height": 3347
@@ -859,7 +859,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -886,8 +886,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -895,9 +895,9 @@
       ]
     },
     "poster|desktop|dark": {
-      "svg_sha256": "b6c613631f7eb77931b7af3239f033b50afd8f4b873b5b9fcb1e6bbc88e9c43a",
-      "svg_bytes": 18730,
-      "manifest_sha256": "fad7b351a6a5d102294be476f51c10106ee6460d291706ea62e43c0ed5b40b53",
+      "svg_sha256": "3b9005d751c5b6469e8914502b8ee53a29b8ae2991b940ac19de1d9c245475d6",
+      "svg_bytes": 162895,
+      "manifest_sha256": "7d4769fb6815ca8ab14151477484397ab8d207d64c48dbb57a7e4bd05bbf8223",
       "canvas": {
         "width": 1440,
         "height": 3347
@@ -905,7 +905,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -932,8 +932,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -941,9 +941,9 @@
       ]
     },
     "poster|tablet|light": {
-      "svg_sha256": "bd0e12e6ee879a86d320074c5e052565cdfd2548b261baa9d1e3c2b73946ee57",
-      "svg_bytes": 19080,
-      "manifest_sha256": "2e14a72f99a9f9bae4f0e6ba6ded88612829611ba88e64cb39e657b436b94c05",
+      "svg_sha256": "3409685c676da16165fe4f60fe8fc077848d24635a21eaae9baf5a3aee5598b0",
+      "svg_bytes": 163245,
+      "manifest_sha256": "047537e016c38b57e71722d609fb25a2ba15b0ef7d569ba079bcd644c06ef326",
       "canvas": {
         "width": 768,
         "height": 3298
@@ -951,7 +951,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -978,8 +978,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -987,9 +987,9 @@
       ]
     },
     "poster|tablet|dark": {
-      "svg_sha256": "9d214980651daf01bd9bee406b56c268e24880a9b4267fd6fefc5dfd1b238628",
-      "svg_bytes": 19080,
-      "manifest_sha256": "5b3faf96cc1b8badee0cf98bea8209c83062d5913ac0b3418009c2f72f53b587",
+      "svg_sha256": "547da9d83c211141f54ae9619f60e82f95a84a640a87550e88b20009eb1a53a3",
+      "svg_bytes": 163245,
+      "manifest_sha256": "222ca1c59ca1ec004ad8a2483f8967012f931cdca94afca090f2ddd4aa68ab33",
       "canvas": {
         "width": 768,
         "height": 3298
@@ -997,7 +997,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1024,8 +1024,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1033,9 +1033,9 @@
       ]
     },
     "poster|mobile|light": {
-      "svg_sha256": "d2ae0e04a0ab1dce35c6e2917e5eb735e6c0137be7b36f8ebe2132192f4f1ff0",
-      "svg_bytes": 17890,
-      "manifest_sha256": "6a3e34cd1b0b8d77faf8a696411d855f6fa81f08f1b1b7389603357c8bb78cca",
+      "svg_sha256": "07d59f2f5ff7f51bdbe16c16df9046978a8909d422aaa4943a0b26a6a3f130ec",
+      "svg_bytes": 162055,
+      "manifest_sha256": "79a69cff098a7e3a153568918684c942b474bf7004a9416b148e6d36055c192f",
       "canvas": {
         "width": 390,
         "height": 3732
@@ -1043,7 +1043,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1070,8 +1070,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1079,9 +1079,9 @@
       ]
     },
     "poster|mobile|dark": {
-      "svg_sha256": "571f3fbe1bbc1a8177eb8c034c8653baf14c51acc834c137483988653d103d7e",
-      "svg_bytes": 17890,
-      "manifest_sha256": "3b130aaa588caf45be5e7cb19b1b95f9b5d97dbc5abdd77ffbe571b78c028257",
+      "svg_sha256": "f96647355491f86008c3c262cbc1b00a59785b14c285ad24a56b326efcd9de59",
+      "svg_bytes": 162055,
+      "manifest_sha256": "2d8597721ad9346deac7c6075d53cd2b1abcf76d1b02d26f24acd02a2db991b1",
       "canvas": {
         "width": 390,
         "height": 3732
@@ -1089,7 +1089,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1116,8 +1116,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1125,9 +1125,9 @@
       ]
     },
     "swiss|desktop|light": {
-      "svg_sha256": "70ba82ba13f37472ada366c79e502771ec58019101b76b2153a6a7755712b3c7",
-      "svg_bytes": 18952,
-      "manifest_sha256": "71f13c98d999deb3bf434ea28f353cfa33e6ca5b3419ba117b7121c9795fed4a",
+      "svg_sha256": "cf13ee3e3267934c5317a449549a3e7725f4fb765aac23ae8680b20cac633aa5",
+      "svg_bytes": 163077,
+      "manifest_sha256": "a02e49cfe25fc1e174e1917540705a17f0ff0442467ac8be3fe04093be4a8fb7",
       "canvas": {
         "width": 1440,
         "height": 3079
@@ -1137,7 +1137,7 @@
         "hero",
         "cta",
         "icon-arrow-right",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "stats",
         "stat-1",
         "stat-2",
@@ -1159,8 +1159,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1168,9 +1168,9 @@
       ]
     },
     "swiss|desktop|dark": {
-      "svg_sha256": "4945a13dbdaf27651e34bf78d25427618f1cc79eca1e7eb854afb00c5434d6df",
-      "svg_bytes": 18952,
-      "manifest_sha256": "e9aa0ab18350e7e52fa174d5690b8b3e2712b196d346f79461f8c99ce973efe2",
+      "svg_sha256": "7296649bbb1455c4f8bbdb46319d627755af60695e87520c0bb76b56fc07fd93",
+      "svg_bytes": 163077,
+      "manifest_sha256": "f4103f1c88cce6c28b5279316872c7d826193dec708d48b257396aeb7c81aac8",
       "canvas": {
         "width": 1440,
         "height": 3079
@@ -1180,7 +1180,7 @@
         "hero",
         "cta",
         "icon-arrow-right",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "stats",
         "stat-1",
         "stat-2",
@@ -1202,8 +1202,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1211,9 +1211,9 @@
       ]
     },
     "swiss|tablet|light": {
-      "svg_sha256": "db5533bd87640b3766f5ab865a61378b273071ad655da22d1c1d27d35d687a15",
-      "svg_bytes": 19131,
-      "manifest_sha256": "312fa180bbe6f119c4740edf18012dc72ed571d581471b5056e73d34196795a0",
+      "svg_sha256": "27f55ea3f074f8db40fddd43e4c980beb2dae1a76910a2c28b01948b2b88bc53",
+      "svg_bytes": 163256,
+      "manifest_sha256": "26217372eb9c165e8040f4a3ae490c97b781be42ac73fe3b9354562f5251c2c0",
       "canvas": {
         "width": 768,
         "height": 3203
@@ -1221,7 +1221,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1245,8 +1245,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1254,9 +1254,9 @@
       ]
     },
     "swiss|tablet|dark": {
-      "svg_sha256": "d5ef84520d3257e57a084ed41f74281d7a437b4386b26ca6e9deefbddee61234",
-      "svg_bytes": 19131,
-      "manifest_sha256": "8f8626231d06cdc4983ae3654ef1f7d9df0c305ff1c9cad0f69ccf7cd65a098c",
+      "svg_sha256": "ab967cc301b5b339fb4ced03053a074aaf82f98c20992bf069890e152570f992",
+      "svg_bytes": 163256,
+      "manifest_sha256": "66c8fd86176ea44ef19248aa8db3140dd0f3006d1a237545cd39b9830329a8d5",
       "canvas": {
         "width": 768,
         "height": 3203
@@ -1264,7 +1264,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1288,8 +1288,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1297,9 +1297,9 @@
       ]
     },
     "swiss|mobile|light": {
-      "svg_sha256": "875c4c0b97ac3f99b138a0f914708514a947270109cdc91997b27552a0bcfe25",
-      "svg_bytes": 17868,
-      "manifest_sha256": "3809e8a557025a17654ac3658efc539b2cb2cbe3ad629f6451acca0282bf3113",
+      "svg_sha256": "88b7e4f3da5605d4eaa3d54abfd47b758633318bf28e80be108bf242b70cb5b1",
+      "svg_bytes": 161993,
+      "manifest_sha256": "22c3de04748e466b036aa044029d50e458bc9ac3bcae815a30471053a0f455f0",
       "canvas": {
         "width": 390,
         "height": 3711
@@ -1307,7 +1307,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1334,8 +1334,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1343,9 +1343,9 @@
       ]
     },
     "swiss|mobile|dark": {
-      "svg_sha256": "947da8a97834af4101e7f21a3044a01e0d71453f1e40356fe3ad7fbc92fd483c",
-      "svg_bytes": 17868,
-      "manifest_sha256": "c4b6f1f9a375e7e917e142b3c51578177f725b48f8a78361fa37b94e7d747022",
+      "svg_sha256": "641d30f67dd8d284f57271eb874353271356626c3b0b1e949fa0e7aeb914aaf6",
+      "svg_bytes": 161993,
+      "manifest_sha256": "40e54fad914d1bcca9c6552016e8c37b642d71856759412e1036b3e2ddcf5231",
       "canvas": {
         "width": 390,
         "height": 3711
@@ -1353,7 +1353,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1380,8 +1380,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1389,9 +1389,9 @@
       ]
     },
     "art-nouveau|desktop|light": {
-      "svg_sha256": "0b78fd99e563d05cefbf59508ec2aee8ef4f11f5e10f01d919ab4e5f1f88e798",
-      "svg_bytes": 26242,
-      "manifest_sha256": "17719dcb18f20921d9707b9a6fd1c1ced55b8acdbefb674732995b58730dadc3",
+      "svg_sha256": "a4abf85817c6aa19d3d6a3d64c4d42991bd24da81087cc9b3690b0aec9eeba16",
+      "svg_bytes": 98301,
+      "manifest_sha256": "b14c234111b1b530d5c96ce3381a350af9827ea83990088cca9cfd662700a671",
       "canvas": {
         "width": 1440,
         "height": 3951
@@ -1432,8 +1432,8 @@
         "ornament",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "ornament",
         "cta-band",
         "cta",
@@ -1443,9 +1443,9 @@
       ]
     },
     "art-nouveau|desktop|dark": {
-      "svg_sha256": "065f5966e6a6eab0c7fea80869d8290c95a3ae3d0d1b15263db671b647ff0873",
-      "svg_bytes": 26242,
-      "manifest_sha256": "4920e0db340ff1e32ff91f1f2846056f1979d56fbc8f0ddd73fe8bc40b364f88",
+      "svg_sha256": "400b66b652d0a96326f1ae3d20f3180cbca7942f7a8323898e8b487ee3dc757b",
+      "svg_bytes": 98301,
+      "manifest_sha256": "33b0e02d5196b62f19cc353e4c535eac34dd33271592ce2cf7023926ab753cf3",
       "canvas": {
         "width": 1440,
         "height": 3951
@@ -1486,8 +1486,8 @@
         "ornament",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "ornament",
         "cta-band",
         "cta",
@@ -1497,9 +1497,9 @@
       ]
     },
     "art-nouveau|tablet|light": {
-      "svg_sha256": "f23be4a825be3ab036d15d6934b3d0aad70b78a8dbf4b70991eb3e1c2d0eee2a",
-      "svg_bytes": 29513,
-      "manifest_sha256": "564bce10b172aee823f68b03dfc1d609222a7a55218f16cfa1f24645673c5610",
+      "svg_sha256": "bd7491d4d629d3c819fe97c8e5a5484ff34b19a270cff021c67fe0333b86da95",
+      "svg_bytes": 173638,
+      "manifest_sha256": "18c60935ad5568c0f55c5e95d20f03782527412b551078665892701814577737",
       "canvas": {
         "width": 768,
         "height": 4083
@@ -1507,7 +1507,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "ornament",
@@ -1542,8 +1542,8 @@
         "ornament",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "ornament",
         "cta-band",
         "cta",
@@ -1553,9 +1553,9 @@
       ]
     },
     "art-nouveau|tablet|dark": {
-      "svg_sha256": "79d97349342a6a314c374168770cf47a0681b6bd82db4dc4f201ff80b7fe1a05",
-      "svg_bytes": 29513,
-      "manifest_sha256": "7c53215d72e22be8eb670be079d562269bfa91d8416e50aa024c0cc46978e9d5",
+      "svg_sha256": "f5441b1526b112a584ca1e58f31376bb5e0da7a16e15372da900a7daa6e4d352",
+      "svg_bytes": 173638,
+      "manifest_sha256": "5d182a4a5f05065983e18b0ca62f3da4822aafa32ce67db6d0c0ce17d2008596",
       "canvas": {
         "width": 768,
         "height": 4083
@@ -1563,7 +1563,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "ornament",
@@ -1598,8 +1598,8 @@
         "ornament",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "ornament",
         "cta-band",
         "cta",
@@ -1609,9 +1609,9 @@
       ]
     },
     "art-nouveau|mobile|light": {
-      "svg_sha256": "f1e099cba63feaf0f67a8c807bee1600726df77990381e36092297ee37c5efa4",
-      "svg_bytes": 25940,
-      "manifest_sha256": "07c8ec05b58010048a19460cb4399d095a971b370e3dcc9378515d30a0525019",
+      "svg_sha256": "54aa4d64b4d2f7e1290618a5a00addb7e51d37f98c4ced246422384ec8f83086",
+      "svg_bytes": 170065,
+      "manifest_sha256": "f6362607437f4b933c661a69f5a9d9f4a37ced9b3c624e3fb5286b8d77c0b888",
       "canvas": {
         "width": 390,
         "height": 4528
@@ -1619,7 +1619,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "ornament",
@@ -1654,8 +1654,8 @@
         "ornament",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "ornament",
         "cta-band",
         "cta",
@@ -1665,9 +1665,9 @@
       ]
     },
     "art-nouveau|mobile|dark": {
-      "svg_sha256": "f7d3e473e4145da7c2d82c1a0f028dcfd14d24496a2eaf24b8a174ac52bfe5b3",
-      "svg_bytes": 25940,
-      "manifest_sha256": "f8caae585cc9fe44ae31bdd8944408bf212d30a1a282f841066fbbd26f8c3836",
+      "svg_sha256": "4404f9a2445d74203e997f8d70986555d20afbfd601e3ac4333d4db7ef215f39",
+      "svg_bytes": 170065,
+      "manifest_sha256": "2d3d58911d3266a77eac7754729b29dceac4ae16067725d1fec52c039e59b9bf",
       "canvas": {
         "width": 390,
         "height": 4528
@@ -1675,7 +1675,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "ornament",
@@ -1710,8 +1710,8 @@
         "ornament",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "ornament",
         "cta-band",
         "cta",
@@ -1721,9 +1721,9 @@
       ]
     },
     "minimal|desktop|light": {
-      "svg_sha256": "23b51bc35a5507ffb39d4a74385b025508ccc50b6cc30ca5684aa2e99c7d8ba2",
-      "svg_bytes": 18721,
-      "manifest_sha256": "39446c3ba6047c9e8d002130f4ce435af397b1555a866b2b2964ec9a8232bd17",
+      "svg_sha256": "dd9640ee9e853d7d754693416a3a9a7194a96950284117c4c6353024a446bfba",
+      "svg_bytes": 162846,
+      "manifest_sha256": "76db86293af6f6f2ced63fbc4092dde3f3caaa538188b3adcce5261ed8f65d21",
       "canvas": {
         "width": 1440,
         "height": 3129
@@ -1733,7 +1733,7 @@
         "hero",
         "cta",
         "icon-arrow-right",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "stats",
         "stat-1",
         "stat-2",
@@ -1758,8 +1758,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1767,9 +1767,9 @@
       ]
     },
     "minimal|desktop|dark": {
-      "svg_sha256": "56a7a776389ea8d3a96dea619fbd8b4defe643891458e78d3eda7737f03c1e6f",
-      "svg_bytes": 18721,
-      "manifest_sha256": "5d4ced7cd1eb928596ecdac1abb7d11ba94cf377e90418152b1e8dbfe0726d2a",
+      "svg_sha256": "d977cceb088253d368204f728b809dd64d050fd94b0a1774c23b096256ce1fb9",
+      "svg_bytes": 162846,
+      "manifest_sha256": "d88c06ce5a96707b1fb02c3e5b2ad35b367b2bd8620f5d31371275924a37255b",
       "canvas": {
         "width": 1440,
         "height": 3129
@@ -1779,7 +1779,7 @@
         "hero",
         "cta",
         "icon-arrow-right",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "stats",
         "stat-1",
         "stat-2",
@@ -1804,8 +1804,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1813,9 +1813,9 @@
       ]
     },
     "minimal|tablet|light": {
-      "svg_sha256": "ea3e2c9e37464bd91792f8db8314fcbfe55bb3692da4e93ee5210c0e125fea0d",
-      "svg_bytes": 19322,
-      "manifest_sha256": "b2ef3cb94bd0e92aa3cf624896d62703a67dcb7e12663bac50ff500f829a4103",
+      "svg_sha256": "9c95292cac3eb83daa5ff7f80bde90871774d64c09f34570eb18899db5b62ca9",
+      "svg_bytes": 163447,
+      "manifest_sha256": "050080863ecea18d8431d8c37f835f45d73f676f84cf663938b4f226a94f0023",
       "canvas": {
         "width": 768,
         "height": 3248
@@ -1823,7 +1823,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1850,8 +1850,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1859,9 +1859,9 @@
       ]
     },
     "minimal|tablet|dark": {
-      "svg_sha256": "a9dbe8bffc68f95b18c77f927ddea55efac296fa6bddfa476ff76a1bc5400555",
-      "svg_bytes": 19322,
-      "manifest_sha256": "55a6293c86e13fafd12043b6d538fc096ba9bc9c179ee3f1492fcb46c5cc6f99",
+      "svg_sha256": "97d444a510a47d648aa8d6e71b25278972f6e5b33eab42d19d15a0d159118aaf",
+      "svg_bytes": 163447,
+      "manifest_sha256": "56ac18e0bb6f51c338301e75367579ff7b3795666d5944524147f10ea992f1b3",
       "canvas": {
         "width": 768,
         "height": 3248
@@ -1869,7 +1869,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1896,8 +1896,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1905,9 +1905,9 @@
       ]
     },
     "minimal|mobile|light": {
-      "svg_sha256": "ac5ecffefb8ee9699a8782c2e54356d784d4c4e8ca478f7b5b302a54b72640ec",
-      "svg_bytes": 17226,
-      "manifest_sha256": "7a675101faa6f05caa86ce6da8bf6366336266029666737161c5b196d4a4ca97",
+      "svg_sha256": "b539e406b510c45ca7bfa1f5d26a490460275367e2d96db48ff418612aaaf072",
+      "svg_bytes": 161351,
+      "manifest_sha256": "744bcfd548c7c1ef748d1ff21a68b4b925785763cb908aa000531c3f73246406",
       "canvas": {
         "width": 390,
         "height": 3673
@@ -1915,7 +1915,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1942,8 +1942,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",
@@ -1951,9 +1951,9 @@
       ]
     },
     "minimal|mobile|dark": {
-      "svg_sha256": "090aabe4fc5b7ab4c0de545570c4ff627afc4041d91ec348c4ca14359c8065c8",
-      "svg_bytes": 17226,
-      "manifest_sha256": "2bc8402a1eb13aa69f6d6b4ac6dc713fbca01deb717639891b4a667b1e8bb61e",
+      "svg_sha256": "26e14c85a48d41877aa5b18664c6e3fe5d153fadc38b9706557f2157d0f5d138",
+      "svg_bytes": 161351,
+      "manifest_sha256": "10c619aaeafd8bdd7ab25793c4e4fb381acbd14e51f708552a8cfd0c4afb92f4",
       "canvas": {
         "width": 390,
         "height": 3673
@@ -1961,7 +1961,7 @@
       "layers": [
         "header",
         "hero",
-        "illo-fixture-plate-a",
+        "illo-raster",
         "cta",
         "icon-arrow-right",
         "stats",
@@ -1988,8 +1988,8 @@
         "plan-cta",
         "gallery",
         "illo-fixture-plate-a",
+        "illo-raster",
         "illo-fixture-plate-b",
-        "illo-fixture-plate-c",
         "cta-band",
         "cta",
         "icon-arrow-right",

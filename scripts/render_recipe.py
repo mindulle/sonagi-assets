@@ -259,6 +259,11 @@ class Renderer:
         self.bp = "desktop"
         self.M = 56
         self.K = 1.0
+        # 래스터 임베드 방식: embed(기본, data URI) | link(파일 1벌 + 상대 경로)
+        self.raster_mode = "embed"
+        self.raster_dir = "assets"
+        self.out_dir = None
+        self.raster_written = {}
 
     def case(self, text):
         return text.upper() if self.upper else text
@@ -314,6 +319,25 @@ class Renderer:
                     return name
         return candidates[0]
 
+    def raster_href(self, raw, mime):
+        """래스터 페이로드의 참조를 만든다.
+
+        embed: data URI(파일 단독으로 열린다)
+        link: `assets/<내용해시>-<폭>.jpg` 상대 경로(같은 이미지는 1벌만 쓴다)
+        """
+        if self.raster_mode != "link":
+            return f"data:{mime};base64,{base64.b64encode(raw).decode()}"
+
+        digest = hashlib.sha256(raw).hexdigest()[:12]
+        ext = "png" if mime == "image/png" else "jpg"
+        name = f"{digest}.{ext}"
+        target = Path(self.out_dir or ".") / self.raster_dir / name
+        if name not in self.raster_written:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(raw)
+            self.raster_written[name] = len(raw)
+        return f"{self.raster_dir}/{name}"
+
     def raster_image(self, path, x, y, w, h, clip):
         ext = Path(path).suffix.lower()
         mime = "image/png" if ext == ".png" else "image/jpeg"
@@ -334,12 +358,13 @@ class Renderer:
                     mime = "image/jpeg"
             except Exception:
                 pass
-        data = base64.b64encode(raw).decode()
-        href = f"data:{mime};base64,{data}"
+        href = self.raster_href(raw, mime)
+        # href 하나만 쓴다. xlink:href를 함께 넣으면 같은 base64가 두 번 들어가
+        # SVG가 정확히 2배가 된다(ASSET-3). Chromium·Figma 모두 href를 읽는다.
         return (
             f'<g id="illo-raster" clip-path="url(#{clip})">'
             f'<image x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid slice" '
-            f'href="{href}" xlink:href="{href}"/></g>'
+            f'href="{href}"/></g>'
         )
 
     def illustration(self, spec, x, y, w, h):
@@ -1186,6 +1211,8 @@ def main():
     ap.add_argument("--embed-max-width", type=int, default=1200, help="래스터 임베드 최대 폭(0=원본)")
     ap.add_argument("--breakpoint", default="desktop", choices=("desktop", "tablet", "mobile"))
     ap.add_argument("--dark", action="store_true", help="팔레트를 다크로 변환(레시피의 dark:true 보다 우선)")
+    ap.add_argument("--raster-mode", default="embed", choices=("embed", "link"), help="래스터 임베드(embed) 또는 파일 1벌 참조(link)")
+    ap.add_argument("--raster-dir", default="assets", help="link 모드에서 이미지를 둘 하위 폴더")
     args = ap.parse_args()
 
     recipe = json.loads(Path(args.recipe).read_text())
@@ -1212,6 +1239,9 @@ def main():
     if dark:
         r.colors = to_dark(r.colors)
     r.embed_max_width = args.embed_max_width
+    r.raster_mode = args.raster_mode
+    r.raster_dir = args.raster_dir
+    r.out_dir = Path(args.out)
     r.bp = args.breakpoint
     r.M = 56 if args.breakpoint == "desktop" else (32 if args.breakpoint == "tablet" else 20)
     r.K = 1.0 if args.breakpoint == "desktop" else (0.88 if args.breakpoint == "tablet" else 0.72)
@@ -1280,6 +1310,8 @@ def main():
         "dark": dark,
         "canvas": {"width": W, "height": H},
         "embed_max_width": args.embed_max_width,
+        "raster_mode": r.raster_mode,
+        "raster_assets": dict(sorted(r.raster_written.items())),
         "output": svg_path.name,
         "sha256": hashlib.sha256(svg.encode()).hexdigest(),
         "layers": re.findall(r'<g id="([^"]+)"', svg),

@@ -136,6 +136,8 @@ def cmd_render(args) -> int:
                 bp,
                 "--embed-max-width",
                 args.embed_max_width,
+                "--raster-mode",
+                args.raster,
             ]
         )
         if code != 0:
@@ -219,6 +221,7 @@ def build_parser() -> argparse.ArgumentParser:
     render.add_argument("--catalog", default=DEFAULT_CATALOG)
     render.add_argument("--tokens", default=DEFAULT_TOKENS)
     render.add_argument("--embed-max-width", default="900")
+    render.add_argument("--raster", default="embed", choices=("embed", "link"), help="래스터 임베드(embed) 또는 파일 1벌 참조(link)")
     render.add_argument("--json", action="store_true")
     render.set_defaults(func=cmd_render)
 

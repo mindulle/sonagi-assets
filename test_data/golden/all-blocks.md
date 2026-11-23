@@ -23,7 +23,7 @@ body: 간격 회귀를 잡기 위한 고정 픽스처. 문장은 검수용이며
 cta: 기준선 보기
 ctaIcon: arrow-right
 illustration:
-- fixture-plate-a
+- fixture-plate-raster
 
 ## stats
 
@@ -113,8 +113,8 @@ cta: 확인
 title: 픽스처 도판
 
 - fixture-plate-a
+- fixture-plate-raster
 - fixture-plate-b
-- fixture-plate-c
 note: 자체 제작 · CC0
 
 ## cta

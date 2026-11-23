@@ -101,6 +101,24 @@ def run(cmd):
         raise SystemExit(f"command failed: {' '.join(cmd)}")
 
 
+def absolutize_refs(text, base_dir):
+    """상대 경로 래스터 참조를 절대 file URI로 바꾼다.
+
+    link 모드 SVG는 `assets/<hash>.jpg`를 상대 경로로 가리킨다. Chromium은
+    임시 HTML 폴더를 기준으로 상대 경로를 풀기 때문에 그대로 두면 이미지가 빠진다.
+    """
+    base = Path(base_dir).resolve()
+    pattern = re.compile(r'(xlink:href|href)="([^"]+)"')
+
+    def repl(m):
+        attr, ref = m.group(1), m.group(2)
+        if ref.startswith(("data:", "http://", "https://", "file:", "#")):
+            return m.group(0)
+        return f'{attr}="{(base / ref).as_uri()}"'
+
+    return pattern.sub(repl, text)
+
+
 def export_pdf(chrome, svgs, fonts_css, out_pdf):
     html = build_html(svgs, fonts_css)
     # snap chromium은 /tmp을 볼 수 없다 → 출력 폴더 옆에 임시 페이지를 만든다
@@ -213,7 +231,7 @@ def main():
     formats = {f.strip() for f in args.formats.split(",")}
 
     gate = [check_assets(f) for f in files]
-    svgs = [(f.read_text(), svg_size(f.read_text())) for f in files]
+    svgs = [(absolutize_refs(f.read_text(), src), svg_size(f.read_text())) for f in files]
 
     produced = []
     if "pdf" in formats:
@@ -226,7 +244,7 @@ def main():
             produced.append(pdf)
 
     for f in files:
-        text = f.read_text()
+        text = absolutize_refs(f.read_text(), src)
         w, h = svg_size(text)
         if "png" in formats or "webp" in formats:
             png = out / f"{f.stem}@{int(args.scale)}x.png"
@@ -240,6 +258,9 @@ def main():
         manifest = f.with_suffix(".manifest.json")
         if manifest.is_file():
             shutil.copy2(manifest, out / manifest.name)
+
+    if (src / "assets").is_dir():
+        shutil.copytree(src / "assets", out / "assets", dirs_exist_ok=True)
 
     summary = {
         "formats": sorted(formats),

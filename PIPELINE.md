@@ -82,7 +82,26 @@ python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
 
 레시피: `"illustration": ["open-vault", "float", "<etching 이름>"]` → 스타일에 맞는 후보를 선택.
 
-래스터(jpg/png)는 SVG에 base64로 임베드한다. 외부 참조가 없어 파일 단독으로 열린다.
+래스터(jpg/png)는 기본적으로 SVG에 base64로 임베드한다. 외부 참조가 없어 파일 단독으로
+열리고 Figma 재임포트도 그대로 된다. `<image>`의 `href` 하나만 쓴다 — `xlink:href`를 함께
+넣으면 같은 base64가 두 번 들어가 SVG가 정확히 2배가 된다(ASSET-3).
+
+납품 용량이 문제면 링크 모드를 쓴다. 이미지를 내용 해시 이름으로 **1벌만** 쓰고 SVG는
+상대 경로로 가리킨다.
+
+```bash
+render_recipe.py ... --raster-mode link      # out/assets/<sha12>.jpg + href="assets/..."
+press render content.md --raster link
+```
+
+| 모드 | SVG | 납품 zip | Figma 재임포트 |
+| --- | --- | --- | --- |
+| `embed`(기본) | 이미지 포함, 단독 열림 | 큼 | 그대로 됨 |
+| `link` | 경로만 | 이미지 1벌 | `svg/assets/`를 함께 열어야 함 |
+
+- export는 상대 경로를 절대 `file:` URI로 바꿔 PDF·PNG를 굽고, `dist/assets/`로 복사한다
+- bundle은 `svg/assets/`에 넣어 `svg/*.svg`의 상대 경로가 풀리게 한다
+- 같은 이미지를 여러 번·여러 브레이크포인트에서 써도 파일은 하나다
 
 | 임베드 폭     | SVG 크기(동판화 1장) | 용도                      |
 | ------------- | -------------------- | ------------------------- |

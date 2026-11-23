@@ -38,3 +38,14 @@ jobs:
                   diff -u /tmp/golden-a.json /tmp/golden-b.json
             - name: 블록 겹침 검수
               run: python3 scripts/check_gaps.py out/golden --recursive
+            - name: 래스터 링크 모드
+              run: |
+                  python3 scripts/render_recipe.py --recipe out/golden/recipe.json \
+                    --style styles/etching.json --catalog test_data/golden/catalog.json \
+                    --tokens tokens/semantic.json --out out/link-check --breakpoint desktop \
+                    --raster-mode link
+                  if grep -q "data:image" out/link-check/*.svg; then
+                    echo "link 모드 SVG에 data URI가 남아 있습니다"
+                    exit 1
+                  fi
+                  ls out/link-check/assets/*.jpg >/dev/null
