@@ -10,14 +10,6 @@ python3 scripts/golden_render.py --update    # 의도된 변경일 때 기준선
 python3 scripts/golden_render.py --styles editorial --breakpoints desktop
 ```
 
-간격 자체는 `scripts/check_gaps.py`가 본다. 렌더 결과의 블록 상·하단을 좌표에서
-되살려 겹침을 찾고, `--max-gap`으로 리듬 상한을 건다.
-
-```bash
-python3 scripts/check_gaps.py out/golden --recursive            # 겹침만
-python3 scripts/check_gaps.py out/sweep --recursive --max-gap 60
-```
-
 ## 1. 구성
 
 | 경로                                         | 역할                                                                           |
@@ -54,7 +46,29 @@ CI에도 그대로 넣을 수 있다(ASSET-5). 스타일 7종은 렌더 경로�
 높이 delta가 **블록 수 × 30px** 배수에 가까우면 30px 오프셋 수정이 반영된 것이다
 (12블록이면 최대 약 330px). 0px인데 `svg`만 바뀌면 색·좌표 미세 변경이다.
 
-## 3. 한계
+## 3. CI
+
+`.github/workflows/ci.yml`의 `determinism` 잡이 PR·main push마다 세 가지를 본다.
+
+1. `golden_render.py` — 커밋된 기준선과 현재 코드가 같은가
+2. `golden_render.py --update --baseline /tmp/...` 두 번 → JSON `diff` — 같은 입력 2회가
+   같은가(결정론). 기준선 파일은 건드리지 않는다
+3. `check_gaps.py out/golden --recursive` — 블록 겹침이 없는가
+
+렌더 경로는 PyYAML만 쓰므로 CI에 Pillow·Chromium이 필요 없다. 42렌더 약 3초.
+
+의도된 변경이면 로컬에서 `--update` 후 `baseline.json`을 같은 PR에 포함한다.
+기준선을 갱신하지 않으면 CI가 실패하고, 어떤 조합이 얼마나 달라졌는지 출력한다.
+
+간격 자체는 `scripts/check_gaps.py`가 본다. 렌더 결과의 블록 상·하단을 좌표에서
+되살려 겹침을 찾고, `--max-gap`으로 리듬 상한을 건다.
+
+```bash
+python3 scripts/check_gaps.py out/golden --recursive            # 겹침만
+python3 scripts/check_gaps.py out/sweep --recursive --max-gap 60
+```
+
+## 4. 한계
 
 - 픽스처 카탈로그라 실제 Lucide·Tabler 자산 렌더를 대신하지 않는다. 자산 자체의
   회귀는 devops 카탈로그로 따로 확인한다.

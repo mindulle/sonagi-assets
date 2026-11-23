@@ -1,19 +1,40 @@
 name: CI Checks
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Run pre-commit
-        uses: pre-commit/action@v3.0.1
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+            - name: Run pre-commit
+              uses: pre-commit/action@v3.0.1
+
+    determinism:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+            - name: Install render deps
+              # SVG 렌더 경로는 PyYAML만 쓴다(Pillow·Chromium은 export 전용)
+              run: python3 -m pip install --quiet pyyaml
+            - name: 골든 기준선과 비교
+              run: python3 scripts/golden_render.py
+            - name: 같은 입력 2회 → 해시 동일
+              run: |
+                  python3 scripts/golden_render.py --update --baseline /tmp/golden-a.json
+                  python3 scripts/golden_render.py --update --baseline /tmp/golden-b.json
+                  diff -u /tmp/golden-a.json /tmp/golden-b.json
+            - name: 블록 겹침 검수
+              run: python3 scripts/check_gaps.py out/golden --recursive
