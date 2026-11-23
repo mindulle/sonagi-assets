@@ -58,31 +58,3 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  update-k8s:
-    needs: [release, docker]
-    if: needs.release.outputs.new_release_published == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Update K8s manifests with new version
-        env:
-          NEW_VERSION: ${{ needs.release.outputs.new_release_version }}
-        run: |
-          sed -i "s|image: ghcr.io/mindulle/sonagi-assets:.*|image: ghcr.io/mindulle/sonagi-assets:${NEW_VERSION}|g" k8s/deployment.yaml
-          sed -i "s|image: ghcr.io/mindulle/sonagi-assets:.*|image: ghcr.io/mindulle/sonagi-assets:${NEW_VERSION}|g" k8s/cronjob.yaml
-
-      - name: Create Pull Request for K8s deployment
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update K8s manifests to deploy v${{ needs.release.outputs.new_release_version }}"
-          title: "🚀 Deploy v${{ needs.release.outputs.new_release_version }} to Kubernetes"
-          body: |
-            A new Docker image for **v${{ needs.release.outputs.new_release_version }}** has been built and pushed to the registry.
-
-            Merging this pull request will update the Kubernetes manifests (`deployment.yaml` and `cronjob.yaml`) so that ArgoCD can automatically sync and deploy the new version.
-          branch: "deploy/v${{ needs.release.outputs.new_release_version }}"
-          labels: "automated-pr, deployment"
