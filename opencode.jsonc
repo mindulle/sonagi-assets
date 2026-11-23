@@ -1,0 +1,22 @@
+{
+    // 이 리포는 Figma 왕복 검증(ASSET-7·9·10·11)을 하므로 figma-console을 켠다.
+    // 전역 설정은 enabled:false — 포트 9223~9232(10칸)를 쓰기 때문.
+    // 세션마다 브리지 프로세스가 하나 뜨므로, Figma 작업이 없는 리포에서는 켜지 않는다.
+    "$schema": "https://opencode.ai/config.json",
+    "mcp": {
+        "figma-console": {
+            "type": "local",
+            "command": [
+                "bash",
+                "-c",
+                "FIGMA_WS_HOST=0.0.0.0 FIGMA_ACCESS_TOKEN={file:~/.secrets/figma-pat} ENABLE_MCP_APPS=true node /home/ubuntu/MCPs/figma-console-mcp/node_modules/figma-console-mcp/dist/local.js"
+            ],
+            "env": {
+                "FIGMA_ACCESS_TOKEN": "{file:~/.secrets/figma-pat}",
+                "FIGMA_WS_HOST": "0.0.0.0",
+                "ENABLE_MCP_APPS": "true"
+            },
+            "enabled": true
+        }
+    }
+}
