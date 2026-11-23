@@ -1,40 +1,31 @@
 {
-  "brand": "SONAGI",
-  "version": "v1.0",
-  "note": "픽스처 — 제출용이 아닙니다.",
-  "symbol": "test_data/identity/symbol.svg",
-  "wordmark": "SONAGI",
-  "type": {
-    "family": "Archivo",
-    "weight": 700,
-    "tracking": 0.14
-  },
-  "colors": {
-    "primary": "#1f4536",
-    "ink": "#161616",
-    "paper": "#fbf9f5",
-    "accent": "#b4551f"
-  },
-  "backgrounds": {
-    "light": "#fbf9f5",
-    "dark": "#12100e"
-  },
-  "lockups": [
-    "horizontal",
-    "stacked",
-    "symbol"
-  ],
-  "variants": [
-    "color",
-    "mono",
-    "inverse",
-    "one-color"
-  ],
-  "clearspace": 0.5,
-  "minimum": {
-    "print_mm": 15,
-    "screen_px": 24
-  },
-  "tagline": "비 오는 날의 종이와 인쇄",
-  "date": "2026-11"
+    "brand": "SONAGI",
+    "version": "v1.0",
+    "note": "픽스처 — 제출용이 아닙니다.",
+    "symbol": "test_data/identity/symbol.svg",
+    "wordmark": "SONAGI",
+    "type": {
+        "family": "Archivo",
+        "weight": 700,
+        "tracking": 0.14
+    },
+    "colors": {
+        "primary": "#1f4536",
+        "ink": "#161616",
+        "paper": "#fbf9f5",
+        "accent": "#b4551f"
+    },
+    "backgrounds": {
+        "light": "#fbf9f5",
+        "dark": "#12100e"
+    },
+    "lockups": ["horizontal", "stacked", "symbol"],
+    "variants": ["color", "mono", "inverse", "one-color"],
+    "clearspace": 0.5,
+    "minimum": {
+        "print_mm": 15,
+        "screen_px": 24
+    },
+    "tagline": "비 오는 날의 종이와 인쇄",
+    "date": "2026-11"
 }

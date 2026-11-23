@@ -27,7 +27,7 @@
     "editorial|desktop|light": {
       "svg_sha256": "cef3075fe445589b38065447049d9721dfa1f91b34f8dd3081c990c58be6bcd2",
       "svg_bytes": 162619,
-      "manifest_sha256": "b68784e9a31c446632cf9948d0a5c09c53938cacb09575b0d2aed6c9d7ce2487",
+      "manifest_sha256": "d08c8d2dba5b766b7625ea9fa05b1acdd6ad158a7eeb2c8c906ddc766dfe73eb",
       "canvas": {
         "width": 1440,
         "height": 3145
@@ -73,7 +73,7 @@
     "editorial|desktop|dark": {
       "svg_sha256": "6e2ed6d3cbeb4bd3ca4089f866b9de00a16675023dba90d1d0c265aacae8cb0c",
       "svg_bytes": 162619,
-      "manifest_sha256": "7f4078fee0373e1040f6dbf16caabaa05b538814e1e0cd9bf981b89d52082a83",
+      "manifest_sha256": "aed5d53e32f6aa7414e8c5efd102e92c13c6b3f8925d449975741c139a780bd7",
       "canvas": {
         "width": 1440,
         "height": 3145
@@ -119,7 +119,7 @@
     "editorial|tablet|light": {
       "svg_sha256": "e968306271aec9407d99ec2df98344f2dc3e117581ed8645283a6bb755518517",
       "svg_bytes": 163435,
-      "manifest_sha256": "2d4d5d00fd41520d0fe845ccca1dbc1b3933441c1fad4a6c3474c2fd700e7ad2",
+      "manifest_sha256": "e4a62482bab2e922550d36ba28ad232b8c0709d3b6ece27b6fe727cb73badc31",
       "canvas": {
         "width": 768,
         "height": 3273
@@ -165,7 +165,7 @@
     "editorial|tablet|dark": {
       "svg_sha256": "7901b5f4d7e827afc22381e238da5a7fb047e778e877cafe279e43b630165576",
       "svg_bytes": 163435,
-      "manifest_sha256": "b830f6b7d39345c46687c8ae17bd11b4e0a9658313f6a0ab713a9ecd9372abe2",
+      "manifest_sha256": "d80a14936b01e249ebc7761f54bd40d28f5ecb794f8a50cf83d4e36dba21c04b",
       "canvas": {
         "width": 768,
         "height": 3273
@@ -211,7 +211,7 @@
     "editorial|mobile|light": {
       "svg_sha256": "08dfa8dd17e5eac1e37a645cdfe4f6875835304795ca17871341aac748d605f9",
       "svg_bytes": 161158,
-      "manifest_sha256": "11efcdadf2f6d9a4de057e7055015dfbcf3dd1892278e07bae8ccbb16099152d",
+      "manifest_sha256": "5575200a66572bec906356694e0db1c022df75cb7ba706a51780a909541a3abd",
       "canvas": {
         "width": 390,
         "height": 3718
@@ -257,7 +257,7 @@
     "editorial|mobile|dark": {
       "svg_sha256": "680cdfcaa4dc3fabf521a4011bec0bbcbeb098eb5f2c9c6c9ef35f4ec35bd9db",
       "svg_bytes": 161158,
-      "manifest_sha256": "a2d21ce48fba31e5970763dbbde52d470d0c5414e6f0bdc6fb302f094235f757",
+      "manifest_sha256": "8a8a637bfb992153b38cf574a5acb6d2af97286adf52454d68f990a1fde0b11f",
       "canvas": {
         "width": 390,
         "height": 3718
@@ -303,7 +303,7 @@
     "brutalist|desktop|light": {
       "svg_sha256": "1a5d9c7a257bc752fa9bc99c4735bf42119ff64d4378260585bd8f95228ce090",
       "svg_bytes": 16927,
-      "manifest_sha256": "4b2d23a77d48731077f1551d86ea17381aeac20c14a9effa7a371d2843fe4955",
+      "manifest_sha256": "8d66ab5849265cb67d19b7ac4437e2ec25794d0aa184d7a626ca80046b2cfbac",
       "canvas": {
         "width": 1440,
         "height": 3160
@@ -347,7 +347,7 @@
     "brutalist|desktop|dark": {
       "svg_sha256": "fb576e7a48629c8b049b9bcbb555a858416050e61072c2f0dabd344d33a98bed",
       "svg_bytes": 16927,
-      "manifest_sha256": "7bb4a1086e922fabfa8162e44cbfb2fe08b823e2b44ff98869c7fd7dc942785a",
+      "manifest_sha256": "c0048f55306775e5e5a655f2b83c55250a6cb01c5b0148815adddaf4a85c1266",
       "canvas": {
         "width": 1440,
         "height": 3160
@@ -391,7 +391,7 @@
     "brutalist|tablet|light": {
       "svg_sha256": "bedd5da78bf323d25b4f85d3ea48d23b3e2fadb52344053980a13c21438bcb0f",
       "svg_bytes": 17572,
-      "manifest_sha256": "b6110d632a337bbe3665282767705e91aa57df4b07b60b4eef56ee5486a2cd62",
+      "manifest_sha256": "bcfa8aa1f4f1de7220287ea347b6ac49f96051b96773ba4b972ab806d87c3ebc",
       "canvas": {
         "width": 768,
         "height": 3304
@@ -437,7 +437,7 @@
     "brutalist|tablet|dark": {
       "svg_sha256": "b70266228ecddf6bf3dfce2e14104be6637a202fc48eb7b1b9f08d92119f43dc",
       "svg_bytes": 17572,
-      "manifest_sha256": "f04bc8d591f591e6f362a9e42167b6fc4eec6293d1e021a88a88eb1ebc7d2347",
+      "manifest_sha256": "63a7ccb6c3c798441607b24c45d20284ab5c9c12beae8dbbe8316c3114743437",
       "canvas": {
         "width": 768,
         "height": 3304
@@ -483,7 +483,7 @@
     "brutalist|mobile|light": {
       "svg_sha256": "d9da09d76f24cfe8489278ef8d1a49648f55b256ebef1ad18f5a50709c09e605",
       "svg_bytes": 15466,
-      "manifest_sha256": "64f951e3ee1ab204fd054aa71f9fe47ebf01a18e86549a22eefc05e5a33128f1",
+      "manifest_sha256": "465b9dc13cf35012f393fcdade56c9011ff3ed294dea3f54326356977909ef83",
       "canvas": {
         "width": 390,
         "height": 3735
@@ -529,7 +529,7 @@
     "brutalist|mobile|dark": {
       "svg_sha256": "a3f515ec1763f34cf682503627b0d8e4a745de37db8ed86704ba57a475dd25aa",
       "svg_bytes": 15466,
-      "manifest_sha256": "6bd8f3b57809fede7a71af4c61c691b3e895d1a2051720d8e18ea55037421780",
+      "manifest_sha256": "2a662e6045a607e71b577cfc1a038edf7e3a2a23e8902bb8eef84d5a9e1a8679",
       "canvas": {
         "width": 390,
         "height": 3735
@@ -575,7 +575,7 @@
     "etching|desktop|light": {
       "svg_sha256": "b12088bcbe1aa5e8ec907da8d2fc9166138031953ce09bbee4accb23e1970878",
       "svg_bytes": 164368,
-      "manifest_sha256": "408ca8de77f7210db9c996ebd580a4d16d2fd48463c1125ecb7024014792b210",
+      "manifest_sha256": "def096d6daeae864b57f00510c50f48272f99a6f6a76d57f13b1b59998012d29",
       "canvas": {
         "width": 1440,
         "height": 3306
@@ -621,7 +621,7 @@
     "etching|desktop|dark": {
       "svg_sha256": "75264538d7068e85180259905a79c0b972c0e780659e653b63d6d0e84f9007c3",
       "svg_bytes": 164368,
-      "manifest_sha256": "0f79fb94c7361e13543e155a08f52110574135ee486f2b15b562723832cf21a7",
+      "manifest_sha256": "e9cc7695b8e90e0e153467639e922fab13863f47e48d85a46082c6265327bfdd",
       "canvas": {
         "width": 1440,
         "height": 3306
@@ -667,7 +667,7 @@
     "etching|tablet|light": {
       "svg_sha256": "a901e43410e7ad3291cc3e08296f5efe6dc1de275f2e7c0239837696455befea",
       "svg_bytes": 164104,
-      "manifest_sha256": "f48c161fb05d00bc79eba4fb12a9d3f78043d9f6a03011e9f8738b7c8022ffd1",
+      "manifest_sha256": "cdf615b974b4f25510548fe8321da780cb6038fb7f2a5807e574db5a0f563ea1",
       "canvas": {
         "width": 768,
         "height": 3390
@@ -713,7 +713,7 @@
     "etching|tablet|dark": {
       "svg_sha256": "845cd402b1f993160be4926de9aacd74bdfd29bf4c5ad9374d21c9c9905a087c",
       "svg_bytes": 164104,
-      "manifest_sha256": "0f537439f4115ca975c26e086ee933d1c19bc9f510f74febc3fbffded2f160fe",
+      "manifest_sha256": "f453d2da6a96e2372ba77141aaa8edde1d94d7136c81bbf90b8f6fbdd13e343c",
       "canvas": {
         "width": 768,
         "height": 3390
@@ -759,7 +759,7 @@
     "etching|mobile|light": {
       "svg_sha256": "74d009184a7a02681ff9fecf29cb8305adc33842e3d6f5c5d91a3ad0ce95bae1",
       "svg_bytes": 161788,
-      "manifest_sha256": "ef9d80c550bd15bfe5ac61265b1babfeac71c4e5714bfa10183d7fc2cc7b4041",
+      "manifest_sha256": "913d3ede8379c245f16415290bfbd160c570dc5b594d10efbdb3e166fd88877a",
       "canvas": {
         "width": 390,
         "height": 3725
@@ -805,7 +805,7 @@
     "etching|mobile|dark": {
       "svg_sha256": "d6ab723941caaf1ed8a2a0165e7fa3869069ebc18126717f798bac48437970bf",
       "svg_bytes": 161788,
-      "manifest_sha256": "bb044413f7488cbef894ff57dcf5e7fd44dbf7e4997e7c39ac25f819a2c08737",
+      "manifest_sha256": "a1e072503e2a0805c1a6d0ea89099bdf3bc01fee1da13e8a82a08cb38c485d1f",
       "canvas": {
         "width": 390,
         "height": 3725
@@ -851,7 +851,7 @@
     "poster|desktop|light": {
       "svg_sha256": "ab9a0a0ca6df52a46423ee0be88501154e24d855ba564465336d5f427797c442",
       "svg_bytes": 162895,
-      "manifest_sha256": "9f7f03c1a145a7e57be9589c9ff571ac1582d49db88f6a7531c1e299d88e00f7",
+      "manifest_sha256": "a02e71bec96714f1ff93fa5d89908429e96e734e1205525ff1e09f429bd2ce5a",
       "canvas": {
         "width": 1440,
         "height": 3347
@@ -897,7 +897,7 @@
     "poster|desktop|dark": {
       "svg_sha256": "3b9005d751c5b6469e8914502b8ee53a29b8ae2991b940ac19de1d9c245475d6",
       "svg_bytes": 162895,
-      "manifest_sha256": "7d4769fb6815ca8ab14151477484397ab8d207d64c48dbb57a7e4bd05bbf8223",
+      "manifest_sha256": "b646e930dce73137d89f8bc6db31551c27660c71b6ea6b5db195bcef08e6dfba",
       "canvas": {
         "width": 1440,
         "height": 3347
@@ -943,7 +943,7 @@
     "poster|tablet|light": {
       "svg_sha256": "3409685c676da16165fe4f60fe8fc077848d24635a21eaae9baf5a3aee5598b0",
       "svg_bytes": 163245,
-      "manifest_sha256": "047537e016c38b57e71722d609fb25a2ba15b0ef7d569ba079bcd644c06ef326",
+      "manifest_sha256": "7bfce842d6e6415aaf1a098796e09ac323660d0d358cde26adca2fe87fe4afa4",
       "canvas": {
         "width": 768,
         "height": 3298
@@ -989,7 +989,7 @@
     "poster|tablet|dark": {
       "svg_sha256": "547da9d83c211141f54ae9619f60e82f95a84a640a87550e88b20009eb1a53a3",
       "svg_bytes": 163245,
-      "manifest_sha256": "222ca1c59ca1ec004ad8a2483f8967012f931cdca94afca090f2ddd4aa68ab33",
+      "manifest_sha256": "4ba58c20ed1dfaa984a636eff30d3a80e3e55fc4fdefe0dde9489582828aa01b",
       "canvas": {
         "width": 768,
         "height": 3298
@@ -1035,7 +1035,7 @@
     "poster|mobile|light": {
       "svg_sha256": "07d59f2f5ff7f51bdbe16c16df9046978a8909d422aaa4943a0b26a6a3f130ec",
       "svg_bytes": 162055,
-      "manifest_sha256": "79a69cff098a7e3a153568918684c942b474bf7004a9416b148e6d36055c192f",
+      "manifest_sha256": "74299c19af51e0eadf284dd122ebcc58d33676dd18cfe603848777ece212d5f3",
       "canvas": {
         "width": 390,
         "height": 3732
@@ -1081,7 +1081,7 @@
     "poster|mobile|dark": {
       "svg_sha256": "f96647355491f86008c3c262cbc1b00a59785b14c285ad24a56b326efcd9de59",
       "svg_bytes": 162055,
-      "manifest_sha256": "2d8597721ad9346deac7c6075d53cd2b1abcf76d1b02d26f24acd02a2db991b1",
+      "manifest_sha256": "f1fcfbc4a94e329223925e4966f6854f8b0417759e111c15a92b470e17d570c9",
       "canvas": {
         "width": 390,
         "height": 3732
@@ -1127,7 +1127,7 @@
     "swiss|desktop|light": {
       "svg_sha256": "cf13ee3e3267934c5317a449549a3e7725f4fb765aac23ae8680b20cac633aa5",
       "svg_bytes": 163077,
-      "manifest_sha256": "a02e49cfe25fc1e174e1917540705a17f0ff0442467ac8be3fe04093be4a8fb7",
+      "manifest_sha256": "1b35a0080ed3cab297d988c928fcd98828d70b63c8fd4b1895a4b5d66f490ba3",
       "canvas": {
         "width": 1440,
         "height": 3079
@@ -1170,7 +1170,7 @@
     "swiss|desktop|dark": {
       "svg_sha256": "7296649bbb1455c4f8bbdb46319d627755af60695e87520c0bb76b56fc07fd93",
       "svg_bytes": 163077,
-      "manifest_sha256": "f4103f1c88cce6c28b5279316872c7d826193dec708d48b257396aeb7c81aac8",
+      "manifest_sha256": "ca539ee4cf3ba61566eaad637a47805fc3cc4586b4ab1325e5e3595c669f1741",
       "canvas": {
         "width": 1440,
         "height": 3079
@@ -1213,7 +1213,7 @@
     "swiss|tablet|light": {
       "svg_sha256": "27f55ea3f074f8db40fddd43e4c980beb2dae1a76910a2c28b01948b2b88bc53",
       "svg_bytes": 163256,
-      "manifest_sha256": "26217372eb9c165e8040f4a3ae490c97b781be42ac73fe3b9354562f5251c2c0",
+      "manifest_sha256": "ff2ccbe4c0be0edebc1b296f95cf4739b9241c3df722bb1261538b15650301c0",
       "canvas": {
         "width": 768,
         "height": 3203
@@ -1256,7 +1256,7 @@
     "swiss|tablet|dark": {
       "svg_sha256": "ab967cc301b5b339fb4ced03053a074aaf82f98c20992bf069890e152570f992",
       "svg_bytes": 163256,
-      "manifest_sha256": "66c8fd86176ea44ef19248aa8db3140dd0f3006d1a237545cd39b9830329a8d5",
+      "manifest_sha256": "6af9cb9eaabe0215884c38023f0ebdeabb35e05307a9db2ef1dfa50e116ecf36",
       "canvas": {
         "width": 768,
         "height": 3203
@@ -1299,7 +1299,7 @@
     "swiss|mobile|light": {
       "svg_sha256": "88b7e4f3da5605d4eaa3d54abfd47b758633318bf28e80be108bf242b70cb5b1",
       "svg_bytes": 161993,
-      "manifest_sha256": "22c3de04748e466b036aa044029d50e458bc9ac3bcae815a30471053a0f455f0",
+      "manifest_sha256": "3901634ab5dd8c703d277399112226ca6ba2d67eb32b8e9805aca8a5928af425",
       "canvas": {
         "width": 390,
         "height": 3711
@@ -1345,7 +1345,7 @@
     "swiss|mobile|dark": {
       "svg_sha256": "641d30f67dd8d284f57271eb874353271356626c3b0b1e949fa0e7aeb914aaf6",
       "svg_bytes": 161993,
-      "manifest_sha256": "40e54fad914d1bcca9c6552016e8c37b642d71856759412e1036b3e2ddcf5231",
+      "manifest_sha256": "3ee962f28c059f0f1f4e360fda3e574fbb4b5bf19dc8d7c5ae89a0a605b66b20",
       "canvas": {
         "width": 390,
         "height": 3711
@@ -1391,7 +1391,7 @@
     "art-nouveau|desktop|light": {
       "svg_sha256": "a4abf85817c6aa19d3d6a3d64c4d42991bd24da81087cc9b3690b0aec9eeba16",
       "svg_bytes": 98301,
-      "manifest_sha256": "b14c234111b1b530d5c96ce3381a350af9827ea83990088cca9cfd662700a671",
+      "manifest_sha256": "cbb3b6742781d5134e759427392e5a15784dc3a3b20870a07c26c7a0c08a0024",
       "canvas": {
         "width": 1440,
         "height": 3951
@@ -1445,7 +1445,7 @@
     "art-nouveau|desktop|dark": {
       "svg_sha256": "400b66b652d0a96326f1ae3d20f3180cbca7942f7a8323898e8b487ee3dc757b",
       "svg_bytes": 98301,
-      "manifest_sha256": "33b0e02d5196b62f19cc353e4c535eac34dd33271592ce2cf7023926ab753cf3",
+      "manifest_sha256": "ce11d9dc6820c0f5ada658fa852bb1501d2a729f7c24b186b2e214fb99ce522f",
       "canvas": {
         "width": 1440,
         "height": 3951
@@ -1499,7 +1499,7 @@
     "art-nouveau|tablet|light": {
       "svg_sha256": "bd7491d4d629d3c819fe97c8e5a5484ff34b19a270cff021c67fe0333b86da95",
       "svg_bytes": 173638,
-      "manifest_sha256": "18c60935ad5568c0f55c5e95d20f03782527412b551078665892701814577737",
+      "manifest_sha256": "1f2ea73eec1cdd9a3aa78c5bf7eeed2d031ce3cb0909fec874a7e3ac5d3fbec5",
       "canvas": {
         "width": 768,
         "height": 4083
@@ -1555,7 +1555,7 @@
     "art-nouveau|tablet|dark": {
       "svg_sha256": "f5441b1526b112a584ca1e58f31376bb5e0da7a16e15372da900a7daa6e4d352",
       "svg_bytes": 173638,
-      "manifest_sha256": "5d182a4a5f05065983e18b0ca62f3da4822aafa32ce67db6d0c0ce17d2008596",
+      "manifest_sha256": "514661b3be3c94242eb8b28287f05b7b8b3706bc7a139329caa269d5ed54910f",
       "canvas": {
         "width": 768,
         "height": 4083
@@ -1611,7 +1611,7 @@
     "art-nouveau|mobile|light": {
       "svg_sha256": "54aa4d64b4d2f7e1290618a5a00addb7e51d37f98c4ced246422384ec8f83086",
       "svg_bytes": 170065,
-      "manifest_sha256": "f6362607437f4b933c661a69f5a9d9f4a37ced9b3c624e3fb5286b8d77c0b888",
+      "manifest_sha256": "f00efc7730b8306938858e65a8401509034f9fa6a42c657e556a173c3c49835e",
       "canvas": {
         "width": 390,
         "height": 4528
@@ -1667,7 +1667,7 @@
     "art-nouveau|mobile|dark": {
       "svg_sha256": "4404f9a2445d74203e997f8d70986555d20afbfd601e3ac4333d4db7ef215f39",
       "svg_bytes": 170065,
-      "manifest_sha256": "2d3d58911d3266a77eac7754729b29dceac4ae16067725d1fec52c039e59b9bf",
+      "manifest_sha256": "9ca69f61916470916d322736aef48df8e7ef33bbdea6e1030f1f62234654cd04",
       "canvas": {
         "width": 390,
         "height": 4528
@@ -1723,7 +1723,7 @@
     "minimal|desktop|light": {
       "svg_sha256": "dd9640ee9e853d7d754693416a3a9a7194a96950284117c4c6353024a446bfba",
       "svg_bytes": 162846,
-      "manifest_sha256": "76db86293af6f6f2ced63fbc4092dde3f3caaa538188b3adcce5261ed8f65d21",
+      "manifest_sha256": "2a3b7ba875e4ceeeb624503fc601cbf791c41b6e922ec2663c386707de86913e",
       "canvas": {
         "width": 1440,
         "height": 3129
@@ -1769,7 +1769,7 @@
     "minimal|desktop|dark": {
       "svg_sha256": "d977cceb088253d368204f728b809dd64d050fd94b0a1774c23b096256ce1fb9",
       "svg_bytes": 162846,
-      "manifest_sha256": "d88c06ce5a96707b1fb02c3e5b2ad35b367b2bd8620f5d31371275924a37255b",
+      "manifest_sha256": "cecb7680fbfc6c97b537303be2684b699921b4197477c7f4f523e9d61a2cf63b",
       "canvas": {
         "width": 1440,
         "height": 3129
@@ -1815,7 +1815,7 @@
     "minimal|tablet|light": {
       "svg_sha256": "9c95292cac3eb83daa5ff7f80bde90871774d64c09f34570eb18899db5b62ca9",
       "svg_bytes": 163447,
-      "manifest_sha256": "050080863ecea18d8431d8c37f835f45d73f676f84cf663938b4f226a94f0023",
+      "manifest_sha256": "d017f0fe06a7e638fc09645abdb4b6fd10173fa78a5045b2ec438d174d190257",
       "canvas": {
         "width": 768,
         "height": 3248
@@ -1861,7 +1861,7 @@
     "minimal|tablet|dark": {
       "svg_sha256": "97d444a510a47d648aa8d6e71b25278972f6e5b33eab42d19d15a0d159118aaf",
       "svg_bytes": 163447,
-      "manifest_sha256": "56ac18e0bb6f51c338301e75367579ff7b3795666d5944524147f10ea992f1b3",
+      "manifest_sha256": "c68f07635a265f421339a7fa8c4a1969e81bcc2c88686830f75377be74eff609",
       "canvas": {
         "width": 768,
         "height": 3248
@@ -1907,7 +1907,7 @@
     "minimal|mobile|light": {
       "svg_sha256": "b539e406b510c45ca7bfa1f5d26a490460275367e2d96db48ff418612aaaf072",
       "svg_bytes": 161351,
-      "manifest_sha256": "744bcfd548c7c1ef748d1ff21a68b4b925785763cb908aa000531c3f73246406",
+      "manifest_sha256": "91e9fe1e9227f90b67a947a0d3cec946fbf3964daf763492d9e7c93288cdf270",
       "canvas": {
         "width": 390,
         "height": 3673
@@ -1953,7 +1953,7 @@
     "minimal|mobile|dark": {
       "svg_sha256": "26e14c85a48d41877aa5b18664c6e3fe5d153fadc38b9706557f2157d0f5d138",
       "svg_bytes": 161351,
-      "manifest_sha256": "10c619aaeafd8bdd7ab25793c4e4fb381acbd14e51f708552a8cfd0c4afb92f4",
+      "manifest_sha256": "9a19a69967e5df737bf8ea70758585324f96e7aec253f9005d43183af6e6b385",
       "canvas": {
         "width": 390,
         "height": 3673

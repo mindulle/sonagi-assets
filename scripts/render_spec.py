@@ -157,11 +157,9 @@ def minimum_svg(spec, body, view):
     ]
     for label, value, size, cy in rows:
         parts += [
-            f'<line x1="{MARGIN}" y1="{cy + size + 40}" x2="520" y2="{cy + size + 40}" '
-            f'stroke="{ink}" stroke-opacity="0.16"/>',
+            f'<line x1="{MARGIN}" y1="{cy + size + 40}" x2="520" y2="{cy + size + 40}" stroke="{ink}" stroke-opacity="0.16"/>',
             f'<text x="{MARGIN}" y="{cy - 26}" font-family="{MONO}" font-size="12" fill="{accent}">{label.upper()}</text>',
-            f'<text x="{MARGIN + 72}" y="{cy - 26}" font-family="{MONO}" font-size="12" fill="{ink}" '
-            f'fill-opacity="0.7">{value} — 실물 크기</text>',
+            f'<text x="{MARGIN + 72}" y="{cy - 26}" font-family="{MONO}" font-size="12" fill="{ink}" fill-opacity="0.7">{value} — 실물 크기</text>',
             symbol_svg(body, view, MARGIN, cy, size, spec["colors"]["primary"]),
         ]
         parts += dim_h(MARGIN, MARGIN + size, cy + size + 14, value, ink)
@@ -192,11 +190,7 @@ def minimum_svg(spec, body, view):
         f'<text x="{zx}" y="{zy + screen_px * zoom + 76}" font-family="{MONO}" font-size="11" fill="{ink}" '
         f'fill-opacity="0.45">가는 선은 최소 0.25pt 이상</text>',
     ]
-    return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
-        + "".join(parts)
-        + "</svg>"
-    )
+    return f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">' + "".join(parts) + "</svg>"
 
 
 def build(spec):
