@@ -224,6 +224,12 @@ def cmd_print(args) -> int:
         cmd += ["--icc", args.icc]
     if args.check:
         cmd.append("--check")
+    if args.approve:
+        cmd.append("--approve")
+    if args.verify:
+        cmd.append("--verify")
+    if args.allow_issues:
+        cmd.append("--allow-issues")
     if args.json:
         cmd.append("--json")
     return run(cmd)
@@ -264,6 +270,12 @@ def cmd_spec(args) -> int:
     cmd = [sys.executable, SCRIPTS / "render_spec.py", "--spec", args.spec, "--out", args.out]
     if args.check:
         cmd.append("--check")
+    if args.approve:
+        cmd.append("--approve")
+    if args.verify:
+        cmd.append("--verify")
+    if args.allow_issues:
+        cmd.append("--allow-issues")
     if args.json:
         cmd.append("--json")
     return run(cmd)
@@ -282,6 +294,12 @@ def cmd_lockup(args) -> int:
         cmd += ["--name", args.name]
     if args.check:
         cmd.append("--check")
+    if args.approve:
+        cmd.append("--approve")
+    if args.verify:
+        cmd.append("--verify")
+    if args.allow_issues:
+        cmd.append("--allow-issues")
     if args.allow_low_contrast:
         cmd.append("--allow-low-contrast")
     if args.json:
@@ -364,7 +382,10 @@ def build_parser() -> argparse.ArgumentParser:
     printing.add_argument("--bleed", type=float, default=3.0)
     printing.add_argument("--slug", type=float, default=5.0)
     printing.add_argument("--icc", default=None)
-    printing.add_argument("--check", action="store_true")
+    printing.add_argument("--check", action="store_true", help="P001~P007 사전 검사")
+    printing.add_argument("--approve", action="store_true", help="APPROVED.md에 해시 기록")
+    printing.add_argument("--verify", action="store_true", help="APPROVED.md와 대조")
+    printing.add_argument("--allow-issues", action="store_true")
     printing.add_argument("--json", action="store_true")
     printing.set_defaults(func=cmd_print)
 

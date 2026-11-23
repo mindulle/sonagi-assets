@@ -588,6 +588,28 @@ press print --src out/brandsheet/01-cover.svg --check     # 조판만 검사
 - 래스터는 `--embed-max-width`로 줄인 뒤 들어간다. 인쇄 전 300dpi 이상인지 확인한다
   (`raster_dpi_min` < 300이면 실패로 표시)
 
+### 패키지 audit (P001–P007)
+
+```bash
+press print --src out/pkg --trim 90x60 --check        # 사전 검사(chromium·gs 불필요)
+press print --src out/pkg --trim 90x60 --approve      # 산출 PDF 해시를 APPROVED.md에 기록
+press print --src out/pkg --trim 90x60 --verify       # 현재 PDF가 승인본과 같은가
+```
+
+| 코드 | 검사 | 방식 |
+| --- | --- | --- |
+| P001 | 도련 3mm | `--bleed` 값 |
+| P002 | 안전 여백 3mm | 텍스트·이미지 bbox가 재단선에서 3mm 안쪽인지 |
+| P003 | CMYK | PDF 내용 스트림의 `k/K` vs `rg/RG` 연산자 |
+| P004 | 바코드 조용영역 3.6mm | `barcode-quiet` rect와 `barcode-bars` bbox 거리 |
+| P005 | 최소 폰트 6pt | SVG `font-size` 최솟값 × 0.75 |
+| P006 | 래스터 300dpi | 임베드 이미지 픽셀 ÷ 배치 크기 |
+| P007 | 레이어 분리 | `dieline`·`fold` 그룹이 따로 있는지 |
+
+- 해당 요소가 없으면 **해당 없음**으로 통과(P004·P007)
+- 실패 시 exit 1. `--allow-issues`로 경고만
+- `--verify`는 **재렌더 없이** 기존 PDF만 해시 비교한다. 승인 후 파일이 바뀌면 실패
+
 **한계**: PDF/X·별색(Pantone) 미지원. ICC를 지정하지 않으면 Ghostscript 기본 CMYK 변환이다.
 색 교정이 필요하면 `--icc`로 프로파일을 넣고, 별색은 인쇄소와 직접 맞춘다.
 

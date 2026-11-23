@@ -63,6 +63,12 @@ jobs:
                     n=$(basename "$f")
                     test "$(sha256sum "$f" | cut -d' ' -f1)" = "$(sha256sum "out/bs-2/$n" | cut -d' ' -f1)"
                   done
+            - name: 패키지 라벨 audit
+              run: |
+                  python3 scripts/render_label.py --spec test_data/package/label.json \
+                    --out out/pkg --name sonagi-tea-label
+                  python3 scripts/export_print.py --src out/pkg/sonagi-tea-label.svg \
+                    --trim 90x60 --check
             - name: 인쇄 조판 검사
               run: python3 scripts/export_print.py --src out/bs --check
             - name: 규격 도해

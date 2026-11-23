@@ -38,8 +38,9 @@ def find_chrome():
 
 
 def svg_size(text):
-    w = int(re.search(r'width="(\d+)"', text).group(1))
-    h = int(re.search(r'height="(\d+)"', text).group(1))
+    """SVG 캔버스 크기(px). 소수 폭을 쓰는 인쇄물(라벨 등)도 받는다."""
+    w = round(float(re.search(r'\bwidth="([\d.]+)"', text).group(1)))
+    h = round(float(re.search(r'\bheight="([\d.]+)"', text).group(1)))
     return w, h
 
 
