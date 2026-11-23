@@ -157,7 +157,7 @@ dist/
 | eyebrow 대비      | 12px accent eyebrow가 3.03:1 (AA 4.5 미달). 판정 골든에 WARN으로 고정          | 접근성                                    |
 | 모바일 제목 넘침  | brutalist·etching 390px에서 hero 제목이 줄바꿈 없이 +18~51px 넘침              | 모바일 가독성                             |
 | 로고 대비         | poster·etching 로고 워드마크 3.34~4.12:1                                       | 접근성                                    |
-| 토큰 이중 소스    | `tokens/`(여기)와 `mindulle-design-system/packages/tokens/`가 둘 다 SSOT를 자칭. 비교 스크립트 없음 | 팔레트 개정 시 갈라짐. `tokens_version`이 드러냄 |
+| 토큰 이중 소스    | `tokens/`와 `mindulle-design-system/packages/tokens/`가 둘 다 SSOT를 자칭. 18역할 중 13개가 ΔE 3 초과, 다크 accent는 ΔE 124.8(블루 vs 골드) | `docs/TOKEN_SSOT.md`에 대조표. 브랜드 결정 후 단일화 |
 | 보존 밖 자산      | 이전 `assets/` 업로드분은 lifecycle 미적용                                    | 수동 정리 필요                            |
 
 ## 10. 다음 후보
@@ -212,6 +212,7 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 | `scripts/contract.py`                                          | 계약 헤더 4칸 생성·검사                        |
 | `scripts/build_registry.py`                                    | 명부 생성·정합성 검사(`registry/`)             |
 | `scripts/ledger.py`                                            | 결정 원장 생성·검사(`*.decisions.json`)        |
+| `scripts/compare_tokens.py`                                    | 두 토큰 저장소 역할별 ΔE 대조                  |
 | `scripts/lint_render.py`                                       | L1 기계 판정(대비·겹침·레이어·라이선스·계약)  |
 | `scripts/judgment_golden.py`                                   | 판정 골든셋 16케이스 + mutation               |
 | `rules/ruleset.json`                                           | 판정 룰 정의(version 1.0.0)                   |
