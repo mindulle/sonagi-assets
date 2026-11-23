@@ -30,6 +30,22 @@ from provenance import disclosure_for, origin_from_tags  # noqa: E402
 from recipe_schema import RecipeError, normalize  # noqa: E402
 from style_axes import load_style  # noqa: E402
 
+PLATE_INVERT_MATRIX = "-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"
+HEX_COLOR = re.compile(r"#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b")
+
+
+def invert_hex(value):
+    raw = value[1:]
+    if len(raw) == 3:
+        raw = "".join(c * 2 for c in raw)
+    return "#" + "".join(f"{255 - int(raw[i : i + 2], 16):02x}" for i in (0, 2, 4))
+
+
+def invert_colors(fragment):
+    """다크 모드에서 도판의 종이·잉크를 뒤집는다(색만, 좌표는 그대로)."""
+    return HEX_COLOR.sub(lambda m: invert_hex(m.group(0)), fragment)
+
+
 SVG_OPEN = re.compile(r"<svg\b[^>]*>", re.S)
 SVG_CLOSE = re.compile(r"</svg>\s*$")
 VIEWBOX = re.compile(r'viewBox="([^"]+)"')
@@ -363,10 +379,11 @@ class Renderer:
         href = self.raster_href(raw, mime)
         # href 하나만 쓴다. xlink:href를 함께 넣으면 같은 base64가 두 번 들어가
         # SVG가 정확히 2배가 된다(ASSET-3). Chromium·Figma 모두 href를 읽는다.
+        filt = ' filter="url(#plate-invert)"' if getattr(self, "dark", False) else ""
         return (
             f'<g id="illo-raster" clip-path="url(#{clip})">'
-            f'<image x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid slice" '
-            f'href="{href}"/></g>'
+            f'<image x="{x}" y="{y}" width="{w}" height="{h}" preserveAspectRatio="xMidYMid slice"'
+            f'{filt} href="{href}"/></g>'
         )
 
     def illustration(self, spec, x, y, w, h):
@@ -388,6 +405,8 @@ class Renderer:
             clip_def = f'<clipPath id="{clip}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}"/></clipPath>'
             return clip_def + self.raster_image(host_path(item["path"]), x, y, w, h, clip)
         body, vb = inner_svg(host_path(item["path"]))
+        if getattr(self, "dark", False):
+            body = invert_colors(body)
         self._clip_seq += 1
         clip = f"clip-{name}-{self._clip_seq}"
         clip_def = f'<clipPath id="{clip}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{self.radius}"/></clipPath>'
@@ -1359,6 +1378,7 @@ def main():
     dark = args.dark or bool(recipe.get("dark"))
     if dark:
         r.colors = to_dark(r.colors)
+    r.dark = dark
     r.embed_max_width = args.embed_max_width
     r.raster_mode = args.raster_mode
     r.raster_dir = args.raster_dir
@@ -1368,7 +1388,12 @@ def main():
     r.K = 1.0 if args.breakpoint == "desktop" else (0.88 if args.breakpoint == "tablet" else 0.72)
 
     body = []
-    body.append('<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter></defs>')
+    plate_filter = (
+        f'<filter id="plate-invert" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="{PLATE_INVERT_MATRIX}"/></filter>'
+        if dark
+        else ""
+    )
+    body.append(f'<defs><filter id="mono"><feColorMatrix type="saturate" values="0"/></filter>{plate_filter}</defs>')
     y = 0
     ornament_types = {"stats", "features", "quote", "faq", "table", "pricing", "gallery", "logos", "cta"}
     for index, block in enumerate(recipe["blocks"]):
