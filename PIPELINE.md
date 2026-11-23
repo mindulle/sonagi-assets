@@ -523,6 +523,47 @@ python3 scripts/judgment_golden.py --update # 룰을 의도적으로 바꿨을 �
 | 390px에서 hero 제목이 줄바꿈되지 않고 넘침 | brutalist·etching 모바일 제목 | +18~51px    |
 | 로고 워드마크가 cream 위에서 AA 미달       | logos (poster·etching)        | 3.34~4.12:1 |
 
+## 결정 원장
+
+매니페스트는 **무엇이 들어갔나**(자산·입력 해시·계약)를 증명한다. 원장은
+**왜 그렇게 골랐나**를 남긴다. 그래프가 변주 12개를 만들어 3개로 좁히는 순간,
+선택의 이유가 사라지면 다음 사람은 같은 고민을 처음부터 다시 한다.
+
+```bash
+python3 scripts/lint_render.py --svg out/x.svg --manifest out/x.manifest.json \
+  --tokens tokens/semantic.json --out out/x.lint.json
+
+python3 scripts/ledger.py --svg out/x.svg --manifest out/x.manifest.json \
+  --lint out/x.lint.json \
+  --decision "style=editorial: 레퍼런스보다 여백이 넓어 제목이 살았다" \
+  --by hoyacho
+
+python3 scripts/ledger.py --check out/x.decisions.json --manifest out/x.manifest.json
+```
+
+| 층           | 누가 쓰나   | 내용                                       |
+| ------------ | ----------- | ------------------------------------------ |
+| `contract`   | 렌더러      | tokens·style·ruleset 버전(재현 좌표)       |
+| `references` | 렌더러      | 실제로 쓰인 자산과 라이선스 범위           |
+| `judgement`  | 린터        | verdict와 발화한 룰 id                     |
+| `decisions`  | 사람/그래프 | `key=choice: 이유`. 자동 3건은 `render.*`  |
+
+자동 3건(`render.style`·`render.tokens`·`render.ruleset`)은 렌더러가 남기고,
+사람과 그래프는 자기 키를 더한다. 키가 겹치면 `--check`가 실패한다 —
+"같은 결정을 두 번 했다"는 뜻이기 때문이다.
+
+`--check`는 네 가지를 본다.
+
+| 검사            | 실패 조건                                     |
+| --------------- | --------------------------------------------- |
+| contract        | 원장과 매니페스트의 contract가 다름(재렌더)   |
+| style_id        | `registry/styles.json`에 없는 id              |
+| decisions       | key 중복 또는 choice/reason 누락              |
+| references      | 원장과 매니페스트의 자산 목록이 다름          |
+
+시각은 기본으로 넣지 않는다(번들 결정론). 필요하면 `--at`으로 고정 값을 준다.
+`bundle_delivery.py`는 `*.decisions.json`이 있으면 함께 담는다.
+
 ## 출처(origin)와 사용 범위
 
 

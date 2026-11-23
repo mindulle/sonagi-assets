@@ -124,7 +124,7 @@ def main():
             if group in g:
                 shutil.copy2(g[group], out / group / g[group].name)
     for f in files:
-        if f.name.endswith(".manifest.json"):
+        if f.name.endswith(".manifest.json") or f.name.endswith(".decisions.json"):
             shutil.copy2(f, out / f.name)
     if (src / "export.json").is_file():
         shutil.copy2(src / "export.json", out / "export.json")
@@ -140,7 +140,7 @@ def main():
         "- `svg/` 원본(편집 가능) · `pdf/` 승인용(폰트 임베드) · `png/` 화면용 2x · `webp/` 웹용\n"
         "- `index.html`을 열면 미리보기와 다운로드 링크가 나옵니다\n"
         "- 래스터를 링크 모드로 뽑았다면 `svg/assets/`에 이미지가 함께 들어갑니다\n"
-        "- 자산 출처와 라이선스는 `CREDITS.md`\n"
+        "- 자산 출처와 라이선스는 `CREDITS.md`, 선택 이유는 `*.decisions.json`\n"
     )
 
     if args.zip:

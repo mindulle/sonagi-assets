@@ -80,6 +80,7 @@ dist/
 ├─ <name>@2x.png
 ├─ <name>@2x.webp
 ├─ <name>.svg + manifest
+├─ *.decisions.json     선택 이유(있으면)
 └─ index.html · CREDITS.md · README.md · export.json
 ```
 
@@ -142,6 +143,7 @@ dist/
   골든 42렌더 갱신이 `manifest`만 바꾸고 `0px`(시각 무변)임을 확인
 - 판정 골든 16케이스(clean 2·good 6·bad 8) 기준선 고정. bad는 mutation으로 생성
 - 명부 정합성: 29스타일 × 12블록 × 룰 1.0.0, 중복 `style_id` 0, 레시피 참조 오류 0
+- 결정 원장: contract·style_id·references 삼중 대조 통과, 자동 3건 + 사람 결정
 - L1 린트가 처음 찾은 부채 3건: 12px accent eyebrow AA 미달(3.03:1),
   모바일 hero 제목 미줄바꿈(+18~51px), 로고 워드마크 대비 3.34~4.12:1
 
@@ -209,6 +211,7 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 | `scripts/render_recipe.py`                                     | 렌더러·스타일·다크 변환·매니페스트            |
 | `scripts/contract.py`                                          | 계약 헤더 4칸 생성·검사                        |
 | `scripts/build_registry.py`                                    | 명부 생성·정합성 검사(`registry/`)             |
+| `scripts/ledger.py`                                            | 결정 원장 생성·검사(`*.decisions.json`)        |
 | `scripts/lint_render.py`                                       | L1 기계 판정(대비·겹침·레이어·라이선스·계약)  |
 | `scripts/judgment_golden.py`                                   | 판정 골든셋 16케이스 + mutation               |
 | `rules/ruleset.json`                                           | 판정 룰 정의(version 1.0.0)                   |
