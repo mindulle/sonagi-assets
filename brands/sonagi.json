@@ -4,9 +4,7 @@
     "note": "단일 심볼은 낙수(rain drop) 장치로 둔다. 워드마크 원본은 assets/brand/sonagi-wordmark.svg이며 아트워크로 함께 배포된다(폰트로 다시 그리지 않는다).",
     "symbol": "assets/brand/sonagi-drop.svg",
     "wordmark": "SONAGI",
-    "artwork": [
-        "assets/brand/sonagi-wordmark.svg"
-    ],
+    "artwork": ["assets/brand/sonagi-wordmark.svg"],
     "type": {
         "family": "Archivo",
         "weight": 600,
@@ -22,16 +20,8 @@
         "light": "#fbfbfa",
         "dark": "#12151d"
     },
-    "lockups": [
-        "horizontal",
-        "stacked",
-        "symbol"
-    ],
-    "variants": [
-        "color",
-        "mono",
-        "inverse"
-    ],
+    "lockups": ["horizontal", "stacked", "symbol"],
+    "variants": ["color", "mono", "inverse"],
     "clearspace": 0.5,
     "minimum": {
         "print_mm": 15,
