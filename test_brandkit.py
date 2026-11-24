@@ -88,3 +88,31 @@ def test_cli_exit_code_when_spec_missing(tmp_path, capsys):
     code = bk.main(["--spec", str(tmp_path / "nope.json"), "--out", str(tmp_path / "out")])
     assert code == 2
     assert "스펙을 찾을 수 없습니다" in capsys.readouterr().err
+
+
+def test_artwork_files_are_copied_after_render(tmp_path):
+    """폰트로 다시 그린 시트와 별개로 원본 벡터를 함께 넣는다."""
+    spec = json.loads(SPEC.read_text(encoding="utf-8"))
+    spec["artwork"] = ["test_data/identity/symbol.svg"]
+    spec_path = tmp_path / "brand.json"
+    spec_path.write_text(json.dumps(spec), encoding="utf-8")
+
+    result = bk.build(spec_path, tmp_path / "out", "kit")
+    stage = Path(result["stage"])
+
+    assert (stage / "logo" / "symbol.svg").is_file()
+    manifest = json.loads((stage / "manifest.json").read_text(encoding="utf-8"))
+    assert "logo/symbol.svg" in [item["path"] for item in manifest["files"]]
+
+
+def test_real_brand_spec_builds_without_contrast_failures(tmp_path):
+    """리포의 실제 스펙(brands/sonagi.json)이 그대로 빌드돼야 한다."""
+    spec = ROOT / "brands" / "sonagi.json"
+    if not spec.is_file():
+        return
+    result = bk.build(spec, tmp_path, "sonagi")
+
+    manifest = result["manifest"]
+    assert manifest["brand"] == "SONAGI"
+    assert manifest["skipped"] == {}  # 로고·규격은 폰트 없이도 나온다
+    assert manifest["fileCount"] >= 8

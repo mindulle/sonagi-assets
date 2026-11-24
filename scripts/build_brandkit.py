@@ -102,6 +102,27 @@ def credits_md(spec: Dict[str, Any]) -> str:
     )
 
 
+def copy_artwork(stage: Path, spec: Dict[str, Any], spec_path: Path) -> List[str]:
+    """스펙이 가리키는 원본 아트워크를 logo/로 복사한다.
+
+    폰트로 다시 그린 워드마크와 **원본 벡터는 다르다**. 납품받는 쪽이 실제 로고를
+    쓸 수 있도록 원본을 함께 넣는다. 경로는 스펙 파일 기준 상대경로다.
+    """
+    copied: List[str] = []
+    target_dir = stage / "logo"
+    target_dir.mkdir(parents=True, exist_ok=True)
+    for entry in spec.get("artwork") or []:
+        source = Path(entry)
+        if not source.is_file():
+            source = spec_path.parent / entry
+        if not source.is_file():
+            continue
+        # 스펙이 리포 밖 경로를 가리켜도 파일명만 쓴다(구조 고정)
+        (target_dir / source.name).write_bytes(source.read_bytes())
+        copied.append(source.name)
+    return copied
+
+
 def build_staging(stage: Path, spec_path: Path, spec: Dict[str, Any], with_pdf: bool) -> Dict[str, Any]:
     """스테이징 폴더에 섹션을 만든다. 반환값은 스킵 사유 기록용."""
     stage.mkdir(parents=True, exist_ok=True)
@@ -112,6 +133,9 @@ def build_staging(stage: Path, spec_path: Path, spec: Dict[str, Any], with_pdf: 
     code = run([sys.executable, SCRIPTS / "render_lockup.py", "--spec", spec_path, "--out", logo_dir])
     if code != 0:
         skipped["logo"] = f"render_lockup exit {code}"
+
+    # 1-1) 원본 아트워크는 렌더 뒤에 복사한다(렌더러가 logo/를 다시 쓰기 때문)
+    copy_artwork(stage, spec, spec_path)
 
     # 2) 규격 도해
     spec_dir = stage / "spec"
