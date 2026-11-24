@@ -140,10 +140,7 @@ def export_pdf(chrome, svgs, fonts_css, out_pdf):
     # Chromium이 0으로 끝나도 파일을 안 만드는 경우가 있다(스냅 격리: /tmp 쓰기 차단).
     # 여기서 끊지 않으면 pypdf가 FileNotFoundError 트레이스백을 낸다 — 원인을 알 수 없다.
     if not Path(out_pdf).is_file():
-        raise SystemExit(
-            f"PDF가 만들어지지 않았습니다: {out_pdf}\n"
-            "snap Chromium은 /tmp에 쓸 수 없습니다. --out을 리포 안(예: out/)으로 두세요."
-        )
+        raise SystemExit(f"PDF가 만들어지지 않았습니다: {out_pdf}\nsnap Chromium은 /tmp에 쓸 수 없습니다. --out을 리포 안(예: out/)으로 두세요.")
 
 
 def normalize_pdf(path, title="delivery", fixed="D:20000101000000Z"):
