@@ -48,6 +48,16 @@ icon: eye
 icon: package
 출처가 남는지 본다.
 
+## gallery
+
+title: 도판 넷
+
+- fixture-plate-a
+- fixture-plate-b
+- fixture-plate-c
+- fixture-plate-raster
+note: 4개는 2×2로 배치한다
+
 ## footer
 
 left: SONAGI
