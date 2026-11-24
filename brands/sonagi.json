@@ -1,21 +1,41 @@
 {
-  "brand": "SONAGI",
-  "version": "v1.0",
-  "note": "단일 심볼은 낙수(rain drop) 장치로 둔다. 워드마크 원본은 assets/brand/sonagi-wordmark.svg이며 아트워크로 함께 배포된다(폰트로 다시 그리지 않는다).",
-  "symbol": "assets/brand/sonagi-drop.svg",
-  "wordmark": "SONAGI",
-  "artwork": ["assets/brand/sonagi-wordmark.svg"],
-  "type": { "family": "Archivo", "weight": 600, "tracking": 0.14 },
-  "colors": {
-    "primary": "#9e5a03",
-    "ink": "#18181b",
-    "paper": "#fbfbfa",
-    "accent": "#ffd166"
-  },
-  "backgrounds": { "light": "#fbfbfa", "dark": "#12151d" },
-  "lockups": ["horizontal", "stacked", "symbol"],
-  "variants": ["color", "mono", "inverse"],
-  "clearspace": 0.5,
-  "minimum": { "print_mm": 15, "screen_px": 24 },
-  "date": "2026-11"
+    "brand": "SONAGI",
+    "version": "v1.0",
+    "note": "단일 심볼은 낙수(rain drop) 장치로 둔다. 워드마크 원본은 assets/brand/sonagi-wordmark.svg이며 아트워크로 함께 배포된다(폰트로 다시 그리지 않는다).",
+    "symbol": "assets/brand/sonagi-drop.svg",
+    "wordmark": "SONAGI",
+    "artwork": [
+        "assets/brand/sonagi-wordmark.svg"
+    ],
+    "type": {
+        "family": "Archivo",
+        "weight": 600,
+        "tracking": 0.14
+    },
+    "colors": {
+        "primary": "#9e5a03",
+        "ink": "#18181b",
+        "paper": "#fbfbfa",
+        "accent": "#ffd166"
+    },
+    "backgrounds": {
+        "light": "#fbfbfa",
+        "dark": "#12151d"
+    },
+    "lockups": [
+        "horizontal",
+        "stacked",
+        "symbol"
+    ],
+    "variants": [
+        "color",
+        "mono",
+        "inverse"
+    ],
+    "clearspace": 0.5,
+    "minimum": {
+        "print_mm": 15,
+        "screen_px": 24
+    },
+    "date": "2026-11"
 }

@@ -114,7 +114,7 @@ def copy_artwork(stage: Path, spec: Dict[str, Any], spec_path: Path) -> List[str
     for entry in spec.get("artwork") or []:
         source = Path(entry)
         if not source.is_file():
-            source = (spec_path.parent / entry)
+            source = spec_path.parent / entry
         if not source.is_file():
             continue
         # 스펙이 리포 밖 경로를 가리켜도 파일명만 쓴다(구조 고정)
