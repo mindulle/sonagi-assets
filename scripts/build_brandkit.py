@@ -63,7 +63,7 @@ def palette_of(spec: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def palette_css(palette: Dict[str, Any]) -> str:
-    lines = [f":root {{", f"  /* {palette['brand']} {palette['version']} */"]
+    lines = [":root {", f"  /* {palette['brand']} {palette['version']} */"]
     for key, value in palette["colors"].items():
         lines.append(f"  --brand-{key}: {value};")
     for key, value in palette["backgrounds"].items():
@@ -93,7 +93,7 @@ def credits_md(spec: Dict[str, Any]) -> str:
             f"# {spec.get('brand')} 브랜드 키트 — CREDITS",
             "",
             f"- 버전: {spec.get('version')}",
-            f"- 제작: press brandkit (결정론 산출물 · 생성 시각 없음)",
+            "- 제작: press brandkit (결정론 산출물 · 생성 시각 없음)",
             f"- 워드마크 서체: {typo.get('family')} {typo.get('weight')} (자간 {typo.get('tracking')})",
             "- 로고 작화: 스펙의 symbol·wordmark 원본을 따른다.",
             "- 재배포·상표 사용 범위는 별도 합의가 우선한다.",

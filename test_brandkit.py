@@ -10,8 +10,6 @@ import sys
 import zipfile
 from pathlib import Path
 
-import pytest
-
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "scripts"))
 import build_brandkit as bk  # noqa: E402
