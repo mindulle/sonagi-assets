@@ -1,7 +1,7 @@
 {
     "schema": 1,
     "ruleset_version": "1.0.0",
-    "tokens_version": "d73bbac048e2",
+    "tokens_version": "76e2bfd81ba9",
     "cases": {
         "clean-desktop-light": {
             "expect": "pass",
@@ -9,7 +9,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -20,7 +20,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "brutalist@0588f96b469d",
                 "ruleset_version": "1.0.0"
             }
@@ -31,7 +31,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -42,7 +42,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "brutalist@0588f96b469d",
                 "ruleset_version": "1.0.0"
             }
@@ -53,7 +53,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "poster@fec3e90ad981",
                 "ruleset_version": "1.0.0"
             }
@@ -64,7 +64,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "minimal@002d9d4fdb3c",
                 "ruleset_version": "1.0.0"
             }
@@ -75,7 +75,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "minimal@002d9d4fdb3c",
                 "ruleset_version": "1.0.0"
             }
@@ -86,7 +86,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "swiss@10cfb1a1905d",
                 "ruleset_version": "1.0.0"
             }
@@ -97,7 +97,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "etching@636cc0c1fa07",
                 "ruleset_version": "1.0.0"
             }
@@ -108,7 +108,7 @@
             "rules": [],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "art-nouveau@105369d3cb00",
                 "ruleset_version": "1.0.0"
             }
@@ -122,7 +122,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -135,7 +135,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -148,7 +148,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -161,7 +161,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -174,7 +174,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -187,7 +187,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "1.0.0"
             }
@@ -208,7 +208,7 @@
             ],
             "contract": {
                 "schema_version": 1,
-                "tokens_version": "d73bbac048e2",
+                "tokens_version": "76e2bfd81ba9",
                 "style_id": "editorial@6b6b1bac5733",
                 "ruleset_version": "0.0.0"
             }
