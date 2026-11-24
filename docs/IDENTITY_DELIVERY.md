@@ -179,8 +179,32 @@ brand-sheet.pdf
 | `lockup` | 락업·변형 시트 | ✅ 구현 (`press lockup`) |
 | `brand-sheet` | 8페이지 가이드 | ✅ 구현 (`press brandsheet`) |
 | `spec-diagram` | 클리어 스페이스·작도 | ✅ 구현 (`press spec`) |
+| `brand-kit` | 위 전부를 한 zip으로 | ✅ 구현 (`press brandkit`) |
 
 `lockup`·`spec-diagram`은 SVG 블록으로 비교적 쉽게 만들 수 있다. `brand-sheet`는 A4 다페이지 PDF 조판이 필요해 별도 작업이다.
+
+### brand kit (구현됨, 2026-11-24)
+
+브랜드 산출물은 명령마다 흩어져 있어 남에게 건넬 때 네 번 실행하고 폴더를 손으로 합쳐야 했다.
+`press brandkit`은 스펙 하나로 **한 벌**을 만든다.
+
+```bash
+press brandkit --spec brand.json --out out/brandkit --name sonagi-brand-kit [--pdf]
+```
+
+```
+logo/    락업·변형 시트 (render_lockup)
+spec/    클리어 스페이스·작도·최소 크기 (render_spec)
+color/   palette.json · palette.css  ← 스펙 색만 옮긴다(발명하지 않음)
+type/    type-scale.json             ← 스펙에 있는 단계만
+print/   브랜드 시트 PDF (--pdf, 폰트 필요 · 없으면 SKIP 사유 기록)
+manifest.json (정렬된 목록 + sha256) · CREDITS.md · <name>.zip
+```
+
+결정론: 같은 스펙이면 **같은 zip 바이트**. 생성 시각을 넣지 않고, zip 엔트리를 정렬하고
+타임스탬프를 1980-01-01로 고정한다(`test_brandkit.py`가 두 번 빌드해 해시를 비교한다).
+
+렌더 실패는 조용히 넘기지 않는다. `manifest.skipped`에 사유가 남는다(예: 폰트 없는 호스트의 PDF).
 
 ### lockup 시트 (구현됨)
 

@@ -334,6 +334,25 @@ def cmd_lockup(args) -> int:
     return run(cmd)
 
 
+def cmd_brandkit(args) -> int:
+    """로고·팔레트·타이포·규격·인쇄를 하나의 zip으로 묶는다."""
+    cmd = [
+        sys.executable,
+        SCRIPTS / "build_brandkit.py",
+        "--spec",
+        args.spec,
+        "--out",
+        args.out,
+        "--name",
+        args.name,
+    ]
+    if args.pdf:
+        cmd.append("--pdf")
+    if args.json:
+        cmd.append("--json")
+    return run(cmd)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="press", description="소나기 렌더·납품 엔진")
     parser.add_argument("--version", action="version", version=f"press {VERSION}")
@@ -401,6 +420,14 @@ def build_parser() -> argparse.ArgumentParser:
     sheet.add_argument("--pdf", action="store_true", help="8페이지 PDF까지 만든다")
     sheet.add_argument("--fonts-css", default=DEFAULT_FONTS_CSS)
     sheet.set_defaults(func=cmd_brandsheet)
+
+    kit = sub.add_parser("brandkit", help="브랜드 키트(로고·색·타이포·규격·인쇄) → zip")
+    kit.add_argument("--spec", required=True, help="brand.json 경로")
+    kit.add_argument("--out", default="out/brandkit")
+    kit.add_argument("--name", default="brand-kit")
+    kit.add_argument("--pdf", action="store_true", help="브랜드 시트 PDF까지(폰트 필요)")
+    kit.add_argument("--json", action="store_true")
+    kit.set_defaults(func=cmd_brandkit)
 
     printing = sub.add_parser("print", help="인쇄용 PDF(도련·재단선·CMYK)")
     printing.add_argument("--src", required=True, help="SVG 파일 또는 폴더")
