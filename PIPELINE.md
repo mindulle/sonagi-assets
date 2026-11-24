@@ -743,6 +743,40 @@ delivery/landing-v2/
 - 화면(SVG)이 있는 항목만 번들에 포함한다(중간 산출물 제외)
 - zip은 폴더 루트를 포함해 풀었을 때 구조가 유지된다
 
+## 브랜드 키트 (로고·색·타이포·규격 → zip 하나)
+
+브랜드 산출물은 `lockup`·`spec`·`brandsheet`·`print`로 나뉘어 있었다. `brandkit`은 이것을
+**한 벌**로 묶는다. 남에게 건넬 때 폴더를 손으로 합치지 않는다.
+
+```bash
+press brandkit --spec brands/sonagi.json --out out/brandkit --name sonagi-brand-kit
+press brandkit --spec brands/sonagi.json --out out/brandkit --name sonagi-brand-kit --pdf
+```
+
+```
+<name>/
+├─ logo/   <brand>.svg(락업 시트) · 원본 아트워크(spec.artwork) · manifest
+├─ spec/   clearspace · construction · minimum-size
+├─ color/  palette.json · palette.css      ← 스펙 색만 옮긴다(발명하지 않음)
+├─ type/   type-scale.json                 ← 스펙에 있는 단계만
+├─ print/  brand-sheet.pdf                 (--pdf, 폰트 필요)
+└─ manifest.json · CREDITS.md
+<name>.zip
+```
+
+| 규칙 | 동작 |
+| --- | --- |
+| 결정론 | 같은 스펙이면 **같은 zip 바이트**(생성 시각 없음 · 정렬 · 타임스탬프 1980-01-01) |
+| 실패 | 렌더가 실패하면 `manifest.skipped`에 사유를 남긴다(조용히 빈 섹션을 배포하지 않는다) |
+| 원본 | `spec.artwork`의 벡터를 `logo/`에 **그대로** 복사한다. 폰트로 그린 시트와 원본은 다르다 |
+| 검증 | `render_lockup`이 락업 × 변형마다 실제 배경 대비를 계산한다(미달 시 중단) |
+
+스펙은 `brands/<brand>.json`에 둔다. 필수: `brand`·`symbol`. `artwork`·`colors`·`backgrounds`·
+`lockups`·`variants`·`minimum`을 선택적으로 갖는다.
+
+> **snap Chromium 주의**: PDF는 리포 안(`out/…`)에 만들어야 한다. snap은 `/tmp`에 쓰지 못하고,
+> 그 경우 `PDF가 만들어지지 않았습니다`로 중단한다(파일이 없는데 성공으로 넘어가지 않는다).
+
 ## 인쇄 (별도 경로)
 
 화면용 export와 섞지 않는다. 색 재현이 다르기 때문이다.

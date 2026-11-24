@@ -87,6 +87,24 @@ jobs:
                     b=$(sha256sum "out/spec-2/$f.svg" | cut -d' ' -f1)
                     test "$a" = "$b"
                   done
+            - name: 브랜드 키트
+              run: |
+                  ./press brandkit --spec brands/sonagi.json --out /tmp/kit-a --name sonagi-brand-kit >/dev/null
+                  ./press brandkit --spec brands/sonagi.json --out /tmp/kit-b --name sonagi-brand-kit >/dev/null
+                  test -f /tmp/kit-a/sonagi-brand-kit.zip
+                  a=$(sha256sum /tmp/kit-a/sonagi-brand-kit.zip | cut -d' ' -f1)
+                  b=$(sha256sum /tmp/kit-b/sonagi-brand-kit.zip | cut -d' ' -f1)
+                  test "$a" = "$b"
+                  # 섹션이 조용히 빠지지 않았는지: 로고·규격·색·타이포·매니페스트
+                  for f in logo/sonagi.svg logo/sonagi-wordmark.svg spec/clearspace.svg \
+                           color/palette.json type/type-scale.json manifest.json; do
+                    test -f "/tmp/kit-a/sonagi-brand-kit/$f"
+                  done
+            - name: 브랜드 키트 테스트
+              run: |
+                  python3 -m pip install --quiet pytest
+                  python3 -m pytest test_brandkit.py -q
+
             - name: 새 축 스모크
               run: |
                   for s in black-han mono-signal; do
