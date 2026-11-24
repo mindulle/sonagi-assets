@@ -1143,10 +1143,15 @@ class Renderer:
         c = self.colors
         m = self.M
         names = block["items"][:6]
-        cols = 3 if self.bp == "tablet" else 3
-        if self.bp == "mobile":
-            cols = 2
-        cols = min(cols, max(1, len(names)))
+        max_cols = 2 if self.bp == "mobile" else 3
+        cols = min(max_cols, max(1, len(names)))
+        # 빈 칸이 적은 열 수를 고른다(4개면 3열 2줄 대신 2×2).
+        best = ((max_cols * ((len(names) + max_cols - 1) // max_cols)) - len(names), -max_cols)
+        for candidate in range(2, max_cols + 1):
+            rows = (len(names) + candidate - 1) // candidate
+            score = (rows * candidate - len(names), -candidate)
+            if score < best:
+                best, cols = score, candidate
         gap = 16
         cell_w = (W - 2 * m - gap * (cols - 1)) / cols
         cell_h = cell_w * 0.78
