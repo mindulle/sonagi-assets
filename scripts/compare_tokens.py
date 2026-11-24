@@ -59,22 +59,31 @@ def flatten(node, prefix=""):
     return out
 
 
-def resolve(value, flat):
+def resolve(value, flat, seen=None):
     if isinstance(value, str) and value.startswith("{") and value.endswith("}"):
         key = value[1:-1]
         if key not in flat:
             raise KeyError(f"참조를 풀 수 없습니다: {value}")
-        return resolve(flat[key], flat)
+        seen = seen or set()
+        if key in seen:
+            raise KeyError(f"참조가 순환합니다: {value}")
+        seen.add(key)
+        return resolve(flat[key], flat, seen)
     return value
 
 
 def load_mds(path: Path):
     primitives = flatten(json.loads((path / "tokens/primitives.json").read_text()))
     semantics = json.loads((path / "tokens/semantics.json").read_text())["semantic"]
+    # semantic 계층도 참조 대상이다(`{semantic.light.color.state.danger}`).
+    lookup = dict(primitives)
+    for mode, tree in semantics.items():
+        for key, value in flatten(tree).items():
+            lookup[f"semantic.{mode}.{key}"] = value
     out = {}
     for mode, tree in semantics.items():
         flat = flatten(tree)
-        out[mode] = {key: resolve(value, primitives) for key, value in flat.items()}
+        out[mode] = {key: resolve(value, lookup) for key, value in flat.items()}
     return out
 
 

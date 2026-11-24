@@ -11,8 +11,8 @@
 | `architecture` | `dark` |
 
 브랜드 역할(`accent`, `accent-strong`)과 중성 역할 모두 MDS 값을 그대로 쓴다.
-MDS에 없는 역할만 규칙으로 파생한다(`accent-ink`는 대비가 큰 쪽 선택,
-`terminal`은 `brand.cyan`).
+`accent-ink`는 MDS `text.inverse`를 그대로 쓴다(악센트 위 반전 텍스트).
+MDS에 없는 역할만 규칙으로 파생한다(`terminal`은 `brand.cyan`).
 
 지원 색상 램프(프리뷰용)는 Radix Colors(MIT)에서 가져와 primitives로 둔다.
 브랜드 값이 아니라 보조 스케일이다.
@@ -32,7 +32,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from compare_tokens import contrast, load_mds  # noqa: E402
+from compare_tokens import load_mds  # noqa: E402
 
 LIGHT_SCALES = ["sand", "amber", "blue", "cyan", "red", "green"]
 DARK_SCALES = [f"{s}-dark" for s in ("sand", "amber", "blue", "cyan", "red", "green")]
@@ -92,6 +92,7 @@ MDS_ROLES = {
     "text-faint": "text.disabled",
     "accent": "brand.primary",
     "accent-strong": "brand.accent",
+    "accent-ink": "text.inverse",
     "border": "border.default",
     "border-strong": "border.strong",
     "success": "state.success",
@@ -130,11 +131,6 @@ def build_semantic(mds_path):
     for theme, mode in THEMES.items():
         source = modes[mode]
         values = {role: source[f"color.{key}"] for role, key in MDS_ROLES.items()}
-        # 악센트 위 글자는 배경/잉크 중 대비가 큰 쪽
-        values["accent-ink"] = max(
-            (source["color.text.primary"], source["color.background.base"]),
-            key=lambda color: contrast(color, values["accent"]),
-        )
         theme_values = {role: values[role] for role in ROLE_ORDER}
         if theme == "architecture":
             theme_values["terminal"] = source["color.brand.cyan"]
