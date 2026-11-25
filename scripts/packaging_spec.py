@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""패키지 입력 계약 검증 — `sonagi-work/docs/press/21-packaging-schema.md` 구현.
+"""패키지 입력 계약 검증 — 라벨 스펙 YAML을 렌더러 입력으로 변환한다.
+
+계약 예시: `test_data/package/packaging.example.label.yaml`.
 
 라벨 렌더러(`render_label.py`)가 읽는 형태로 변환하는 `to_label_spec()`도 제공한다.
 참여 단계에서는 `size_mm`만 있으면 되고, `.ai` 전개도 파싱은 하지 않는다.
