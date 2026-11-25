@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-# press — 소나기 렌더·납품 엔진 (scripts/press.py 실행 래퍼)
-set -euo pipefail
-here="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
-exec python3 "$here/scripts/press.py" "$@"

@@ -221,7 +221,7 @@ python3 scripts/bundle_delivery.py --src dist --out delivery/<name> --name "<제
 
 | 경로                                                           | 역할                                          |
 | -------------------------------------------------------------- | --------------------------------------------- |
-| `press` · `scripts/press.py`                                   | 단일 CLI(check·render·package·print·lockup·spec·brandsheet·styles·preview) |
+| `styles/axes.json`                                             | 스타일 축 정의(팔레트·타이포·기하·레이아웃·장식) |
 | `scripts/render_recipe.py`                                     | 렌더러·스타일·다크 변환·매니페스트            |
 | `scripts/contract.py`                                          | 계약 헤더 4칸 생성·검사                        |
 | `scripts/build_registry.py`                                    | 명부 생성·정합성 검사(`registry/`)             |

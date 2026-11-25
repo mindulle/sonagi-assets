@@ -2,10 +2,10 @@
 """라벨 1종 생성 — 패키지 audit 검사용(ASSET-13).
 
 패키지 우선 전략(WORK-29)의 첫 산출물. 실제 발주용이 아니라 규격·검사를
-검증하는 기준 샘플이다. 도련·CMYK·안전여백은 `press print`가 처리하고,
+검증하는 기준 샘플이다. 도련·CMYK·안전여백은 `export_print.py`가 처리하고,
 이 스크립트는 재단 크기의 아트와 전개도 레이어를 만든다.
 
-레이어 규칙(`press print --check`가 검사):
+레이어 규칙(`export_print.py --check`가 검사):
 - `<g id="dieline">` 재단선 / `<g id="fold">` 접힘선 — 아트와 분리
 - `<g id="barcode">` 안에 `barcode-quiet`(조용영역)와 `barcode-bars`
 

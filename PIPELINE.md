@@ -91,7 +91,6 @@ python3 scripts/render_recipe.py --recipe recipes/landing-hero.json \
 
 ```bash
 render_recipe.py ... --raster-mode link      # out/assets/<sha12>.jpg + href="assets/..."
-press render content.md --raster link
 ```
 
 | 모드 | SVG | 납품 zip | Figma 재임포트 |
@@ -127,28 +126,29 @@ render_recipe.py ... --embed-max-width 900
 
 한계: 블록 조합 자체(섹션 순서·개수)는 아직 레시피가 고정한다.
 
-## press CLI
+## 렌더 스크립트 직접 실행
 
-`press --version`은 릴리즈 태그를 따른다. 우선순위는 `PRESS_VERSION` 환경변수(이미지 빌드에서 주입) → `git describe --tags` → `dev`다.
-`.dockerignore`가 `.git`을 빼므로 이미지 안에서는 반드시 빌드 인자로 준다.
+`press` 통합 CLI는 제거됐다(2026-11-25). 파이프라인은 아래 스크립트를 직접 실행한다.
+각 스크립트는 독립 실행 가능하고 필요한 경로를 인자로 받는다.
 
-단일 진입점. 기존 스크립트를 감싸기만 하고 로직은 그대로 둔다.
+| 하던 일 | 실행 |
+| --- | --- |
+| 스타일·축 목록 | `jq -r 'keys[]' styles/axes.json` |
+| 콘텐츠 검증 | `python3 scripts/import_content.py content/x.md --catalog <catalog> --check` |
+| 렌더 | `python3 scripts/import_content.py ... --out out/recipe.json` → `python3 scripts/render_recipe.py --recipe out/recipe.json --style styles/etching.json ...` |
+| 납품 패키지 | `python3 scripts/export_recipe.py ...` → `python3 scripts/bundle_delivery.py ...` |
+| 장식 미리보기 | `python3 scripts/preview_ornament.py --sheet --png` |
+| 락업·변형 시트 | `python3 scripts/render_lockup.py --spec <spec> --out <dir>` |
+| 규격 도해 | `python3 scripts/render_spec.py --spec <spec> --out <dir>` |
+| 브랜드 시트 | `python3 scripts/render_brandsheet.py --spec <spec> --out <dir>` |
+| 브랜드 키트 | `python3 scripts/build_brandkit.py --spec <spec> --out <dir> --name <name>` |
+| 인쇄 PDF | `python3 scripts/export_print.py --src <dir> --trim 210x297 --bleed 3` |
 
-```bash
-press styles                                  # 축·스타일 목록
-press check content/atelier-landing.md        # 검증만
-press render content/atelier-landing.md --style etching --breakpoints desktop,mobile
-press package --src out/press/dist --out delivery/x --name atelier --title "Atelier"
-press preview --sheet --png
-```
+| 환경변수          | 기본                                 |
+| ----------------- | ------------------------------------ |
+| `PRESS_FONTS_CSS` | `/home/ubuntu/brief/fonts/fonts.css` |
 
-| 환경변수          | 기본                                      |
-| ----------------- | ----------------------------------------- |
-| `PRESS_CATALOG`   | `/srv/sonagi-assets/catalog/catalog.json` |
-| `PRESS_TOKENS`    | `tokens/semantic.json`                    |
-| `PRESS_FONTS_CSS` | `/home/ubuntu/brief/fonts/fonts.css`      |
-
-`sonagi press ...`는 이 CLI에 인자를 그대로 넘긴다(`@sonagi/cli`, PRESS_BIN으로 경로 지정 가능).
+`sonagi press` 서브커맨드도 함께 제거됐다(`@sonagi/cli`).
 
 ## 레시피 형식
 
@@ -284,7 +284,6 @@ python3 scripts/recipe_schema.py recipes/*.json        # 스키마·블록 요�
 ```bash
 render_recipe.py ... --pattern-mode tile   # 기본. 작지만 Figma에서 사라짐
 render_recipe.py ... --pattern-mode line   # Figma 안전. 같은 페이지가 168KB → 943KB
-press render content.md --pattern line
 ```
 
 `tile` 모드로 패턴이 있는 스타일을 렌더하면 stderr에 안내가 한 줄 나온다.
@@ -749,8 +748,8 @@ delivery/landing-v2/
 **한 벌**로 묶는다. 남에게 건넬 때 폴더를 손으로 합치지 않는다.
 
 ```bash
-press brandkit --spec brands/sonagi.json --out out/brandkit --name sonagi-brand-kit
-press brandkit --spec brands/sonagi.json --out out/brandkit --name sonagi-brand-kit --pdf
+python3 scripts/build_brandkit.py --spec brands/sonagi.json --out out/brandkit --name sonagi-brand-kit
+python3 scripts/build_brandkit.py --spec brands/sonagi.json --out out/brandkit --name sonagi-brand-kit --pdf
 ```
 
 ```
@@ -786,8 +785,8 @@ SVG ──조판(도련+재단선)──▶ Chromium PDF(RGB) ──Ghostscript�
 ```
 
 ```bash
-press print --src out/brandsheet --trim 210x297 --bleed 3 --slug 5
-press print --src out/brandsheet/01-cover.svg --check     # 조판만 검사
+python3 scripts/export_print.py --src out/brandsheet --trim 210x297 --bleed 3 --slug 5
+python3 scripts/export_print.py --src out/brandsheet/01-cover.svg --check   # 조판만 검사
 ```
 
 | 항목 | 기본값 | 설명 |
@@ -806,9 +805,9 @@ press print --src out/brandsheet/01-cover.svg --check     # 조판만 검사
 ### 패키지 audit (P001–P007)
 
 ```bash
-press print --src out/pkg --trim 90x60 --check        # 사전 검사(chromium·gs 불필요)
-press print --src out/pkg --trim 90x60 --approve      # 산출 PDF 해시를 APPROVED.md에 기록
-press print --src out/pkg --trim 90x60 --verify       # 현재 PDF가 승인본과 같은가
+python3 scripts/export_print.py --src out/pkg --trim 90x60 --check        # 사전 검사(chromium·gs 불필요)
+python3 scripts/export_print.py --src out/pkg --trim 90x60 --approve      # 산출 PDF 해시를 APPROVED.md에 기록
+python3 scripts/export_print.py --src out/pkg --trim 90x60 --verify       # 현재 PDF가 승인본과 같은가
 ```
 
 | 코드 | 검사 | 방식 |
