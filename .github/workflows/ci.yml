@@ -89,8 +89,8 @@ jobs:
                   done
             - name: 브랜드 키트
               run: |
-                  ./press brandkit --spec brands/sonagi.json --out /tmp/kit-a --name sonagi-brand-kit >/dev/null
-                  ./press brandkit --spec brands/sonagi.json --out /tmp/kit-b --name sonagi-brand-kit >/dev/null
+                  python3 scripts/build_brandkit.py --spec brands/sonagi.json --out /tmp/kit-a --name sonagi-brand-kit >/dev/null
+                  python3 scripts/build_brandkit.py --spec brands/sonagi.json --out /tmp/kit-b --name sonagi-brand-kit >/dev/null
                   test -f /tmp/kit-a/sonagi-brand-kit.zip
                   a=$(sha256sum /tmp/kit-a/sonagi-brand-kit.zip | cut -d' ' -f1)
                   b=$(sha256sum /tmp/kit-b/sonagi-brand-kit.zip | cut -d' ' -f1)
@@ -145,10 +145,6 @@ jobs:
                   python-version: "3.12"
             - name: Install render deps
               run: python3 -m pip install --quiet pyyaml pillow==12.2.0
-            - name: press 버전
-              run: |
-                  test "$(PRESS_VERSION=v9.9.9 ./press --version)" = "press 9.9.9"
-                  ./press --version >/dev/null
             - name: 계약 헤더
               run: python3 scripts/contract.py --style styles/editorial.json
             - name: 명부 정합성

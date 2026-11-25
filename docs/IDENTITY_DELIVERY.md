@@ -1,7 +1,7 @@
 # 로고·브랜딩 납품 규격
 
 라우드소싱 콘테스트(브랜딩·로고) 납품을 전제로 한 산출물 규격.
-저작은 VectorCraft/DesignCraft에서 하고, **시스템화·검사·export는 press가 맡는다.**
+저작은 VectorCraft/DesignCraft에서 하고, **시스템화·검사·export는 sonagi-assets 렌더 스크립트가 맡는다.**
 
 ## 1. 역할 분담
 
@@ -9,10 +9,10 @@
 | --- | --- | --- |
 | 저작 | VectorCraft | 심볼·워드마크 벡터 원본 |
 | 조판 | DesignCraft | 락업 배치, 브랜드 시트 레이아웃 |
-| 시스템화 | **press** | 락업 세트·변형·규격표·export·라이선스 게이트 |
+| 시스템화 | **sonagi-assets** | 락업 세트·변형·규격표·export·라이선스 게이트 |
 | 제출 | 사람 | 콘테스트 양식 업로드 |
 
-press는 **로고를 만들지 않는다.** 이미 만든 벡터를 규격에 맞춰 전개하고 검사한다.
+렌더 스크립트는 **로고를 만들지 않는다.** 이미 만든 벡터를 규격에 맞춰 전개하고 검사한다.
 
 ## 2. 납품 폴더
 
@@ -92,7 +92,7 @@ A4 세로, 300dpi 상당의 벡터. PDF로 납품하고 원본 SVG를 함께 둔
 
 ## 6. Export 형식과 `.ai`의 현실
 
-| 형식 | press | 비고 |
+| 형식 | 스크립트 | 비고 |
 | --- | --- | --- |
 | SVG | ✅ | 원본·웹·Figma 재편집 |
 | PDF | ✅ | 인쇄·심사용, 벡터 유지 |
@@ -110,7 +110,7 @@ A4 세로, 300dpi 상당의 벡터. PDF로 납품하고 원본 SVG를 함께 둔
 
 ### 실측: Illustrator 2027(31.0.0) 왕복 (2026-11-23)
 
-`press lockup --lockup-dir`로 뽑은 단일 락업 6종과 브랜드 시트 PDF를 Illustrator에서 열어 확인했다.
+`render_lockup.py`로 뽑은 단일 락업 6종과 브랜드 시트 PDF를 Illustrator에서 열어 확인했다.
 
 | 대상 | 결과 | 판정 |
 | --- | --- | --- |
@@ -129,7 +129,7 @@ A4 세로, 300dpi 상당의 벡터. PDF로 납품하고 원본 SVG를 함께 둔
    `.ai` 저장. 폰트가 없어도 결과가 정확하다(아웃라인 전에 대체 경고만 확인).
 2. **PDF는 보기·인쇄용**으로 둔다. 임베드 폰트로 렌더되므로 제출 자체는 문제없다.
 3. PDF를 **편집 가능한 원본**으로 넘겨야 하면 폰트를 설치하거나, 아웃라인 PDF를 별도로 만든다
-   (현재 press는 아웃라인 PDF를 만들지 않는다).
+   (현재 렌더 파이프라인은 아웃라인 PDF를 만들지 않는다).
 4. 제출 전에 Archivo · Pretendard · JetBrains Mono를 설치해 두면 대체 경고 없이 확인할 수 있다.
 
 ## 7. 라이선스·법적 게이트
@@ -143,7 +143,7 @@ A4 세로, 300dpi 상당의 벡터. PDF로 납품하고 원본 SVG를 함께 둔
 | 상표 | 상표 검색은 파이프라인 밖. 사람이 KIPRIS/USPTO 확인 |
 | 유사성 | 콘테스트는 유사 시안 리스크가 크다. 참고 이미지 출처를 남긴다 |
 
-`CREDITS.md`에 폰트·자산·AI 사용 내역을 자동 생성한다(현재 press의 CREDITS 로직 재사용).
+`CREDITS.md`에 폰트·자산·AI 사용 내역을 자동 생성한다(현재 build_brandkit의 CREDITS 로직 재사용).
 
 ## 8. 파일명·매니페스트
 
@@ -171,25 +171,25 @@ brand-sheet.pdf
 - [ ] 상표 검색을 사람이 확인했다
 - [ ] 파일명이 규칙을 지킨다(소문자·하이픈)
 
-## 10. press에 필요한 신규 문서 타입
+## 10. 렌더 파이프라인에 필요한 신규 문서 타입
 
 | 타입 | 내용 | 현재 |
 | --- | --- | --- |
 | `page` | 웹·랜딩 | ✅ 구현 |
-| `lockup` | 락업·변형 시트 | ✅ 구현 (`press lockup`) |
-| `brand-sheet` | 8페이지 가이드 | ✅ 구현 (`press brandsheet`) |
-| `spec-diagram` | 클리어 스페이스·작도 | ✅ 구현 (`press spec`) |
-| `brand-kit` | 위 전부를 한 zip으로 | ✅ 구현 (`press brandkit`) |
+| `lockup` | 락업·변형 시트 | ✅ 구현 (`render_lockup.py`) |
+| `brand-sheet` | 8페이지 가이드 | ✅ 구현 (`render_brandsheet.py`) |
+| `spec-diagram` | 클리어 스페이스·작도 | ✅ 구현 (`render_spec.py`) |
+| `brand-kit` | 위 전부를 한 zip으로 | ✅ 구현 (`build_brandkit.py`) |
 
 `lockup`·`spec-diagram`은 SVG 블록으로 비교적 쉽게 만들 수 있다. `brand-sheet`는 A4 다페이지 PDF 조판이 필요해 별도 작업이다.
 
 ### brand kit (구현됨, 2026-11-24)
 
 브랜드 산출물은 명령마다 흩어져 있어 남에게 건넬 때 네 번 실행하고 폴더를 손으로 합쳐야 했다.
-`press brandkit`은 스펙 하나로 **한 벌**을 만든다.
+`build_brandkit.py`는 스펙 하나로 **한 벌**을 만든다.
 
 ```bash
-press brandkit --spec brand.json --out out/brandkit --name sonagi-brand-kit [--pdf]
+python3 scripts/build_brandkit.py --spec brand.json --out out/brandkit --name sonagi-brand-kit [--pdf]
 ```
 
 ```
@@ -208,7 +208,7 @@ manifest.json (정렬된 목록 + sha256) · CREDITS.md · <name>.zip
 
 ### lockup 시트 (구현됨)
 
-스펙 JSON 하나로 락업 × 변형 매트릭스를 전개한다. press는 로고를 만들지 않고,
+스펙 JSON 하나로 락업 × 변형 매트릭스를 전개한다. 스크립트는 로고를 만들지 않고,
 받은 심볼 벡터를 다시 칠해 배치하고 **실제 배경 대비를 계산**한다.
 
 ```json
@@ -233,8 +233,8 @@ manifest.json (정렬된 목록 + sha256) · CREDITS.md · <name>.zip
 ```
 
 ```bash
-press lockup --spec brand/lockup.json --out out/lockup --name sonagi-lockup
-press lockup --spec brand/lockup.json --check      # 파일 없이 검사만
+python3 scripts/render_lockup.py --spec brand/lockup.json --out out/lockup --name sonagi-lockup
+python3 scripts/render_lockup.py --spec brand/lockup.json --check   # 파일 없이 검사만
 ```
 
 - 셀마다 전경·배경·대비를 매니페스트에 남긴다. 4.5:1 미만이면 exit 1
@@ -252,7 +252,7 @@ press lockup --spec brand/lockup.json --check      # 파일 없이 검사만
 lockup 스펙 하나로 세 장을 뽑는다. 값은 스펙의 `clearspace`·`minimum`을 그대로 쓴다.
 
 ```bash
-press spec --spec brand/lockup.json --out out/spec
+python3 scripts/render_spec.py --spec brand/lockup.json --out out/spec
 ```
 
 | 파일 | 내용 | 결정하는 값 |
@@ -268,7 +268,7 @@ press spec --spec brand/lockup.json --out out/spec
 5절의 8페이지를 A4 세로(794×1123px 벡터)로 조판하고 한 PDF로 묶는다.
 
 ```bash
-press brandsheet --spec brand/lockup.json --out out/brandsheet --name sonagi-brand-sheet --pdf
+python3 scripts/render_brandsheet.py --spec brand/lockup.json --out out/brandsheet --name sonagi-brand-sheet --pdf
 ```
 
 | 페이지 | 내용 | 근거 데이터 |

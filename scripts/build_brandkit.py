@@ -1,7 +1,7 @@
 """브랜드 키트 — 로고·팔레트·타이포·규격·인쇄를 하나의 zip으로 묶는다.
 
-지금까지 브랜드 산출물은 명령마다 흩어져 있었다(`press lockup`, `press spec`,
-`press brandsheet`, `press print`). 남에게 건넬 때는 네 번 실행하고 폴더를 손으로
+브랜드 산출물은 스크립트마다 흩어져 있었다(`render_lockup.py`, `render_spec.py`,
+`render_brandsheet.py`, `export_print.py`). 남에게 건넬 때는 네 번 실행하고 폴더를 손으로
 합쳐야 했다. 이 빌더는 한 번에 **하나의 인수인계물**을 만든다.
 
 ```
@@ -93,7 +93,7 @@ def credits_md(spec: Dict[str, Any]) -> str:
             f"# {spec.get('brand')} 브랜드 키트 — CREDITS",
             "",
             f"- 버전: {spec.get('version')}",
-            "- 제작: press brandkit (결정론 산출물 · 생성 시각 없음)",
+            "- 제작: scripts/build_brandkit.py (결정론 산출물 · 생성 시각 없음)",
             f"- 워드마크 서체: {typo.get('family')} {typo.get('weight')} (자간 {typo.get('tracking')})",
             "- 로고 작화: 스펙의 symbol·wordmark 원본을 따른다.",
             "- 재배포·상표 사용 범위는 별도 합의가 우선한다.",
