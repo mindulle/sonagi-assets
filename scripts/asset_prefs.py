@@ -205,10 +205,7 @@ def query_pref_events(
         clauses.append("substr(ts, 1, 7) = ?")
         params.append(month)
     where = f"WHERE {' AND '.join(clauses)}" if clauses else ""
-    sql = (
-        f"SELECT id, asset_id, brand, event, context, reason_tags, run_id, ts "
-        f"FROM asset_prefs {where} ORDER BY ts DESC, id DESC LIMIT ? OFFSET ?"
-    )
+    sql = f"SELECT id, asset_id, brand, event, context, reason_tags, run_id, ts FROM asset_prefs {where} ORDER BY ts DESC, id DESC LIMIT ? OFFSET ?"
     params.extend([limit, offset])
     rows = conn.execute(sql, params).fetchall()
     out: List[Dict[str, Any]] = []
