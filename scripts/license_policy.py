@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 """라이선스 → 사용 범위(scope) 정책 단일 출처.
 
-세 단계로 나눈다.
+네 단계로 나눈다.
 
+- public: 고객 보유·제공 자산. 계약 범위 안에서 결과물·팩에 사용
 - bundle: 결과물 제작 + 폰트 파일 재배포(패키지·번들) 가능
 - output: 결과물 제작만 가능. 파일 재배포·임베딩 금지
 - blocked: 사용 불가(유료·개인용·내부용·권리 불명)
+
+`owned`(직접 보유)·`given`(고객 제공)은 `public`이다. 고객 자산은 재배포
+범위를 계약서가 정하므로 공개 라이선스(bundle)와 구분해 둔다.
 
 새 라이선스를 추가할 때는 LICENSE_SCOPE만 고치면 카탈로그·allow-list·
 패키징 스크립트가 함께 따라온다.
@@ -17,11 +21,15 @@
     is_pack_ready("free")      # False
 """
 
+SCOPE_PUBLIC = "public"
 SCOPE_BUNDLE = "bundle"
 SCOPE_OUTPUT = "output"
 SCOPE_BLOCKED = "blocked"
 
 LICENSE_SCOPE = {
+    # 고객 보유·제공 자산 (재배포 범위는 계약서를 따른다)
+    "owned": SCOPE_PUBLIC,
+    "given": SCOPE_PUBLIC,
     # 파일 재배포까지 허용
     "ofl": SCOPE_BUNDLE,
     "mit": SCOPE_BUNDLE,
@@ -44,6 +52,7 @@ LICENSE_SCOPE = {
 
 BUNDLE_LICENSES = tuple(sorted(k for k, v in LICENSE_SCOPE.items() if v == SCOPE_BUNDLE))
 OUTPUT_LICENSES = tuple(sorted(k for k, v in LICENSE_SCOPE.items() if v == SCOPE_OUTPUT))
+PUBLIC_LICENSES = tuple(sorted(k for k, v in LICENSE_SCOPE.items() if v == SCOPE_PUBLIC))
 
 
 def scope_for_license(license_value):
@@ -52,8 +61,8 @@ def scope_for_license(license_value):
 
 
 def is_pack_ready(license_value):
-    """판매용 팩에 폰트 파일을 넣어도 되는지."""
-    return scope_for_license(license_value) == SCOPE_BUNDLE
+    """판매용 팩에 파일을 넣어도 되는지. 고객 자산(public)도 계약 범위 안이면 넣는다."""
+    return scope_for_license(license_value) in (SCOPE_BUNDLE, SCOPE_PUBLIC)
 
 
 def license_from_tags(tags):

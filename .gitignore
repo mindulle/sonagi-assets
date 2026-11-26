@@ -11,3 +11,10 @@ previews/
 
 # 골든 렌더 산출물
 out/
+
+# devops에서 rsync로 받는 실자산·카탈로그 (git에 넣지 않는다)
+catalog/
+library/
+
+# 테스트 캐시
+.pytest_cache/

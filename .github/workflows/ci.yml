@@ -105,6 +105,14 @@ jobs:
                   python3 -m pip install --quiet pytest
                   python3 -m pytest test_brandkit.py -q
 
+            - name: 클라이언트 자산 테스트
+              run: python3 -m pytest tests -q
+
+            - name: 셸 스크립트 검사
+              run: |
+                  python3 -m pip install --quiet shellcheck-py
+                  shellcheck scripts/ingest_assets.sh scripts/sync_assets.sh
+
             - name: 새 축 스모크
               run: |
                   for s in black-han mono-signal; do

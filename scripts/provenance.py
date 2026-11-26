@@ -12,6 +12,7 @@ origin은 납품·판매 시 고지와 사용 가능 범위를 결정한다.
 | commercial | 유료 라이선스 | blocked |
 | generated | AI 생성·합성 | output (강제) |
 | in-house | 자체 제작 | bundle |
+| client | 고객 보유·제공 | public |
 | unknown | 출처·권리 불명 | blocked |
 
 사용::
@@ -27,6 +28,7 @@ ORIGIN_FREEWARE = "freeware"
 ORIGIN_COMMERCIAL = "commercial"
 ORIGIN_GENERATED = "generated"
 ORIGIN_IN_HOUSE = "in-house"
+ORIGIN_CLIENT = "client"
 ORIGIN_UNKNOWN = "unknown"
 
 ORIGINS = (
@@ -36,6 +38,7 @@ ORIGINS = (
     ORIGIN_COMMERCIAL,
     ORIGIN_GENERATED,
     ORIGIN_IN_HOUSE,
+    ORIGIN_CLIENT,
     ORIGIN_UNKNOWN,
 )
 
@@ -43,6 +46,7 @@ ORIGIN_SCOPE = {
     ORIGIN_OPEN_SOURCE: "bundle",
     ORIGIN_PUBLIC_DOMAIN: "bundle",
     ORIGIN_IN_HOUSE: "bundle",
+    ORIGIN_CLIENT: "public",
     ORIGIN_FREEWARE: "output",
     ORIGIN_GENERATED: "output",
     ORIGIN_COMMERCIAL: "blocked",
@@ -57,6 +61,7 @@ DISCLOSURE = {
     ORIGIN_COMMERCIAL: "유료 라이선스 자산. 납품 전 별도 구매·확인 필요.",
     ORIGIN_GENERATED: "AI 생성 자산. 사용 모델·일자·프롬프트를 기록하고, 계약상 고지 의무를 확인하세요.",
     ORIGIN_IN_HOUSE: "자체 제작 자산.",
+    ORIGIN_CLIENT: "고객 보유·제공 자산. 계약 범위 안에서 사용하고, 재배포 범위는 계약서를 따르세요.",
     ORIGIN_UNKNOWN: "출처 불명. 납품·판매에 사용하지 마세요.",
 }
 
@@ -68,6 +73,8 @@ _LICENSE_TO_ORIGIN = {
     "cc0": ORIGIN_PUBLIC_DOMAIN,
     "free": ORIGIN_FREEWARE,
     "commercial": ORIGIN_COMMERCIAL,
+    "owned": ORIGIN_CLIENT,
+    "given": ORIGIN_CLIENT,
 }
 
 
