@@ -78,13 +78,9 @@ class AssetPrefsSidecarTests(unittest.TestCase):
     def test_export_catalog_immutable_license_filter_and_exploration_quota(self) -> None:
         catalog_path = self.tmpdir / "catalog.json"
         out_path = self.tmpdir / "catalog.render.json"
-        items = [
-            {"id": f"pref-{i}", "name": f"Pref {i}", "ext": "svg", "license": "cc0", "license_scope": "bundle"}
-            for i in range(7)
-        ] + [
-            {"id": f"new-{i}", "name": f"New {i}", "ext": "svg", "license": "ofl", "license_scope": "bundle"}
-            for i in range(5)
-        ] + [
+        items = [{"id": f"pref-{i}", "name": f"Pref {i}", "ext": "svg", "license": "cc0", "license_scope": "bundle"} for i in range(7)]
+        items += [{"id": f"new-{i}", "name": f"New {i}", "ext": "svg", "license": "ofl", "license_scope": "bundle"} for i in range(5)]
+        items += [
             {"id": "blocked-1", "name": "Paid", "ext": "svg", "license": "commercial", "license_scope": "blocked"},
             {"id": "unknown-1", "name": "Unknown", "ext": "svg", "license": "unknown", "license_scope": "blocked"},
         ]
@@ -92,10 +88,8 @@ class AssetPrefsSidecarTests(unittest.TestCase):
         before_hash = hashlib.sha256(catalog_path.read_bytes()).hexdigest()
 
         now = dt.datetime(2026, 11, 26, 0, 0, tzinfo=dt.timezone.utc)
-        events = [
-            {"asset_id": f"pref-{i}", "brand": "mindulle", "event": "chosen", "ts": "2026-11-25T00:00:00Z"}
-            for i in range(7)
-        ] + [
+        events = [{"asset_id": f"pref-{i}", "brand": "mindulle", "event": "chosen", "ts": "2026-11-25T00:00:00Z"} for i in range(7)]
+        events += [
             {"asset_id": "blocked-1", "brand": "mindulle", "event": "chosen", "ts": "2026-11-25T00:00:00Z"},
             {"asset_id": "unknown-1", "brand": "mindulle", "event": "chosen", "ts": "2026-11-25T00:00:00Z"},
         ]

@@ -591,9 +591,7 @@ def gallery_view(month: str = "", brand: str = ""):
                     lic = t.split(":", 1)[1]
                     break
             items_by_id[row["id"]] = {"name": row["name"], "ext": row["ext"], "license": lic}
-        return HTMLResponse(
-            asset_prefs.render_gallery_html(events, month=month, brand=brand, items_by_id=items_by_id)
-        )
+        return HTMLResponse(asset_prefs.render_gallery_html(events, month=month, brand=brand, items_by_id=items_by_id))
     finally:
         conn.close()
 

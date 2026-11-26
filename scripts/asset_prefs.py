@@ -383,10 +383,7 @@ def export_catalog_with_prefs(
     step = max(1, round(1.0 / quota)) if quota > 0 and min_explore > 0 else total_target + 1
 
     for pos in range(total_target):
-        need_explore_slot = (
-            u_idx < len(selected_unexplored)
-            and ((pos + 1) % step == 0 or e_idx >= len(remaining_pool))
-        )
+        need_explore_slot = u_idx < len(selected_unexplored) and ((pos + 1) % step == 0 or e_idx >= len(remaining_pool))
         if need_explore_slot:
             merged.append(selected_unexplored[u_idx])
             u_idx += 1
