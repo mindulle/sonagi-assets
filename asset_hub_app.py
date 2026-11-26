@@ -22,6 +22,8 @@ from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
 from starlette.requests import Request
 
+from scripts import asset_prefs
+
 try:
     from PIL import Image
 
@@ -34,6 +36,7 @@ LIBRARY_PATH = os.environ.get("GALLERY_LIBRARY_PATH", "/app/data")
 ORIGINALS_PATH = Path(LIBRARY_PATH) / "originals"
 THUMBNAILS_PATH = Path(LIBRARY_PATH) / "thumbnails"
 DB_PATH = os.environ.get("DB_PATH", "asset_hub.db")
+PREFS_JSONL_PATH = os.environ.get("ASSET_PREFS_JSONL_PATH", str(Path(LIBRARY_PATH) / "asset_prefs.jsonl"))
 
 ORIGINALS_PATH.mkdir(parents=True, exist_ok=True)
 THUMBNAILS_PATH.mkdir(parents=True, exist_ok=True)
@@ -104,6 +107,7 @@ def init_db():
                   PRIMARY KEY (item_id, tag_id),
                   FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
                   FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE)""")
+    asset_prefs.init_prefs_table(conn)
     conn.commit()
     conn.close()
 
@@ -516,6 +520,80 @@ async def upload_file(file: UploadFile = File(...), tags: str = Form(""), annota
 @app.get("/")
 def index():
     return FileResponse("static/index.html")
+
+
+class PrefEventRequest(BaseModel):
+    asset_id: str
+    brand: str = ""
+    event: str
+    context: str = ""
+    reason_tags: List[str] = []
+    run_id: str = ""
+    ts: str = ""
+
+
+@app.get("/api/prefs")
+def get_prefs(
+    brand: str = "",
+    asset_id: str = "",
+    event: str = "",
+    month: str = "",
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+):
+    conn = get_db()
+    try:
+        events = asset_prefs.query_pref_events(
+            conn,
+            brand=brand,
+            asset_id=asset_id,
+            event=event,
+            month=month,
+            limit=limit,
+            offset=offset,
+        )
+        all_events = asset_prefs.query_pref_events(conn, brand=brand, month=month, limit=5000, offset=0)
+        summary = asset_prefs.summarize_prefs(all_events, brand=brand)
+        return {"events": events, "summary": summary, "total": len(all_events)}
+    finally:
+        conn.close()
+
+
+@app.post("/api/prefs")
+def post_pref(req: PrefEventRequest):
+    conn = get_db()
+    try:
+        try:
+            record = asset_prefs.record_pref_event(
+                req.model_dump() if hasattr(req, "model_dump") else req.dict(),
+                conn=conn,
+                jsonl_path=PREFS_JSONL_PATH,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        return {"status": "ok", "event": record}
+    finally:
+        conn.close()
+
+
+@app.get("/gallery", response_class=HTMLResponse)
+def gallery_view(month: str = "", brand: str = ""):
+    conn = get_db()
+    try:
+        events = asset_prefs.query_pref_events(conn, brand=brand, limit=2000, offset=0)
+        rows = conn.execute("SELECT id, name, ext, tags FROM items").fetchall()
+        items_by_id = {}
+        for row in rows:
+            raw_tags = json.loads(row["tags"]) if row["tags"] else []
+            lic = ""
+            for t in raw_tags:
+                if isinstance(t, str) and t.startswith("license:"):
+                    lic = t.split(":", 1)[1]
+                    break
+            items_by_id[row["id"]] = {"name": row["name"], "ext": row["ext"], "license": lic}
+        return HTMLResponse(asset_prefs.render_gallery_html(events, month=month, brand=brand, items_by_id=items_by_id))
+    finally:
+        conn.close()
 
 
 # ==========================================
