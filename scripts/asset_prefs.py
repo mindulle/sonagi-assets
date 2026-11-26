@@ -429,11 +429,7 @@ def render_gallery_html(
     all_months = sorted({str(ev.get("ts") or "")[:7] for ev in events if len(str(ev.get("ts") or "")) >= 7}, reverse=True)
     active_month = month or (all_months[0] if all_months else dt.datetime.now(dt.timezone.utc).strftime("%Y-%m"))
 
-    filtered = [
-        ev
-        for ev in events
-        if str(ev.get("ts") or "").startswith(active_month) and (not brand or str(ev.get("brand") or "") == brand)
-    ]
+    filtered = [ev for ev in events if str(ev.get("ts") or "").startswith(active_month) and (not brand or str(ev.get("brand") or "") == brand)]
 
     chosen = [ev for ev in filtered if ev.get("event") == "chosen"]
     rejected = [ev for ev in filtered if ev.get("event") == "rejected"]
