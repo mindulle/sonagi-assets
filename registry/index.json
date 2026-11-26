@@ -15,6 +15,9 @@
     },
     "duplicate_style_ids": {},
     "recipes": {
+        "client-seed.json": {
+            "theme": "editorial"
+        },
         "landing-hero-v2.json": {
             "theme": "editorial"
         },

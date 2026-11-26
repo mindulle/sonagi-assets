@@ -133,7 +133,8 @@ def resolve_scope(tags, license_value, origin_value):
     if origin_value == "generated":
         return "output"
     scopes = {t.split(":", 1)[1] for t in tags if t.startswith("scope:")}
-    for candidate in ("blocked", "output", "bundle"):
+    # public은 bundle보다 넓은 고객 자산 범위다. 충돌하면 좁은 쪽을 고른다.
+    for candidate in ("blocked", "output", "bundle", "public"):
         if candidate in scopes:
             return candidate
     return scope_for_license(license_value)
