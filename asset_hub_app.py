@@ -22,14 +22,14 @@ from pydantic import BaseModel
 from sse_starlette.sse import EventSourceResponse
 from starlette.requests import Request
 
+from scripts import asset_prefs
+
 try:
     from PIL import Image
 
     HAS_PIL = True
 except ImportError:
     HAS_PIL = False
-
-from scripts import asset_prefs
 
 # New Flat Cloud-Native Directory Structure
 LIBRARY_PATH = os.environ.get("GALLERY_LIBRARY_PATH", "/app/data")

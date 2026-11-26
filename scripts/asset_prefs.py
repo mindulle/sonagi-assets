@@ -486,7 +486,10 @@ def render_gallery_html(
 <title>Sonagi Asset Preference Gallery — {html.escape(active_month)}</title>
 <style>
   body {{ font-family: -apple-system, BlinkMacSystemFont, "Pretendard", sans-serif; margin: 0; padding: 24px; background: #faf9f6; color: #1c1917; }}
-  header {{ display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid #e7e5e4; padding-bottom: 16px; margin-bottom: 20px; }}
+  header {{
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+    gap: 16px; border-bottom: 1px solid #e7e5e4; padding-bottom: 16px; margin-bottom: 20px;
+  }}
   h1 {{ margin: 0; font-size: 20px; }}
   .kpis {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }}
   .kpi {{ background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; padding: 12px 14px; }}
