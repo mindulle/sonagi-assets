@@ -802,6 +802,20 @@ python3 scripts/export_print.py --src out/brandsheet/01-cover.svg --check   # �
 - 래스터는 `--embed-max-width`로 줄인 뒤 들어간다. 인쇄 전 300dpi 이상인지 확인한다
   (`raster_dpi_min` < 300이면 실패로 표시)
 
+### 패키지 목업
+
+참여작은 목업 이미지로 평가받는다. 라벨 아트를 정면 + 측면 띠로 배치해 PNG로 굽는다.
+
+```bash
+python3 scripts/render_mockup.py --spec pkg.yaml --label out/pkg/label.svg --out out/mockup --scale 2
+python3 scripts/render_mockup.py ... --check      # 렌더 없이 조판만
+```
+
+- 정면: 라벨 아트 그대로(전개도·접힘선 레이어 제거), 그림자 포함
+- 측면: `colors.calm` 세로 그라디언트 + 세로 워드마크. 깊이는 `depth_mm`(기본 30mm)
+- 캡션: `FRONT · 제품명`, `SIDE · 깊이`
+- 원근 합성(파우치·박스 형태에 앉히기)은 별도 단계다. 여기서는 **평면 목업**만 만든다
+
 ### 패키지 audit (P001–P007)
 
 ```bash

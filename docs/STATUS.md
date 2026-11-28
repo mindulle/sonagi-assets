@@ -137,6 +137,7 @@ dist/
 - 브랜드 시트: 8페이지 A4(210×297mm) 단일 PDF. 페이지별 해시 동일, 8페이지 확인
 - 인쇄: A4 8페이지 → 226×313mm(도련 3·여백 5), CMYK 연산자만, 2회 실행 해시 동일
 - 패키지: 90×60mm 라벨 audit P001–P007 전부 통과, 승인 해시 변조 시 exit 1
+- 목업: 계약 YAML → 라벨 → 정면+측면 PNG. 전개도·접힘선 제외, 2x 렌더
 - Figma: `<pattern>` 배경은 임포트에서 사라진다. `--pattern-mode line`이면 유지(168KB → 943KB)
 - 축 확장: type 4종·layout 2종 추가. `split-reverse`·`magazine-grid` 렌더 확인(데모 스타일 2종)
 - 계약 헤더: 매니페스트에 `schema_version`·`tokens_version`·`style_id`·`ruleset_version` 4칸.
